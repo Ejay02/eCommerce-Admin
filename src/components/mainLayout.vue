@@ -157,6 +157,14 @@
             </router-link>
           </a-menu-item>
         </a-sub-menu>
+
+        <!-- setting -->
+        <a-menu-item key="9">
+          <router-link to="/admin/settings" style="text-decoration: none">
+            <i class="fa-solid fa-gears"></i>
+            <span class="m-4">Settings</span>
+          </router-link>
+        </a-menu-item>
       </a-menu>
     </a-layout-sider>
     <a-layout>
@@ -194,7 +202,7 @@
             <!-- avatar -->
             <div class="">
               <img
-                src="https://img.freepik.com/free-psd/3d-illustration-person-with-sunglasses_23-2149436188.jpg?w=996&t=st=1720677670~exp=1720678270~hmac=bd0a8555318a3758fb6cc4695bacb17878a47ebd3e0578a9cd5705f173ef5d12"
+                src="https://img.freepik.com/free-psd/3d-illustration-person-with-glasses_23-2149436185.jpg?w=996&t=st=1720681827~exp=1720682427~hmac=189dffe3117a9caac144609539d8e4383817c87c0a80116d53cac50c2dd2e54d"
                 alt="user image"
                 style="width: 50px; height: 50px; border-radius: 5px"
               />
@@ -251,3 +259,4 @@ const selectedKeys = ref(["1"]);
   color: gray;
 }
 </style>
+
