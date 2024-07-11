@@ -1,8 +1,6 @@
 <template>
   <div class="login py-5">
     <br />
-    <br />
-    <br />
 
     <div class="my-5 w-25 bg-white rounded-3 mx-auto p-4">
       <h3 class="text-center">Log In</h3>
@@ -41,13 +39,15 @@
               </label>
             </div>
           </div>
-          <router-link to="/forgot-password">Forgot password?</router-link>
+          <router-link to="/forgot-password">
+            <span class="forgot"> Forgot Password? </span>
+          </router-link>
         </div>
         <!-- Button -->
         <router-link to="/admin">
-          <div class="text-left">
+          <div class="mt-3">
             <button
-              class="btn border-0 px-3 py-2 text-white fw-bold w-100 text-center"
+              class="btn border-0 px-3 py-2 fw-bold w-100 text-center"
               type="submit"
             >
               Log In
@@ -59,7 +59,7 @@
       <!-- continue -->
       <div class="or-continue">
         <hr class="line" />
-        <span class="text-center capitalize">or continue with</span>
+        <span class="text-center text-uppercase">or continue with</span>
         <hr class="line" />
       </div>
 
@@ -72,7 +72,7 @@
           <i class="fa-brands fa-google me-1"></i> Google
         </button>
         <button
-          class="btn d-flex border-0 fw-bold text-center align-items-center"
+          class="btn d-flex border-0 fw-bold text-center align-items-center text-wrap"
           type="submit"
         >
           <i class="fa-brands fa-facebook me-1"></i> Facebook
@@ -106,10 +106,20 @@ const onSubmit = () => {
   min-height: 100vh;
 }
 
+.login p,
+.login label {
+  color: gray;
+  font-size: 12px;
+}
+
+.login h3 {
+  font-size: 20px;
+}
+
 .btn {
   background-color: #ffd333;
   width: 32%;
-  font-size: 14px;
+  font-size: 13px;
 }
 
 .or-continue {
@@ -119,6 +129,11 @@ const onSubmit = () => {
   gap: 1rem;
   margin: 1rem 0;
   color: gray;
+}
+
+.or-continue span,
+.forgot {
+  font-size: 12px;
 }
 
 .line {

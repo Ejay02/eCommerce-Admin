@@ -33,10 +33,7 @@
         </a-space>
 
         <div class="text-left">
-          <button
-            class="btn border-0 px-3 py-2 text-white fw-bold w-100"
-            type="submit"
-          >
+          <button class="btn border-0 px-3 py-2 fw-bold w-100" type="submit">
             Reset
           </button>
         </div>
@@ -65,5 +62,14 @@ const onSubmit = () => {
 
 .btn {
   background-color: #ffd333;
+}
+
+.login h3 {
+  font-size: 20px;
+}
+
+.login p {
+  color: gray;
+  font-size: 12px;
 }
 </style>

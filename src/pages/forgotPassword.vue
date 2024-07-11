@@ -3,6 +3,7 @@
     <br />
     <br />
     <br />
+    <br />
 
     <div class="my-5 w-25 bg-white rounded-3 mx-auto p-4">
       <h3 class="text-center">Forgot Password?</h3>
@@ -16,14 +17,10 @@
             id="email"
           />
         </a-space>
-   
-     
+
         <!-- Button -->
         <div class="text-left">
-          <button
-            class="btn border-0 px-3 py-2 text-white fw-bold w-100"
-            type="submit"
-          >
+          <button class="btn border-0 px-3 py-2 fw-bold w-100" type="submit">
             Send Link
           </button>
         </div>
@@ -39,7 +36,6 @@ const email = ref("");
 
 const onSubmit = () => {
   console.log("Email:", email.value);
-
 };
 </script>
 
@@ -51,5 +47,14 @@ const onSubmit = () => {
 
 .btn {
   background-color: #ffd333;
+}
+
+.login p {
+  color: gray;
+  font-size: 12px;
+}
+
+.login h3 {
+  font-size: 20px;
 }
 </style>
