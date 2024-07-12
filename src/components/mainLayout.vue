@@ -87,13 +87,13 @@
           </a-menu-item>
 
           <!-- color -->
-          <a-menu-item key="7">
+          <a-menu-item key="9">
             <router-link to="/admin/color" style="text-decoration: none">
               <i class="bi bi-palette"></i>
               <span class="m-4">Color</span>
             </router-link>
           </a-menu-item>
-          <a-menu-item key="8">
+          <a-menu-item key="10">
             <router-link to="/admin/color-list" style="text-decoration: none">
               <i class="fa-solid fa-list"></i>
               <span class="m-4">Color List</span>
@@ -103,7 +103,7 @@
         </a-sub-menu>
 
         <!-- orders -->
-        <a-menu-item key="9">
+        <a-menu-item key="11">
           <span>
             <i class="fa-solid fa-cart-shopping"></i>
             <span class="m-4">Orders</span>
@@ -111,7 +111,7 @@
         </a-menu-item>
 
         <!-- enquiry -->
-        <a-menu-item key="9">
+        <a-menu-item key="12">
           <router-link to="/admin/enquiries" style="text-decoration: none">
             <i class="bi bi-chat-square-text"></i>
             <span class="m-4">Enquiries</span>
@@ -192,13 +192,22 @@
         <div class="d-flex gap-4 align-items-center">
           <!-- notification -->
           <div class="position-relative">
-            <i class="bi bi-bell fs-4"></i>
-            <span class="badge bg-danger rounded-circle position-absolute">
-              7</span
+            <router-link
+              to="admin/notification"
+              class="text-decoration-none text-secondary"
             >
+              <i class="bi bi-bell fs-4"></i>
+              <span class="badge bg-danger rounded-circle position-absolute">
+                7</span
+              >
+            </router-link>
           </div>
 
-          <div class="d-flex gap-3 align-items-center">
+          <!-- <div class="d-flex gap-3 align-items-center"> -->
+          <router-link
+            to="admin/settings"
+            class="d-flex gap-3 align-items-center text-decoration-none text-secondary"
+          >
             <!-- avatar -->
             <div class="">
               <img
@@ -212,7 +221,8 @@
               <h5 class="mb-0">Sarah Smith</h5>
               <p class="mb-0">s_smith@example.com</p>
             </div>
-          </div>
+          </router-link>
+          <!-- </div> -->
         </div>
       </a-layout-header>
 
@@ -220,7 +230,12 @@
       <a-layout-content style="margin: 0 16px">
         <a-breadcrumb style="margin: 16px 0"> </a-breadcrumb>
         <div
-          :style="{ padding: '24px', background: '#fff', minHeight: '360px' }"
+          class="mb-5"
+          :style="{
+            padding: '1px',
+            background: 'transparent',
+            minHeight: '360px',
+          }"
         >
           <router-view />
         </div>
@@ -259,4 +274,3 @@ const selectedKeys = ref(["1"]);
   color: gray;
 }
 </style>
-

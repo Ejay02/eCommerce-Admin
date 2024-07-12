@@ -20,6 +20,10 @@ main {
   overflow-y: scroll;
 }
 
+html::-webkit-scrollbar {
+  width: 0px;
+}
+
 .ant-layout-sider {
   flex: 0 0 250px;
   max-width: 250px;
