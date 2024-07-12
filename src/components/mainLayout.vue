@@ -1,14 +1,16 @@
 <template>
   <a-layout style="min-height: 100vh" class="home">
     <a-layout-sider v-model:collapsed="collapsed" collapsible>
-      <div
-        class="logo m-2 rounded d-flex align-items-center justify-content-center"
-      >
-        <i class="bi bi-brilliance fs-4"></i>
-        <h2 v-if="!collapsed" class="fs-5 text-center text-white py-3 m-4">
-          <span>BuyZone</span>
-        </h2>
-      </div>
+      <router-link to="/admin/dashboard" style="text-decoration: none">
+        <div
+          class="logo m-2 rounded d-flex align-items-center justify-content-center"
+        >
+          <i class="bi bi-brilliance fs-4"></i>
+          <h2 v-if="!collapsed" class="fs-5 text-center text-white py-3 m-4">
+            <span>BuyZone</span>
+          </h2>
+        </div>
+      </router-link>
 
       <!--  -->
       <a-menu v-model:selectedKeys="selectedKeys" theme="dark" mode="inline">
@@ -104,10 +106,12 @@
 
         <!-- orders -->
         <a-menu-item key="11">
-          <span>
-            <i class="fa-solid fa-cart-shopping"></i>
-            <span class="m-4">Orders</span>
-          </span>
+          <router-link to="/admin/orders" style="text-decoration: none">
+            <span>
+              <i class="fa-solid fa-cart-shopping"></i>
+              <span class="m-4">Orders</span>
+            </span>
+          </router-link>
         </a-menu-item>
 
         <!-- enquiry -->
@@ -123,7 +127,7 @@
           <template #title>
             <span>
               <i class="fa-solid fa-blog"></i>
-              <span class="m-4">Blogs</span>
+              <span class="m-4">Blog</span>
             </span>
           </template>
           <a-menu-item key="6">

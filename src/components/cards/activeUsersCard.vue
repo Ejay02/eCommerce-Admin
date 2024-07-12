@@ -33,7 +33,7 @@ const activePages = ref([
   { name: "/customers", users: 18 },
   { name: "/catalog", users: 6 },
   { name: "/orders", users: 7 },
-  { name: "/blogs", users: 3 },
+  { name: "/blog", users: 3 },
   { name: "/enquiries", users: 1 },
 ]);
 </script>

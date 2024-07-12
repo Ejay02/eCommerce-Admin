@@ -2,7 +2,7 @@
   <div class="mt-4 card">
     <div class="d-flex justify-content-between">
       <h3 class="mb-4">Recent reviews</h3>
-      <i class="bi bi-three-dots-vertical"></i>
+      <i class="bi bi-arrow-right fs-5"></i>
     </div>
 
     <!--  -->
@@ -96,5 +96,9 @@ const onLoadMore = () => {
 
 .card {
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.bi {
+  color: gray;
 }
 </style>

@@ -1,18 +1,81 @@
 <template>
-  <div class="mt-4 card">
-    <div class="d-flex justify-content-between">
-      <h3 class="mb-4">Settings</h3>
+  <div class="mt-4 card p-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h3 class="mb-0">Settings</h3>
       <i class="bi bi-three-dots-vertical"></i>
     </div>
 
- 
+    <form @submit.prevent="updateSettings">
+      <div class="mb-4">
+        <label for="avatar" class="form-label">Avatar</label>
+        <div class="d-flex align-items-center">
+          <img :src="avatar" alt="User Avatar" class="avatar-preview me-4" />
+          <input type="file" id="avatar" @change="handleAvatarChange" />
+        </div>
+        <small class="form-text text-warning">.JPG and .PNG formats only</small>
+        <small class="form-text text-warning">Max size 2MB</small>
+      </div>
+
+      <div class="mb-4">
+        <label for="name" class="form-label">Name</label>
+        <input type="text" id="name" class="form-control" v-model="name" />
+      </div>
+
+      <div class="mb-4">
+        <label for="email" class="form-label">Email</label>
+        <input type="email" id="email" class="form-control" v-model="email" />
+      </div>
+
+      <button type="submit" class="btn btn-primary">Save Changes</button>
+    </form>
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+import { ref } from "vue";
+
+const avatar = ref(
+  "https://img.freepik.com/free-psd/3d-illustration-person-with-glasses_23-2149436185.jpg?w=996&t=st=1720681827~exp=1720682427~hmac=189dffe3117a9caac144609539d8e4383817c87c0a80116d53cac50c2dd2e54d"
+);
+const name = ref("");
+const email = ref("");
+
+const handleAvatarChange = (event) => {
+  const file = event.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      avatar.value = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+};
+
+const updateSettings = () => {
+  // Handle the settings update logic here
+  console.log("Settings updated:", {
+    avatar: avatar.value,
+    name: name.value,
+    email: email.value,
+  });
+};
+</script>
 
 <style scoped>
 .card {
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+}
+
+.avatar-preview {
+  width: 100px;
+  height: 100px;
+  border-radius: 5%;
+  object-fit: cover;
+}
+
+.form-text {
+  display: block;
+  margin-top: 0.25rem;
 }
 </style>

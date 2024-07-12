@@ -2,7 +2,8 @@
   <div class="mt-4 card">
     <div class="d-flex justify-content-between">
       <h3 class="mb-4">Recent activity</h3>
-      <i class="bi bi-three-dots-vertical"></i>
+      <!-- <i class="bi bi-three-dots-vertical"></i> -->
+      <i class="bi bi-arrow-right fs-5"></i>
     </div>
 
     <div>
@@ -73,7 +74,8 @@ const timelineItems = [
   border: 2px solid #fff;
 }
 
-.timeline-text {
+.timeline-text,
+.bi {
   color: gray; /* Gray color */
 }
 </style>
