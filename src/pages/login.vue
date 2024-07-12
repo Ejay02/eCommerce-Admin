@@ -44,7 +44,7 @@
           </router-link>
         </div>
         <!-- Button -->
-        <router-link to="/admin">
+        <router-link to="/admin/dashboard">
           <div class="mt-3">
             <button
               class="btn border-0 px-3 py-2 fw-bold w-100 text-center"

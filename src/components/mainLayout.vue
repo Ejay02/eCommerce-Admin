@@ -4,7 +4,7 @@
       <div
         class="logo m-2 rounded d-flex align-items-center justify-content-center"
       >
-        <i class="bi bi-brilliance"></i>
+        <i class="bi bi-brilliance fs-4"></i>
         <h2 v-if="!collapsed" class="fs-5 text-center text-white py-3 m-4">
           <span>BuyZone</span>
         </h2>
@@ -193,7 +193,7 @@
           <!-- notification -->
           <div class="position-relative">
             <router-link
-              to="admin/notification"
+              to="/admin/notification"
               class="text-decoration-none text-secondary"
             >
               <i class="bi bi-bell fs-4"></i>
@@ -205,7 +205,7 @@
 
           <!-- <div class="d-flex gap-3 align-items-center"> -->
           <router-link
-            to="admin/settings"
+            to="/admin/settings"
             class="d-flex gap-3 align-items-center text-decoration-none text-secondary"
           >
             <!-- avatar -->
@@ -272,5 +272,25 @@ const selectedKeys = ref(["1"]);
 
 .bi-search {
   color: gray;
+}
+
+.logo i {
+  transition: transform 0.3s ease-in-out;
+}
+
+@keyframes spin-zoom {
+  0% {
+    transform: rotate(0deg) scale(1);
+  }
+  50% {
+    transform: rotate(180deg) scale(1.5);
+  }
+  100% {
+    transform: rotate(360deg) scale(1);
+  }
+}
+
+.logo:hover i {
+  animation: spin-zoom 0.5s ease-in-out;
 }
 </style>

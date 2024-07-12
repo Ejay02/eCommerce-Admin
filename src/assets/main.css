@@ -43,6 +43,7 @@ html::-webkit-scrollbar {
   background-color: #ffd333 !important;
   margin: 0;
   height: 64px;
+  cursor: pointer;
 }
 
 .ant-menu-title-content {

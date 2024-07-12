@@ -14,7 +14,7 @@
               class="btn border-0 px-3 py-2 text-white fw-bold w-30 text-center te"
               type="submit"
             >
-              <a href="/admin" class="link_404">Home</a>
+              <a href="/admin/dashboard" class="link_404">Home</a>
             </button>
           </div>
         </div>
