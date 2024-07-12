@@ -1,12 +1,6 @@
 <template>
   <div class="stats-container">
-    <div
-      v-for="(stat, index) in stats"
-      :key="index"
-      class="stat-card"
-      @mouseover="handleHover(true, index)"
-      @mouseleave="handleHover(false, index)"
-    >
+    <div v-for="(stat, index) in stats" :key="index" class="stat-card">
       <div class="d-flex flex-grow-1 justify-content-between">
         <p>{{ stat.title }}</p>
         <i class="bi bi-three-dots-vertical"></i>
@@ -60,7 +54,7 @@ const stats = ref([
   },
   {
     title: "Total Orders",
-    amount: "9849.00",
+    amount: "77849.00",
     trend: "up",
     trendIcon: "fa-solid fa-arrow-trend-up",
     trendPercentage: "32%",
