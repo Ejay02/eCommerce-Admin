@@ -5,50 +5,42 @@
       <i class="bi bi-arrow-right fs-5"></i>
     </div>
 
-    <!--  -->
-    <a-list
-      class="demo-loadmore-list border-top border-gray"
-      :loading="initLoading"
-      item-layout="horizontal"
-      :data-source="list"
-    >
-      <template #loadMore>
-        <div
-          v-if="!initLoading && !loading"
-          :style="{
-            textAlign: 'center',
-            marginTop: '12px',
-            height: '32px',
-            lineHeight: '32px',
-          }"
-        >
-          <a-button @click="onLoadMore">load more</a-button>
-        </div>
-      </template>
-      <template #renderItem="{ item }">
-        <a-list-item>
-          <template #actions>
-            <div class=""></div>
+    <div class="list-container">
+      <a-list
+        class="demo-loadmore-list border-top border-gray"
+        :loading="initLoading"
+        item-layout="horizontal"
+        :data-source="list"
+      >
+        <template #renderItem="{ item }">
+          <a-list-item>
+            <template #actions>
+              <div class=""></div>
+              <a-rate :value="2" disabled />
+            </template>
+            <a-skeleton avatar :title="false" :loading="!!item.loading" active>
+              <a-list-item-meta
+                description="Ant Design, a design language for background applications, is refined by Ant UED Team"
+              >
+                <template #title>
+                  <a href="https://www.antdv.com/">{{ item.name.last }}</a>
+                </template>
+                <template #avatar>
+                  <a-avatar :src="item.picture.large" />
+                </template>
+              </a-list-item-meta>
+            </a-skeleton>
+          </a-list-item>
+        </template>
+      </a-list>
+    </div>
 
-            <a-rate :value="2" disabled />
-          </template>
-          <a-skeleton avatar :title="false" :loading="!!item.loading" active>
-            <a-list-item-meta
-              description="Ant Design, a design language for background applications, is refined by Ant UED Team"
-            >
-              <template #title>
-                <a href="https://www.antdv.com/">{{ item.name.last }}</a>
-              </template>
-              <template #avatar>
-                <a-avatar :src="item.picture.large" />
-              </template>
-            </a-list-item-meta>
-          </a-skeleton>
-        </a-list-item>
-      </template>
-    </a-list>
+    <div v-if="!initLoading && !loading" class="load-more-container">
+      <a-button @click="onLoadMore">load more</a-button>
+    </div>
   </div>
 </template>
+
 <script setup>
 import { onMounted, ref, nextTick } from "vue";
 const count = 3;
@@ -90,15 +82,22 @@ const onLoadMore = () => {
 </script>
 
 <style scoped>
-.demo-loadmore-list {
-  min-height: 30px;
-}
-
 .card {
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  height: 600px;
+  display: flex;
+  flex-direction: column;
 }
 
-.bi {
-  color: gray;
+.list-container {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.load-more-container {
+  text-align: center;
+  margin-top: 12px;
+  height: 32px;
+  line-height: 32px;
 }
 </style>
