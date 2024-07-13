@@ -44,16 +44,14 @@
           </router-link>
         </div>
         <!-- Button -->
-        <router-link to="/admin/dashboard">
-          <div class="mt-3">
-            <button
-              class="btn border-0 px-3 py-2 fw-bold w-100 text-center"
-              type="submit"
-            >
-              Log In
-            </button>
-          </div>
-        </router-link>
+        <div class="mt-3">
+          <button
+            class="btn border-0 px-3 py-2 fw-bold w-100 text-center"
+            type="submit"
+          >
+            Log In
+          </button>
+        </div>
       </form>
 
       <!-- continue -->
@@ -64,15 +62,15 @@
       </div>
 
       <!-- social buttons -->
-      <div class="d-flex flex-wrap justify-content-between w-100">
+      <div class="d-flex justify-content-between w-100">
         <button
-          class="btn d-flex border-0 fw-bold text-center align-items-center"
-          type="submit"
+          @click="googleLogin"
+          class="btn d-flex align-items-center fw-bold"
         >
           <i class="fa-brands fa-google me-1"></i> Google
         </button>
         <button
-          class="btn d-flex border-0 fw-bold text-center align-items-center text-wrap"
+          class="btn d-flex border-0 fw-bold align-items-center"
           type="submit"
         >
           <i class="fa-brands fa-facebook me-1"></i> Facebook
@@ -90,6 +88,7 @@
 
 <script setup>
 import { ref } from "vue";
+import router from "../router";
 
 const email = ref("");
 const password = ref("");
@@ -97,6 +96,13 @@ const password = ref("");
 const onSubmit = () => {
   console.log("Email:", email.value);
   console.log("Password:", password.value);
+};
+
+const googleLogin = () => {
+  // Trigger your Google OAuth login process here
+  console.log("Google OAuth login initiated");
+  // Simulate a successful login and redirect
+  router.push("/admin/dashboard");
 };
 </script>
 
