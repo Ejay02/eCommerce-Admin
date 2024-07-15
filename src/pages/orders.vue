@@ -2,9 +2,9 @@
   <div>
     <OrdersCard 
     :pageSize="10" 
-    :title="` Orders`" 
-   
+    
     />
+    <!-- :title="` Orders`"  -->
   </div>
 </template>
 

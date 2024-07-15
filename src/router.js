@@ -65,54 +65,52 @@ const routes = [
       {
         path: "product",
         component: AddProduct,
-        children: [
-          {
-            path: "product-list",
-            component: ProductList,
-          },
-          {
-            path: "brand",
-            component: Brand,
-          },
-          {
-            path: "brand-list",
-            component: BrandList,
-          },
-          {
-            path: "color",
-            component: Color,
-          },
-          {
-            path: "color-list",
-            component: ColorList,
-          },
-          {
-            path: "category",
-            component: Category,
-          },
-          {
-            path: "category-list",
-            component: CategoryList,
-          },
-        ],
+        children: [],
+      },
+      {
+        path: "product/product-list",
+        component: ProductList,
+      },
+      {
+        path: "product/brand",
+        component: Brand,
+      },
+      {
+        path: "product/brand-list",
+        component: BrandList,
+      },
+      {
+        path: "product/color",
+        component: Color,
+      },
+      {
+        path: "product/color-list",
+        component: ColorList,
+      },
+      {
+        path: "product/category",
+        component: Category,
+      },
+      {
+        path: "product/category-list",
+        component: CategoryList,
       },
       {
         path: "blog",
         component: AddBlog,
-        children: [
-          {
-            path: "add-blog-category",
-            component: AddBlogCategory,
-          },
-          {
-            path: "blog-category-list",
-            component: BlogCategoryList,
-          },
-          {
-            path: "blog-list",
-            component: BlogList,
-          },
-        ],
+        children: [],
+      },
+      {
+        path: "blog/add-blog-category",
+        component: AddBlogCategory,
+      },
+      {
+        path: "blog/blog-category-list",
+        component: BlogCategoryList,
+      },
+      {
+        path: "blog/blog-list",
+        component: BlogList,
       },
     ],
   },

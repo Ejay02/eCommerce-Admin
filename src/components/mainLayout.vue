@@ -53,7 +53,10 @@ b
           </a-menu-item>
 
           <a-menu-item key="4">
-            <router-link to="/admin/product/product-list" style="text-decoration: none">
+            <router-link
+              to="/admin/product/product-list"
+              style="text-decoration: none"
+            >
               <i class="bi bi-card-list"></i>
               <span class="m-4">Product List</span>
             </router-link>
@@ -61,13 +64,19 @@ b
 
           <!-- brand -->
           <a-menu-item key="5">
-            <router-link to="/admin/product/brand" style="text-decoration: none">
+            <router-link
+              to="/admin/product/brand"
+              style="text-decoration: none"
+            >
               <i class="fa-brands fa-pied-piper-alt"></i>
               <span class="m-4">Brand</span>
             </router-link>
           </a-menu-item>
           <a-menu-item key="6">
-            <router-link to="/admin/product/brand-list" style="text-decoration: none">
+            <router-link
+              to="/admin/product/brand-list"
+              style="text-decoration: none"
+            >
               <i class="fa-solid fa-clipboard-list"></i>
               <span class="m-4">Brand List</span>
             </router-link>
@@ -75,7 +84,10 @@ b
 
           <!-- category -->
           <a-menu-item key="7">
-            <router-link to="/admin/product/category" style="text-decoration: none">
+            <router-link
+              to="/admin/product/category"
+              style="text-decoration: none"
+            >
               <i class="bi bi-collection"></i>
               <span class="m-4">Category</span>
             </router-link>
@@ -92,13 +104,19 @@ b
 
           <!-- color -->
           <a-menu-item key="9">
-            <router-link to="/admin/product/color" style="text-decoration: none">
+            <router-link
+              to="/admin/product/color"
+              style="text-decoration: none"
+            >
               <i class="bi bi-palette"></i>
               <span class="m-4">Color</span>
             </router-link>
           </a-menu-item>
           <a-menu-item key="10">
-            <router-link to="/admin/product/color-list" style="text-decoration: none">
+            <router-link
+              to="/admin/product/color-list"
+              style="text-decoration: none"
+            >
               <i class="fa-solid fa-list"></i>
               <span class="m-4">Color List</span>
             </router-link>
@@ -139,7 +157,10 @@ b
             </router-link>
           </a-menu-item>
           <a-menu-item key="47">
-            <router-link to="/admin/blog/blog-list" style="text-decoration: none">
+            <router-link
+              to="/admin/blog/blog-list"
+              style="text-decoration: none"
+            >
               <i class="bi bi-list"></i>
               <span class="m-4">Blog List</span>
             </router-link>
@@ -209,12 +230,12 @@ b
             </router-link>
           </div>
 
-          <a-dropdown class="">
+          <a-dropdown>
             <div
-              class="d-flex gap-3 align-items-center text-decoration-none text-secondary"
+              class="profile d-flex gap-3 align-items-center text-decoration-none text-secondary"
             >
               <!-- avatar -->
-              <div class="">
+              <div>
                 <img
                   src="https://img.freepik.com/free-psd/3d-illustration-person-with-glasses_23-2149436185.jpg?w=996&t=st=1720681827~exp=1720682427~hmac=189dffe3117a9caac144609539d8e4383817c87c0a80116d53cac50c2dd2e54d"
                   alt="user image"
@@ -319,6 +340,10 @@ const selectedKeys = ref(["1"]);
 
 .bi-search {
   color: gray;
+}
+
+.profile {
+  cursor: pointer;
 }
 
 .logo i {

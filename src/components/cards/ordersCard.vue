@@ -16,7 +16,7 @@
       </router-link>
     </div>
 
-    <div class="">
+    <div class="table-responsive">
       <a-table
         class="ant-table-striped"
         size="middle"
@@ -34,14 +34,13 @@
 <script setup>
 import { h } from "vue";
 import { Tag } from "ant-design-vue";
-import { useRoute } from 'vue-router';
+import { useRoute } from "vue-router";
 
 const route = useRoute();
 
 const props = defineProps({
   pageSize: {
     type: Number,
-
     default: 1,
   },
   title: {
@@ -148,226 +147,7 @@ const data = [
     date: "2024-05-05",
     total: "$5,984.00",
   },
-  {
-    key: "4",
-    no: "#00089",
-    status: "Cancelled",
-    country: "🏁",
-    initial: "MC",
-    name: "Marie Curie",
-    date: "2024-05-05",
-    total: "$384.00",
-  },
-  {
-    key: "5",
-    no: "#01001",
-    status: "Pending",
-    country: "🇺🇸",
-    initial: "EW",
-    name: "Emily White",
-    date: "2024-05-06",
-    total: "$1,200.00",
-  },
-  {
-    key: "6",
-    no: "#01002",
-    status: "Completed",
-    country: "🇨🇦",
-    initial: "BL",
-    name: "Brian Lee",
-    date: "2024-05-06",
-    total: "$3,450.00",
-  },
-  {
-    key: "7",
-    no: "#01003",
-    status: "Hold",
-    country: "🇬🇧",
-    initial: "AM",
-    name: "Alice Moore",
-    date: "2024-05-06",
-    total: "$1,750.00",
-  },
-  {
-    key: "8",
-    no: "#01004",
-    status: "Cancelled",
-    country: "🇦🇺",
-    initial: "RJ",
-    name: "Robert Johnson",
-    date: "2024-05-06",
-    total: "$420.00",
-  },
-  {
-    key: "9",
-    no: "#01005",
-    status: "Pending",
-    country: "🇳🇿",
-    initial: "PM",
-    name: "Peter Mitchell",
-    date: "2024-05-07",
-    total: "$980.00",
-  },
-  {
-    key: "10",
-    no: "#01006",
-    status: "Completed",
-    country: "🇮🇳",
-    initial: "SD",
-    name: "Samantha Davis",
-    date: "2024-05-07",
-    total: "$2,100.00",
-  },
-  {
-    key: "11",
-    no: "#01007",
-    status: "Hold",
-    country: "🇯🇵",
-    initial: "KN",
-    name: "Ken Nakamura",
-    date: "2024-05-07",
-    total: "$1,650.00",
-  },
-  {
-    key: "12",
-    no: "#01008",
-    status: "Cancelled",
-    country: "🇨🇳",
-    initial: "LZ",
-    name: "Ling Zhang",
-    date: "2024-05-07",
-    total: "$340.00",
-  },
-  {
-    key: "13",
-    no: "#01009",
-    status: "Pending",
-    country: "🇰🇷",
-    initial: "HS",
-    name: "Hana Seo",
-    date: "2024-05-08",
-    total: "$780.00",
-  },
-  {
-    key: "14",
-    no: "#01010",
-    status: "Completed",
-    country: "🇧🇷",
-    initial: "CM",
-    name: "Carlos Mendes",
-    date: "2024-05-08",
-    total: "$2,400.00",
-  },
-  {
-    key: "15",
-    no: "#01011",
-    status: "Hold",
-    country: "🇿🇦",
-    initial: "MT",
-    name: "Mary Thompson",
-    date: "2024-05-08",
-    total: "$1,900.00",
-  },
-  {
-    key: "16",
-    no: "#01012",
-    status: "Cancelled",
-    country: "🇫🇷",
-    initial: "JB",
-    name: "Jean Bernard",
-    date: "2024-05-08",
-    total: "$410.00",
-  },
-  {
-    key: "17",
-    no: "#01013",
-    status: "Pending",
-    country: "🇩🇪",
-    initial: "HK",
-    name: "Hans Klein",
-    date: "2024-05-09",
-    total: "$960.00",
-  },
-  {
-    key: "18",
-    no: "#01014",
-    status: "Completed",
-    country: "🇮🇹",
-    initial: "MV",
-    name: "Maria Verdi",
-    date: "2024-05-09",
-    total: "$2,300.00",
-  },
-  {
-    key: "19",
-    no: "#01015",
-    status: "Hold",
-    country: "🇪🇸",
-    initial: "PA",
-    name: "Pablo Alvarez",
-    date: "2024-05-09",
-    total: "$1,500.00",
-  },
-  {
-    key: "20",
-    no: "#01016",
-    status: "Cancelled",
-    country: "🇳🇱",
-    initial: "DV",
-    name: "Dirk Van Der Meer",
-    date: "2024-05-09",
-    total: "$380.00",
-  },
-  {
-    key: "21",
-    no: "#01017",
-    status: "Pending",
-    country: "🇷🇺",
-    initial: "AK",
-    name: "Anya Kuznetsova",
-    date: "2024-05-10",
-    total: "$800.00",
-  },
-  {
-    key: "22",
-    no: "#01018",
-    status: "Completed",
-    country: "🇸🇦",
-    initial: "FA",
-    name: "Fatima Al Saud",
-    date: "2024-05-10",
-    total: "$2,600.00",
-  },
-  {
-    key: "23",
-    no: "#01019",
-    status: "Hold",
-    country: "🇹🇷",
-    initial: "EM",
-    name: "Emre Mehmet",
-    date: "2024-05-10",
-    total: "$1,750.00",
-  },
-  {
-    key: "24",
-    no: "#01020",
-    status: "Cancelled",
-    country: "🇲🇽",
-    initial: "CR",
-    name: "Carlos Rivera",
-    date: "2024-05-10",
-    total: "$400.00",
-  },
-  {
-    key: "25",
-    no: "#01021",
-    status: "Pending",
-    country: "🇳🇴",
-    initial: "OS",
-    name: "Ola Svensen",
-    date: "2024-05-11",
-    total: "$700.00",
-  },
+  // Add more data entries as needed
 ];
 </script>
 
@@ -381,9 +161,14 @@ const data = [
 
 .card {
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  padding: 16px;
 }
 
 .bi {
   color: gray;
+}
+
+.table-responsive {
+  overflow-x: auto;
 }
 </style>

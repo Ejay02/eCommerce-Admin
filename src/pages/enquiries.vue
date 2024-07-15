@@ -1,7 +1,7 @@
 <template>
   <div class="mt-4 card p-4">
     <div class="d-flex justify-content-between mb-3">
-      <h3>Enquiries</h3>
+      <h3></h3>
       <i class="bi bi-three-dots-vertical"></i>
     </div>
     <div class="table-responsive">
