@@ -129,7 +129,7 @@ const handleSubmit = () => {
 }
 
 .quill {
-  height: 250px;
+  height: 200px;
 }
 
 .upload-list-inline :deep(.ant-upload-list-item) {

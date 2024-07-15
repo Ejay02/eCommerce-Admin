@@ -147,7 +147,7 @@ const data = [
     date: "2024-05-05",
     total: "$5,984.00",
   },
-  // Add more data entries as needed
+
 ];
 </script>
 
