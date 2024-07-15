@@ -1,11 +1,8 @@
 <template>
   <div class="mt-4 card p-4">
-    <span class="mb-4 text-end">Preview</span>
-    <!--  -->
+    <!-- <span class="mb-4 text-end">Preview</span> -->
 
     <a-steps :items="items" class="mb-3"></a-steps>
-
-    <!--  -->
 
     <div class="row">
       <div class="col-md-6">
@@ -41,17 +38,13 @@
               required
             />
           </div>
-          <div class="mb-3">
-            <label for="images" class="form-label">Images</label>
-            <input
-              type="file"
-              id="images"
-              ref="fileInput"
-              multiple
-              class="form-control"
-            />
-            <small class="text-muted">Select multiple images to upload.</small>
-          </div>
+
+          <a-upload list-type="picture" class="upload-list-inline">
+            <a-button class="">
+              <upload-outlined></upload-outlined>
+              <i class="bi bi-upload m-2"></i> upload Image(s)
+            </a-button>
+          </a-upload>
         </form>
       </div>
       <div class="col-md-6">
@@ -74,30 +67,25 @@
 import { ref } from "vue";
 import { h } from "vue";
 import {
-  // UserOutlined,
   SolutionOutlined,
   LoadingOutlined,
   SmileOutlined,
 } from "@ant-design/icons-vue";
 const items = [
   {
-    title: "Create blog",
+    title: "Write blog",
     status: "finish",
     icon: h(LoadingOutlined),
   },
   {
-    title: "Verify details",
+    title: "Preview",
     status: "wait",
     // status: "finish",
     icon: h(SolutionOutlined),
   },
-  // {
-  //   title: "Preview",
-  //   status: "process",
-  //   icon: h(LoadingOutlined),
-  // },
+
   {
-    title: "Done",
+    title: "Post",
     status: "wait",
     icon: h(SmileOutlined),
   },
@@ -141,6 +129,16 @@ const handleSubmit = () => {
 }
 
 .quill {
-  height: 300px;
+  height: 250px;
+}
+
+.upload-list-inline :deep(.ant-upload-list-item) {
+  float: left;
+  width: 200px;
+  margin-right: 8px;
+}
+
+.upload-list-inline [class*="-upload-list-rtl"] :deep(.ant-upload-list-item) {
+  float: right;
 }
 </style>
