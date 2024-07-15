@@ -1,6 +1,11 @@
 <template>
   <div class="mt-4 card p-4">
     <span class="mb-4 text-end">Preview</span>
+    <!--  -->
+
+    <a-steps :items="items" class="mb-3"></a-steps>
+
+    <!--  -->
 
     <div class="row">
       <div class="col-md-6">
@@ -60,13 +65,43 @@
       </div>
     </div>
     <div class="text-end">
-      <button type="submit" class="btn btn-primary">Submit</button>
+      <button type="submit" class="btn btn-primary">Create</button>
     </div>
   </div>
 </template>
 
 <script setup>
 import { ref } from "vue";
+import { h } from "vue";
+import {
+  // UserOutlined,
+  SolutionOutlined,
+  LoadingOutlined,
+  SmileOutlined,
+} from "@ant-design/icons-vue";
+const items = [
+  {
+    title: "Create blog",
+    status: "finish",
+    icon: h(LoadingOutlined),
+  },
+  {
+    title: "Verify details",
+    status: "wait",
+    // status: "finish",
+    icon: h(SolutionOutlined),
+  },
+  // {
+  //   title: "Preview",
+  //   status: "process",
+  //   icon: h(LoadingOutlined),
+  // },
+  {
+    title: "Done",
+    status: "wait",
+    icon: h(SmileOutlined),
+  },
+];
 
 const formData = ref({
   title: "",
