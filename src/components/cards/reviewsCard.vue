@@ -15,8 +15,7 @@
         <template #renderItem="{ item }">
           <a-list-item>
             <template #actions>
-              <div class=""></div>
-              <a-rate :value="2" disabled />
+              <a-rate :value="4" disabled style="" />
             </template>
             <a-skeleton avatar :title="false" :loading="!!item.loading" active>
               <a-list-item-meta

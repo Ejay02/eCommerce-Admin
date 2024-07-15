@@ -45,12 +45,17 @@
         </div>
         <!-- Button -->
         <div class="mt-3">
-          <button
-            class="btn border-0 px-3 py-2 fw-bold w-100 text-center"
-            type="submit"
+          <router-link
+            to="/admin/dashboard"
+            class="text-decoration-none text-secondary"
           >
-            Log In
-          </button>
+            <button
+              class="btn border-0 px-3 py-2 fw-bold w-100 text-center"
+              type="submit"
+            >
+              Log In
+            </button>
+          </router-link>
         </div>
       </form>
 
@@ -78,6 +83,7 @@
         <button
           class="d-flex align-items-center btn border-0 fw-bold text-center"
           type="submit"
+          @click="githubLogin"
         >
           <i class="fa-brands fa-github me-1"></i> Github
         </button>
@@ -103,6 +109,23 @@ const googleLogin = () => {
   console.log("Google OAuth login initiated");
   // Simulate a successful login and redirect
   router.push("/admin/dashboard");
+};
+
+const githubLogin = () => {
+  const isLocalhost = window.location.hostname === "localhost";
+  console.log("isLocalhost:", isLocalhost);
+
+  const clientId = isLocalhost
+    ? import.meta.env.VITE_GITHUB_CLIENT_ID_LOCAL
+    : import.meta.env.VITE_GITHUB_CLIENT_ID;
+
+  const redirectUri = isLocalhost
+    ? import.meta.env.VITE_GITHUB_REDIRECT_URI_LOCAL
+    : import.meta.env.VITE_GITHUB_REDIRECT_URI;
+
+  const githubAuthUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=read:user`;
+
+  window.location.href = githubAuthUrl;
 };
 </script>
 

@@ -1,3 +1,4 @@
+b
 <template>
   <a-layout style="min-height: 100vh" class="home">
     <a-layout-sider v-model:collapsed="collapsed" collapsible>
@@ -5,7 +6,8 @@
         <div
           class="logo m-2 rounded d-flex align-items-center justify-content-center"
         >
-          <i class="bi bi-brilliance fs-4"></i>
+          <!-- <i class="bi bi-brilliance fs-4"></i> -->
+          <i class="fa-solid fa-yin-yang fs-4"></i>
           <h2 v-if="!collapsed" class="fs-5 text-center text-white py-3 m-4">
             <span>BuyZone</span>
           </h2>
@@ -51,7 +53,7 @@
           </a-menu-item>
 
           <a-menu-item key="4">
-            <router-link to="/admin/product-list" style="text-decoration: none">
+            <router-link to="/admin/product/product-list" style="text-decoration: none">
               <i class="bi bi-card-list"></i>
               <span class="m-4">Product List</span>
             </router-link>
@@ -59,13 +61,13 @@
 
           <!-- brand -->
           <a-menu-item key="5">
-            <router-link to="/admin/brand" style="text-decoration: none">
+            <router-link to="/admin/product/brand" style="text-decoration: none">
               <i class="fa-brands fa-pied-piper-alt"></i>
               <span class="m-4">Brand</span>
             </router-link>
           </a-menu-item>
           <a-menu-item key="6">
-            <router-link to="/admin/brand-list" style="text-decoration: none">
+            <router-link to="/admin/product/brand-list" style="text-decoration: none">
               <i class="fa-solid fa-clipboard-list"></i>
               <span class="m-4">Brand List</span>
             </router-link>
@@ -73,14 +75,14 @@
 
           <!-- category -->
           <a-menu-item key="7">
-            <router-link to="/admin/category" style="text-decoration: none">
+            <router-link to="/admin/product/category" style="text-decoration: none">
               <i class="bi bi-collection"></i>
               <span class="m-4">Category</span>
             </router-link>
           </a-menu-item>
           <a-menu-item key="8">
             <router-link
-              to="/admin/category-list"
+              to="/admin/product/category-list"
               style="text-decoration: none"
             >
               <i class="fa-solid fa-layer-group"></i>
@@ -90,13 +92,13 @@
 
           <!-- color -->
           <a-menu-item key="9">
-            <router-link to="/admin/color" style="text-decoration: none">
+            <router-link to="/admin/product/color" style="text-decoration: none">
               <i class="bi bi-palette"></i>
               <span class="m-4">Color</span>
             </router-link>
           </a-menu-item>
           <a-menu-item key="10">
-            <router-link to="/admin/color-list" style="text-decoration: none">
+            <router-link to="/admin/product/color-list" style="text-decoration: none">
               <i class="fa-solid fa-list"></i>
               <span class="m-4">Color List</span>
             </router-link>
@@ -130,30 +132,30 @@
               <span class="m-4">Blog</span>
             </span>
           </template>
-          <a-menu-item key="6">
+          <a-menu-item key="46">
             <router-link to="/admin/blog" style="text-decoration: none">
               <i class="bi bi-file-plus"></i>
               <span class="m-4">Add Blog</span>
             </router-link>
           </a-menu-item>
-          <a-menu-item key="6">
-            <router-link to="/admin/blog-list" style="text-decoration: none">
+          <a-menu-item key="47">
+            <router-link to="/admin/blog/blog-list" style="text-decoration: none">
               <i class="bi bi-list"></i>
               <span class="m-4">Blog List</span>
             </router-link>
           </a-menu-item>
-          <a-menu-item key="8">
+          <a-menu-item key="48">
             <router-link
-              to="/admin/blog-category"
+              to="/admin/blog/add-blog-category"
               style="text-decoration: none"
             >
               <i class="fa-solid fa-plus"></i>
               <span class="m-4">Add Blog Category</span>
             </router-link>
           </a-menu-item>
-          <a-menu-item key="8">
+          <a-menu-item key="49">
             <router-link
-              to="/admin/blog-category-list"
+              to="/admin/blog/blog-category-list"
               style="text-decoration: none"
             >
               <i class="bi bi-list-nested"></i>
@@ -197,7 +199,7 @@
           <!-- notification -->
           <div class="position-relative">
             <router-link
-              to="/admin/notification"
+              to="/admin/enquiries"
               class="text-decoration-none text-secondary"
             >
               <i class="bi bi-bell fs-4"></i>
@@ -207,26 +209,67 @@
             </router-link>
           </div>
 
-          <!-- <div class="d-flex gap-3 align-items-center"> -->
-          <router-link
-            to="/admin/settings"
-            class="d-flex gap-3 align-items-center text-decoration-none text-secondary"
-          >
-            <!-- avatar -->
-            <div class="">
-              <img
-                src="https://img.freepik.com/free-psd/3d-illustration-person-with-glasses_23-2149436185.jpg?w=996&t=st=1720681827~exp=1720682427~hmac=189dffe3117a9caac144609539d8e4383817c87c0a80116d53cac50c2dd2e54d"
-                alt="user image"
-                style="width: 50px; height: 50px; border-radius: 5px"
-              />
+          <a-dropdown class="">
+            <div
+              class="d-flex gap-3 align-items-center text-decoration-none text-secondary"
+            >
+              <!-- avatar -->
+              <div class="">
+                <img
+                  src="https://img.freepik.com/free-psd/3d-illustration-person-with-glasses_23-2149436185.jpg?w=996&t=st=1720681827~exp=1720682427~hmac=189dffe3117a9caac144609539d8e4383817c87c0a80116d53cac50c2dd2e54d"
+                  alt="user image"
+                  style="width: 50px; height: 50px; border-radius: 5px"
+                />
+              </div>
+              <!-- deets -->
+              <div>
+                <h5 class="mb-0">Sarah Smith</h5>
+                <p class="mb-0">s_smith@example.com</p>
+              </div>
             </div>
-            <!-- deets -->
-            <div class="">
-              <h5 class="mb-0">Sarah Smith</h5>
-              <p class="mb-0">s_smith@example.com</p>
-            </div>
-          </router-link>
-          <!-- </div> -->
+            <!-- dropdown -->
+            <template #overlay>
+              <a-menu>
+                <a-menu-item>
+                  <router-link
+                    to="/admin/settings"
+                    class="d-flex gap-3 align-items-center text-decoration-none text-secondary"
+                  >
+                    <i class="fa-solid fa-gears"></i>
+                    Settings
+                  </router-link>
+                </a-menu-item>
+                <a-menu-item>
+                  <div
+                    class="d-flex gap-3 align-items-center text-decoration-none text-secondary"
+                  >
+                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                    <span class="">Switch Account</span>
+                  </div>
+                </a-menu-item>
+                <a-menu-item>
+                  <a
+                    href="https://buyzone-demo.netlify.app/"
+                    target="_blank"
+                    class="d-flex gap-3 align-items-center text-decoration-none text-secondary"
+                  >
+                    <i class="fas fa-external-link-alt"></i>
+
+                    Visit Site</a
+                  >
+                </a-menu-item>
+                <a-menu-item>
+                  <router-link
+                    to="/"
+                    class="d-flex gap-3 align-items-center text-decoration-none text-secondary"
+                  >
+                    <i class="fa-solid fa-power-off"></i>
+                    <span>Logout</span>
+                  </router-link>
+                </a-menu-item>
+              </a-menu>
+            </template>
+          </a-dropdown>
         </div>
       </a-layout-header>
 

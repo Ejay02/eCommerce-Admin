@@ -11,16 +11,24 @@ import ResetPassword from "./pages/resetPassword.vue";
 // import ResetPassword from "./pages/resetPassword.vue";
 import NotFound from "./components/error/notFound.vue";
 import ForgotPassword from "./pages/forgotPassword.vue";
+import AddBlog from "./pages/blog/addBlog.vue";
+import AddBlogCategory from "./pages/blog/addBlogCategory.vue";
+import BlogCategoryList from "./pages/blog/blogCategoryList.vue";
+import BlogList from "./pages/blog/blogList.vue";
+import AddProduct from "./pages/catalog/addProduct.vue";
+import ProductList from "./pages/catalog/productList.vue";
+import Brand from "./pages/catalog/brand.vue";
+import BrandList from "./pages/catalog/brandList.vue";
+import Color from "./pages/catalog/color.vue";
+import ColorList from "./pages/catalog/colorList.vue";
+import Category from "./pages/catalog/category.vue";
+import CategoryList from "./pages/catalog/categoryList.vue";
 // import AboutView from "./AboutView.vue";
 
 const routes = [
   {
     path: "/",
     component: Login,
-    // children: [
-    // {
-    //   path: "dashboard",
-    //   component: Dashboard,
   },
   {
     path: "/reset-password",
@@ -30,8 +38,6 @@ const routes = [
     path: "/forgot-password",
     component: ForgotPassword,
   },
-  // ],
-  // },
   {
     path: "/admin",
     component: MainLayout,
@@ -56,18 +62,58 @@ const routes = [
         path: "settings",
         component: Settings,
       },
-      // {
-      //   path: "orders",
-      //   component: Orders,
-      // },
-      // {
-      //   path: "orders",
-      //   component: Orders,
-      // },
-      // {
-      //   path: "orders",
-      //   component: Orders,
-      // },
+      {
+        path: "product",
+        component: AddProduct,
+        children: [
+          {
+            path: "product-list",
+            component: ProductList,
+          },
+          {
+            path: "brand",
+            component: Brand,
+          },
+          {
+            path: "brand-list",
+            component: BrandList,
+          },
+          {
+            path: "color",
+            component: Color,
+          },
+          {
+            path: "color-list",
+            component: ColorList,
+          },
+          {
+            path: "category",
+            component: Category,
+          },
+          {
+            path: "category-list",
+            component: CategoryList,
+          },
+        ],
+      },
+      {
+        path: "blog",
+        component: AddBlog,
+        children: [
+          {
+            path: "add-blog-category",
+            component: AddBlogCategory,
+          },
+          {
+            path: "blog-category-list",
+            component: BlogCategoryList,
+          },
+          {
+            path: "blog-list",
+            component: BlogList,
+          },
+        ],
+      },
     ],
   },
   {
