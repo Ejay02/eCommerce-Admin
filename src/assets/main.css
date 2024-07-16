@@ -5,6 +5,12 @@
   font-weight: normal;
 } */
 
+:root {
+  --color-212529: #212529;
+  --color-ffd333: #ffd333;
+  --color-47ad24: #47ad24;
+}
+
 body {
   font-family: "Roboto", sans-serif;
 }

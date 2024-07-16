@@ -8,7 +8,7 @@
       <div class="col-md-6">
         <form @submit.prevent="handleSubmit">
           <div class="mb-3">
-            <label for="title" class="form-label">Title</label>
+            <!-- <label for="title" class="form-label">Title</label> -->
             <input
               type="text"
               id="title"
@@ -16,39 +16,43 @@
               class="form-control"
               required
               autofocus
+              placeholder="Blog Title"
             />
           </div>
           <div class="mb-3">
-            <label for="category" class="form-label">Category</label>
+            <!-- <label for="category" class="form-label">Category</label> -->
             <input
               type="text"
               id="category"
               v-model="formData.category"
               class="form-control"
               required
+              placeholder="Blog Category"
             />
           </div>
           <div class="mb-3">
-            <label for="author" class="form-label">Author</label>
+            <!-- <label for="author" class="form-label">Author</label> -->
             <input
               type="text"
               id="author"
               v-model="formData.author"
               class="form-control"
               required
+              placeholder="Author name"
             />
           </div>
 
           <a-upload list-type="picture" class="upload-list-inline">
-            <a-button class="">
+            <a-button class="span">
               <upload-outlined></upload-outlined>
-              <i class="bi bi-upload m-2"></i> upload Image(s)
+              <i class="bi bi-upload m-2"></i>
+              <span> upload Image(s) </span>
             </a-button>
           </a-upload>
         </form>
       </div>
       <div class="col-md-6">
-        <div class="mb-3 quill">
+        <div class="mb-5 quill">
           <QuillEditor
             theme="snow"
             rows="12"
@@ -58,7 +62,7 @@
       </div>
     </div>
     <div class="text-end">
-      <button type="submit" class="btn btn-primary">Create</button>
+      <button type="submit" class="btn btn-primary mt-3">Create</button>
     </div>
   </div>
 </template>
@@ -71,6 +75,7 @@ import {
   LoadingOutlined,
   SmileOutlined,
 } from "@ant-design/icons-vue";
+
 const items = [
   {
     title: "Write blog",
@@ -140,5 +145,11 @@ const handleSubmit = () => {
 
 .upload-list-inline [class*="-upload-list-rtl"] :deep(.ant-upload-list-item) {
   float: right;
+}
+
+.row input::placeholder,
+.span {
+  color: gray;
+  font-size: 12px;
 }
 </style>

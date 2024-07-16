@@ -147,6 +147,36 @@ const data = [
     date: "2024-05-05",
     total: "$5,984.00",
   },
+  {
+    key: "1",
+    no: "#00922",
+    status: "Pending",
+    country: "🏳️‍⚧️",
+    initial: "JB",
+    name: "John Brown",
+    date: "2024-05-05",
+    total: "$2,984.00",
+  },
+  {
+    key: "2",
+    no: "#00409",
+    status: "Hold",
+    country: "🏳️‍🌈",
+    initial: "TS",
+    name: "Taylor Swift",
+    date: "2024-05-05",
+    total: "$984.00",
+  },
+  {
+    key: "3",
+    no: "#00239",
+    status: "Completed",
+    country: "🏳️",
+    initial: "KJ",
+    name: "Kehinde Jones",
+    date: "2024-05-05",
+    total: "$5,984.00",
+  },
 
 ];
 </script>
