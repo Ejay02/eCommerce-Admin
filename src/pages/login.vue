@@ -70,18 +70,18 @@
       <div class="d-flex justify-content-between w-100">
         <button
           @click="googleLogin"
-          class="btn d-flex align-items-center fw-bold"
+          class="btn d-flex align-items-center fw-bold g"
         >
           <i class="fa-brands fa-google me-1"></i> Google
         </button>
         <button
-          class="btn d-flex border-0 fw-bold align-items-center"
+          class="btn d-flex border-0 fw-bold align-items-center fb"
           type="submit"
         >
           <i class="fa-brands fa-facebook me-1"></i> Facebook
         </button>
         <button
-          class="d-flex align-items-center btn border-0 fw-bold text-center"
+          class="d-flex align-items-center btn border-0 fw-bold text-center ghub"
           type="submit"
           @click="githubLogin"
         >
@@ -170,6 +170,12 @@ const githubLogin = () => {
   border: 0;
   height: 1px;
   background: gray;
+}
+
+.fb,
+.g,
+.ghub {
+  font-size: 12px;
 }
 
 @media (max-width: 768px) {
