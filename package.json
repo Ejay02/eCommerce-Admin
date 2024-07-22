@@ -11,14 +11,17 @@
   },
   "dependencies": {
     "@ant-design/icons-vue": "^7.0.1",
+    "@formkit/vue": "^1.6.5",
     "@vueup/vue-quill": "^1.2.0",
     "ant-design-vue": "^4.2.3",
+    "axios": "^1.7.2",
     "chart.js": "^4.4.3",
     "pinia": "^2.1.7",
     "vue": "^3.4.29",
     "vue-chartjs": "^5.3.1",
     "vue-router": "^4.3.3",
-    "vue3-google-login": "^2.0.26"
+    "vue3-google-login": "^2.0.26",
+    "yup": "^1.4.0"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.0.5",

@@ -31,11 +31,33 @@
 
 <script setup>
 import { ref } from "vue";
+import axios from "axios";
+import router from "../router";
+import { useNotifications } from "@/composable/globalAlert.js";
+
+const { notify } = useNotifications();
 
 const email = ref("");
+const isLocalhost = window.location.hostname === "localhost";
 
-const onSubmit = () => {
-  console.log("Email:", email.value);
+const onSubmit = async () => {
+  const baseURL = isLocalhost
+    ? import.meta.env.VITE_BASE_URL_LOCAL
+    : import.meta.env.VITE_BASE_URL;
+
+  try {
+    const response = await axios.post(`${baseURL}/user/forgot-password`, {
+      email: email.value,
+    });
+
+    if (response.data) {
+      notify("Email sent!", "success");
+      router.push("/");
+    }
+  } catch (e) {
+    notify("Problem sending email", "error");
+    console.log(e);
+  }
 };
 </script>
 

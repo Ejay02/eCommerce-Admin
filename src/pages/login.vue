@@ -12,7 +12,10 @@
             v-model:value="email"
             placeholder="name@example.com"
             id="email"
+            aria-required="true"
+            @blur="validateEmail"
           />
+          <p v-if="emailError" class="text-danger">{{ emailError }}</p>
         </a-space>
         <!-- Password -->
         <a-space
@@ -24,11 +27,14 @@
             v-model:value="password"
             placeholder="password"
             id="password"
+            aria-required="true"
+            @blur="validatePassword"
           />
+          <p v-if="passwordError" class="text-danger">{{ passwordError }}</p>
         </a-space>
         <div class="d-flex justify-content-between">
           <div class="col-auto">
-            <div class="form-check">
+            <!-- <div class="form-check">
               <input
                 class="form-check-input"
                 type="checkbox"
@@ -37,7 +43,7 @@
               <label class="form-check-label" for="autoSizingCheck2">
                 Remember me
               </label>
-            </div>
+            </div> -->
           </div>
           <router-link to="/forgot-password">
             <span class="forgot"> Forgot Password? </span>
@@ -45,17 +51,15 @@
         </div>
         <!-- Button -->
         <div class="mt-3">
-          <router-link
-            to="/admin/dashboard"
-            class="text-decoration-none text-secondary"
-          >
+          <div class="text-decoration-none text-secondary">
             <button
               class="btn border-0 px-3 py-2 fw-bold w-100 text-center"
               type="submit"
+              :disabled="!isFormValid"
             >
               Log In
             </button>
-          </router-link>
+          </div>
         </div>
       </form>
 
@@ -67,54 +71,91 @@
       </div>
 
       <!-- social buttons -->
-      <div class="d-flex justify-content-between w-100">
-        <button
-          @click="googleLogin"
-          class="btn d-flex align-items-center fw-bold g"
-        >
-          <i class="fa-brands fa-google me-1"></i> Google
-        </button>
-        <button
-          class="btn d-flex border-0 fw-bold align-items-center fb"
-          type="submit"
-        >
-          <i class="fa-brands fa-facebook me-1"></i> Facebook
-        </button>
-        <button
-          class="d-flex align-items-center btn border-0 fw-bold text-center ghub"
-          type="submit"
-          @click="githubLogin"
-        >
-          <i class="fa-brands fa-github me-1"></i> Github
-        </button>
-      </div>
+
+      <!-- gh -->
+      <button
+        class="btn border-0 px-3 py-2 fw-bold w-100 text-center ghub"
+        type="submit"
+        @click="githubLogin"
+      >
+        <i class="fa-brands fa-github me-1"></i> Github
+      </button>
+
+      <!-- google -->
+      <button
+        @click="googleLogin"
+        class="btn mt-2 border-0 px-3 py-2 fw-bold w-100 text-center g"
+      >
+        <i class="fa-brands fa-google me-1"></i> Google
+      </button>
+
+      <!-- fb -->
+      <button
+        class="mt-2 border-0 px-3 py-2 fw-bold w-100 text-center fb btn"
+        type="submit"
+      >
+        <i class="fa-brands fa-facebook me-1"></i> Facebook
+      </button>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from "vue";
+import axios from "axios";
 import router from "../router";
+import { ref, computed } from "vue";
 
 const email = ref("");
 const password = ref("");
+const emailError = ref("");
+const passwordError = ref("");
 
-const onSubmit = () => {
-  console.log("Email:", email.value);
-  console.log("Password:", password.value);
+const isLocalhost = window.location.hostname === "localhost";
+
+const validateEmail = () => {
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  emailError.value = !emailPattern.test(email.value)
+    ? "Invalid email address"
+    : "";
+};
+
+const validatePassword = () => {
+  passwordError.value =
+    password.value.length < 6 ? "Password must be at least 6 characters" : "";
+};
+
+const isFormValid = computed(() => {
+  return (
+    email.value && password.value && !emailError.value && !passwordError.value
+  );
+});
+
+const onSubmit = async () => {
+  const baseURL = isLocalhost
+    ? import.meta.env.VITE_BASE_URL_LOCAL
+    : import.meta.env.VITE_BASE_URL;
+  try {
+    const response = await axios.post(`${baseURL}/user/login`, {
+      email: email.value,
+      password: password.value,
+    });
+
+    if (response.data) {
+      localStorage.setItem("token", response.data.token);
+      router.push("/admin/dashboard");
+    }
+  } catch (error) {
+    console.log(error.message);
+  }
 };
 
 const googleLogin = () => {
-  // Trigger your Google OAuth login process here
   console.log("Google OAuth login initiated");
-  // Simulate a successful login and redirect
+
   router.push("/admin/dashboard");
 };
 
 const githubLogin = () => {
-  const isLocalhost = window.location.hostname === "localhost";
-  console.log("isLocalhost:", isLocalhost);
-
   const clientId = isLocalhost
     ? import.meta.env.VITE_GITHUB_CLIENT_ID_LOCAL
     : import.meta.env.VITE_GITHUB_CLIENT_ID;
@@ -175,12 +216,16 @@ const githubLogin = () => {
 .fb,
 .g,
 .ghub {
-  font-size: 12px;
+  font-size: 15px;
 }
 
 @media (max-width: 768px) {
   .d-flex.flex-md-row {
     flex-direction: column;
   }
+}
+
+.text-danger {
+  color: red;
 }
 </style>
