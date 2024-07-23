@@ -280,13 +280,13 @@ b
                   >
                 </a-menu-item>
                 <a-menu-item>
-                  <router-link
-                    to="/"
+                  <div
+                    @click="handleLogout"
                     class="d-flex gap-3 align-items-center text-decoration-none text-secondary"
                   >
                     <i class="fa-solid fa-power-off"></i>
                     <span>Logout</span>
-                  </router-link>
+                  </div>
                 </a-menu-item>
               </a-menu>
             </template>
@@ -313,9 +313,24 @@ b
 </template>
 <script setup>
 import { ref } from "vue";
+import router from "../router";
+import { useNotifications } from "@/composable/globalAlert.js";
 
 const collapsed = ref(false);
 const selectedKeys = ref(["1"]);
+const { notify } = useNotifications();
+
+const handleLogout = async () => {
+  try {
+    localStorage.removeItem("token");
+
+    notify("Logout successful!", "success");
+
+    router.push("/");
+  } catch (error) {
+    notify("Logout failed. Please try again.", "error");
+  }
+};
 </script>
 
 <style scoped>

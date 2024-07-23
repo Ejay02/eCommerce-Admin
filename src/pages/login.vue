@@ -3,9 +3,9 @@
     <br />
 
     <div class="my-5 w-25 bg-white rounded-3 mx-auto p-4">
-      <h3 class="text-center">Log In</h3>
+      <h3 class="text-center">Welcome Back!</h3>
       <p class="text-center">Login to your account to continue</p>
-      <form @submit.prevent="onSubmit">
+      <form @submit.prevent="handleLogin">
         <!-- Email -->
         <a-space direction="vertical" class="form-floating mb-3 w-100">
           <a-input
@@ -53,6 +53,7 @@
         <div class="mt-3">
           <div class="text-decoration-none text-secondary">
             <button
+              @click="handleLogin"
               class="btn border-0 px-3 py-2 fw-bold w-100 text-center"
               type="submit"
               :disabled="!isFormValid"
@@ -74,27 +75,30 @@
 
       <!-- gh -->
       <button
-        class="btn border-0 px-3 py-2 fw-bold w-100 text-center ghub"
+        class="btn border-0 py-2 fw-bold w-100 text-center ghub"
         type="submit"
         @click="githubLogin"
       >
-        <i class="fa-brands fa-github me-1"></i> Github
+        <i class="fa-brands fa-github me-1"></i>
+        <span class="m-3"> Sign in with Github </span>
       </button>
 
       <!-- google -->
       <button
         @click="googleLogin"
-        class="btn mt-2 border-0 px-3 py-2 fw-bold w-100 text-center g"
+        class="btn mt-2 border-0 py-2 fw-bold w-100 text-center g"
       >
-        <i class="fa-brands fa-google me-1"></i> Google
+        <i class="fa-brands fa-google me-3"></i>
+        <span class="m-2"> Sign in with Google </span>
       </button>
 
       <!-- fb -->
       <button
-        class="mt-2 border-0 px-3 py-2 fw-bold w-100 text-center fb btn"
+        class="mt-2 border-0 py-2 fw-bold w-100 text-center fb btn"
         type="submit"
       >
-        <i class="fa-brands fa-facebook me-1"></i> Facebook
+        <i class="fa-brands fa-facebook me-3"></i>
+        <span> Sign in with Facebook </span>
       </button>
     </div>
   </div>
@@ -104,6 +108,9 @@
 import axios from "axios";
 import router from "../router";
 import { ref, computed } from "vue";
+import { useNotifications } from "@/composable/globalAlert.js";
+
+const { notify } = useNotifications();
 
 const email = ref("");
 const password = ref("");
@@ -130,22 +137,23 @@ const isFormValid = computed(() => {
   );
 });
 
-const onSubmit = async () => {
+const handleLogin = async () => {
   const baseURL = isLocalhost
     ? import.meta.env.VITE_BASE_URL_LOCAL
     : import.meta.env.VITE_BASE_URL;
   try {
-    const response = await axios.post(`${baseURL}/user/login`, {
+    const response = await axios.post(`${baseURL}/user/admin-login`, {
       email: email.value,
       password: password.value,
     });
 
     if (response.data) {
       localStorage.setItem("token", response.data.token);
+      notify("Login successful!", "success");
       router.push("/admin/dashboard");
     }
   } catch (error) {
-    console.log(error.message);
+    notify("Invalid Credentials", "error");
   }
 };
 
@@ -188,7 +196,7 @@ const githubLogin = () => {
 
 .btn {
   background-color: #ffd333;
-  width: 32%;
+  /* width: 32%; */
   font-size: 13px;
 }
 
@@ -211,12 +219,6 @@ const githubLogin = () => {
   border: 0;
   height: 1px;
   background: gray;
-}
-
-.fb,
-.g,
-.ghub {
-  font-size: 15px;
 }
 
 @media (max-width: 768px) {
