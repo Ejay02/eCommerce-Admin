@@ -108,6 +108,7 @@
 import axios from "axios";
 import router from "../router";
 import { ref, computed } from "vue";
+import { useUserStore } from "./../stores/useUserStore";
 import { useNotifications } from "@/composable/globalAlert.js";
 
 const { notify } = useNotifications();
@@ -147,8 +148,11 @@ const handleLogin = async () => {
       password: password.value,
     });
 
+    console.log("response:", response);
     if (response.data) {
-      localStorage.setItem("token", response.data.token);
+      const userStore = useUserStore();
+      userStore.setUser(response.data);
+      // localStorage.setItem("token", response.data.token);
       notify("Login successful!", "success");
       router.push("/admin/dashboard");
     }

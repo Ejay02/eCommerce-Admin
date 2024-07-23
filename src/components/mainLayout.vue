@@ -244,8 +244,9 @@ b
               </div>
               <!-- deets -->
               <div>
-                <h5 class="mb-0">Sarah Smith</h5>
-                <p class="mb-0">s_smith@example.com</p>
+                <h5 class="mb-0">{{ user?.firstname }} {{ user?.lastname }}</h5>
+
+                <p class="mb-0">{{ user?.email }}</p>
               </div>
             </div>
             <!-- dropdown -->
@@ -314,15 +315,23 @@ b
 <script setup>
 import { ref } from "vue";
 import router from "../router";
+import { storeToRefs } from "pinia";
+import { useUserStore } from "@/stores/useUserStore";
 import { useNotifications } from "@/composable/globalAlert.js";
 
 const collapsed = ref(false);
 const selectedKeys = ref(["1"]);
 const { notify } = useNotifications();
 
+const userStore = useUserStore();
+
+userStore.loadUserFromStorage();
+
+const { user } = storeToRefs(userStore);
+
 const handleLogout = async () => {
   try {
-    localStorage.removeItem("token");
+    userStore.clearUser(); 
 
     notify("Logout successful!", "success");
 
