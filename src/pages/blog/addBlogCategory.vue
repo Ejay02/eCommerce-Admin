@@ -49,9 +49,10 @@ const handleSubmit = async () => {
 
     if (response.data) {
       notify("Category added successfully!", "success");
-      title.value = "";
     }
+    title.value = "";
   } catch (error) {
+    console.log("error:", error);
     notify("Error adding category", "error");
   }
 };

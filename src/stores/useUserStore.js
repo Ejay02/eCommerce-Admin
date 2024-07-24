@@ -1,5 +1,8 @@
 import axios from "axios";
 import { defineStore } from "pinia";
+import { useNotifications } from "@/composable/globalAlert.js";
+
+const { notify } = useNotifications();
 
 export const useUserStore = defineStore("user", {
   state: () => ({
@@ -25,7 +28,7 @@ export const useUserStore = defineStore("user", {
         // Set the Authorization header when the user is set
         axios.defaults.headers.common["Authorization"] = `Bearer ${data.token}`;
       } else {
-        console.error("Invalid user data:", data); // Log invalid data
+        notify("Invalid user data:", "error");
       }
     },
 
@@ -45,7 +48,8 @@ export const useUserStore = defineStore("user", {
         try {
           this.user = JSON.parse(user);
         } catch (error) {
-          console.error("Failed to parse user data from local storage:", error);
+          notify("Failed to parse user data from local storage:", "error");
+
           this.user = null;
         }
       } else {
