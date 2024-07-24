@@ -142,17 +142,22 @@ const handleLogin = async () => {
   const baseURL = isLocalhost
     ? import.meta.env.VITE_BASE_URL_LOCAL
     : import.meta.env.VITE_BASE_URL;
+
   try {
     const response = await axios.post(`${baseURL}/user/admin-login`, {
       email: email.value,
       password: password.value,
     });
 
-    console.log("response:", response);
     if (response.data) {
       const userStore = useUserStore();
       userStore.setUser(response.data);
-      // localStorage.setItem("token", response.data.token);
+
+      // Set the Authorization header for all future requests
+      axios.defaults.headers.common[
+        "Authorization"
+      ] = `Bearer ${response.data.token}`;
+
       notify("Login successful!", "success");
       router.push("/admin/dashboard");
     }

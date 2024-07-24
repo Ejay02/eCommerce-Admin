@@ -1,3 +1,4 @@
+import axios from "axios";
 import { defineStore } from "pinia";
 
 export const useUserStore = defineStore("user", {
@@ -20,6 +21,9 @@ export const useUserStore = defineStore("user", {
         }; // Create a user object from the response data
         localStorage.setItem("token", data.token);
         localStorage.setItem("user", JSON.stringify(this.user));
+
+        // Set the Authorization header when the user is set
+        axios.defaults.headers.common["Authorization"] = `Bearer ${data.token}`;
       } else {
         console.error("Invalid user data:", data); // Log invalid data
       }
@@ -31,6 +35,8 @@ export const useUserStore = defineStore("user", {
 
       if (token) {
         this.token = token;
+        // Set the Authorization header if the token exists
+        axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
       } else {
         this.token = null;
       }
@@ -40,7 +46,7 @@ export const useUserStore = defineStore("user", {
           this.user = JSON.parse(user);
         } catch (error) {
           console.error("Failed to parse user data from local storage:", error);
-          this.user = null; 
+          this.user = null;
         }
       } else {
         this.user = null;
@@ -52,6 +58,8 @@ export const useUserStore = defineStore("user", {
       this.user = null;
       localStorage.removeItem("token");
       localStorage.removeItem("user");
+      // Remove the Authorization header when the user is cleared
+      delete axios.defaults.headers.common["Authorization"];
     },
   },
 });

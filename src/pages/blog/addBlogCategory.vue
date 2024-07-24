@@ -1,37 +1,60 @@
 <template>
   <div class="mt-4 card p-4">
     <div class="d-flex justify-content-between align-items-center">
-      <h3 class="mb-4 text-capitalize">Update Blog Category</h3>
+      <h3 class="mb-4 text-capitalize">Add Blog Category</h3>
       <i class="bi bi-three-dots-vertical"></i>
     </div>
 
     <form @submit.prevent="handleSubmit">
       <div class="mb-3">
-        <label for="categoryName" class="form-label">Category Name</label>
+        <label for="title" class="form-label">Category Name</label>
         <input
           type="text"
-          id="categoryName"
-          v-model="categoryName"
+          id="title"
+          v-model="title"
           class="form-control"
           required
         />
       </div>
 
       <div class="text-end gap-2">
-        <button type="submit" class="btn btn-primary">Update</button>
+        <button type="submit" class="btn btn-primary" @click="handleSubmit">
+          Add
+        </button>
       </div>
     </form>
   </div>
 </template>
 
 <script setup>
+import axios from "axios";
 import { ref } from "vue";
+import { useNotifications } from "@/composable/globalAlert.js";
 
-const categoryName = ref(""); // Initialize with existing category name for editing
+const { notify } = useNotifications();
 
-const handleSubmit = () => {
+const isLocalhost = window.location.hostname === "localhost";
 
-  console.log("Updating category:", categoryName.value);
+const title = ref("");
+
+const handleSubmit = async () => {
+  const baseURL = isLocalhost
+    ? import.meta.env.VITE_BASE_URL_LOCAL
+    : import.meta.env.VITE_BASE_URL;
+
+  console.log("Adding category:", title.value);
+  try {
+    const response = await axios.post(`${baseURL}/blog-category`, {
+      title: title.value,
+    });
+
+    if (response.data) {
+      notify("Category added successfully!", "success");
+      title.value = "";
+    }
+  } catch (error) {
+    notify("Error adding category", "error");
+  }
 };
 </script>
 

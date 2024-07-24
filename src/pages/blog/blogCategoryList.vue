@@ -1,9 +1,5 @@
 <template>
   <div class="mt-4 card">
-    <div class="d-flex justify-content-between align-items-center">
-      <h3 class="mb-4 text-capitalize"></h3>
-      <i class="bi bi-three-dots-vertical"></i>
-    </div>
     <div v-if="categories.length">
       <div
         v-for="category in categories"
@@ -17,6 +13,9 @@
             {{ new Date(category.createdAt).toLocaleDateString() }}
           </span>
         </div>
+        <button class="btn" @click="handleDelete(category._id)">
+          <i class="bi bi-trash"></i>
+        </button>
       </div>
     </div>
     <div v-else>
@@ -26,25 +25,53 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import axios from "axios";
+import { ref, onMounted } from "vue";
 
-const categories = ref([
-  {
-    _id: "1",
-    title: "Tech",
-    createdAt: "2023-01-01T00:00:00Z",
-  },
-  {
-    _id: "2",
-    title: "Lifestyle",
-    createdAt: "2023-02-01T00:00:00Z",
-  },
-  {
-    _id: "3",
-    title: "Travel",
-    createdAt: "2023-03-01T00:00:00Z",
-  },
-]);
+import { useNotifications } from "@/composable/globalAlert.js";
+
+const { notify } = useNotifications();
+const categories = ref([]);
+
+const isLocalhost = window.location.hostname === "localhost";
+
+const handleFetchBlogCat = async () => {
+  const baseURL = isLocalhost
+    ? import.meta.env.VITE_BASE_URL_LOCAL
+    : import.meta.env.VITE_BASE_URL;
+  try {
+    const response = await axios.get(`${baseURL}/blog-category`);
+
+    if (response.data) {
+      categories.value = response.data;
+    }
+  } catch (error) {
+    notify("Error fetching data", "error");
+  }
+};
+
+const handleDelete = async (id) => {
+  const baseURL = isLocalhost
+    ? import.meta.env.VITE_BASE_URL_LOCAL
+    : import.meta.env.VITE_BASE_URL;
+  try {
+    const response = await axios.delete(`${baseURL}/blog-category/${id}`);
+
+    if (response.data) {
+      // Optionally filter out the deleted category from the categories array
+      categories.value = categories.value.filter(
+        (category) => category._id !== id
+      );
+      notify("Category deleted successfully!", "success");
+    }
+  } catch (error) {
+    notify("Error deleting category", "error");
+  }
+};
+
+onMounted(() => {
+  handleFetchBlogCat();
+});
 </script>
 
 <style scoped>
@@ -85,5 +112,14 @@ const categories = ref([
 .category-title .text-muted {
   font-size: 0.9rem;
   color: #6c757d;
+}
+
+.bi {
+  color: red;
+}
+
+.btn {
+  text-decoration: none;
+  border: none;
 }
 </style>

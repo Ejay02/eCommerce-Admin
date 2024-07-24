@@ -1,61 +1,76 @@
 <template>
-  <div class="mt-4 card">
-    <div class="d-flex justify-content-between">
-      <h3 class="mb-4 text-capitalize"></h3>
-      <i class="bi bi-three-dots-vertical"></i>
-    </div>
-    <div v-if="blogs.length">
+  <div class="mt-4 card" v-if="blogs.length">
+    <div class="d-flex justify-content-between"></div>
+    <div class="m-5">
       <div v-for="blog in blogs" :key="blog._id" class="blog-item">
         <img
-          :src="blog.image || 'https://via.placeholder.com/150'"
+          :src="blog?.image || 'https://via.placeholder.com/150'"
           alt="Blog Image"
           class="blog-image"
         />
         <div class="blog-content">
           <h4>{{ blog.title }}</h4>
           <p>{{ blog.description }}</p>
-          <div class="d-flex justify-content-between align-items-center">
-            <span class="category-tag">{{ blog.category }}</span>
-            <span class="text-muted">{{ blog.author }}</span>
-          </div>
+
+          <h6 class="text-muted mb-3">{{ blog?.author }}</h6>
+          <span class="category-tag">{{ blog?.category }}</span>
         </div>
+        <button class="btn ml-5" @click="handleDelete(blog._id)">
+          <i class="bi bi-trash"></i>
+        </button>
       </div>
     </div>
-    <div v-else>
-      <p>No blogs available</p>
-    </div>
+  </div>
+  <div v-else>
+    <Empty />
   </div>
 </template>
 
 <script setup>
-import { ref } from "vue";
+import axios from "axios";
+import { ref, onMounted } from "vue";
+import Empty from "@/components/empty.vue";
+import { useNotifications } from "@/composable/globalAlert.js";
 
-const blogs = ref([
-  {
-    _id: "1",
-    title: "First Blog Post",
-    description: "This is a description for the first blog post.",
-    category: "Tech",
-    author: "John Doe",
-    image: "",
-  },
-  {
-    _id: "2",
-    title: "Second Blog Post",
-    description: "This is a description for the second blog post.",
-    category: "Lifestyle",
-    author: "Jane Doe",
-    image: "",
-  },
-  {
-    _id: "3",
-    title: "Third Blog Post",
-    description: "This is a description for the third blog post.",
-    category: "Travel",
-    author: "Admin",
-    image: "",
-  },
-]);
+const { notify } = useNotifications();
+const blogs = ref([]);
+
+const isLocalhost = window.location.hostname === "localhost";
+
+const baseURL = isLocalhost
+  ? import.meta.env.VITE_BASE_URL_LOCAL
+  : import.meta.env.VITE_BASE_URL;
+
+const handleFetchBlogs = async () => {
+  try {
+    const response = await axios.get(`${baseURL}/blog`);
+
+    if (response.data) {
+      blogs.value = response.data;
+    }
+  } catch (error) {
+    notify("Error fetching blogs", "error");
+  }
+};
+
+const handleDelete = async (id) => {
+  try {
+    const response = await axios.delete(`${baseURL}/blog/${id}`);
+
+    if (response.data) {
+      blogs.value = blogs.value.filter(
+        (blog) => blog._id !== id
+      );
+      notify("Blog deleted successfully!", "success");
+    }
+  } catch (error) {
+    notify("Error deleting blog", "error");
+  }
+};
+
+onMounted(() => {
+  handleFetchBlogs();
+});
 </script>
 
 <style scoped>
@@ -89,9 +104,19 @@ const blogs = ref([
 }
 
 .category-tag {
-  background-color: aliceblue;
-  color: gray;
+  background-color: rgb(152, 182, 209);
+  /* color: gray; */
   padding: 4px 8px;
   border-radius: 4px;
+  font-size: 10px;
+}
+
+.blog-content h6 {
+  font-size: 12px;
+}
+
+.btn {
+  text-decoration: none;
+  border: none;
 }
 </style>
