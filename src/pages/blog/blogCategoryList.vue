@@ -34,7 +34,6 @@ import axios from "axios";
 import { ref, onMounted } from "vue";
 import { useModalStore } from "@/stores/useModalStore";
 import { useNotifications } from "@/composable/globalAlert.js";
-// import DeleteModal from "@/components/modals/deleteModal.vue";
 
 const { notify } = useNotifications();
 const categories = ref([]);
@@ -62,25 +61,6 @@ const showDelModal = (id, title) => {
   modalStore.modalId = id;
   modalStore.modalTitle = title;
 };
-
-// const handleDelete = async (id) => {
-//   const baseURL = isLocalhost
-//     ? import.meta.env.VITE_BASE_URL_LOCAL
-//     : import.meta.env.VITE_BASE_URL;
-//   try {
-//     const response = await axios.delete(`${baseURL}/blog-category/${id}`);
-
-//     if (response.data) {
-//       // Optionally filter out the deleted category from the categories array
-//       categories.value = categories.value.filter(
-//         (category) => category._id !== id
-//       );
-//       notify("Category deleted successfully!", "success");
-//     }
-//   } catch (error) {
-//     notify("Error deleting category", "error");
-//   }
-// };
 
 onMounted(() => {
   handleFetchBlogCat();

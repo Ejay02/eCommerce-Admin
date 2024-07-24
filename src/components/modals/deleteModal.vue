@@ -13,26 +13,28 @@
       </div>
       <div class="modal-footer mt-2">
         <button class="cancel-button" @click="handleCancel">Cancel</button>
-        <button class="ok-button" @click="handleOk">OK</button>
+        <button class="ok-button" @click="handleDelete">OK</button>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
+import axios from "axios";
 import { ref, watch } from "vue";
 import { useModalStore } from "@/stores/useModalStore";
+import { useNotifications } from "@/composable/globalAlert.js";
+
+const { notify } = useNotifications();
 
 const modalStore = useModalStore();
 const isModalVisible = ref(modalStore.deleteModal);
 
-const handleOk = () => {
-  modalStore.deleteModal = false;
-  // Handle the delete action using modalStore.modalId
-};
+const isLocalhost = window.location.hostname === "localhost";
 
 const handleCancel = () => {
   modalStore.deleteModal = false;
+  modalStore.modalId = null;
 };
 
 watch(
@@ -50,17 +52,37 @@ watch(
     title.value = newVal;
   }
 );
+
+const handleDelete = async () => {
+  const baseURL = isLocalhost
+    ? import.meta.env.VITE_BASE_URL_LOCAL
+    : import.meta.env.VITE_BASE_URL;
+  try {
+    const response = await axios.delete(
+      `${baseURL}/blog-category/${modalStore.modalId}`
+    );
+
+    if (response.data) {
+      // Optionally filter out the deleted category from the categories array
+      // categories.value = categories.value.filter(
+      //   (category) => category._id !== id
+      // );
+      modalStore.deleteModal = false;
+      notify("Category deleted successfully!", "success");
+    }
+  } catch (error) {
+    notify("Error deleting category", "error");
+  }
+};
 </script>
 
 <style scoped>
 .modal-overlay {
   position: fixed;
   top: 0;
-  /* left: 0; */
   width: 100%;
   height: 100%;
   background: rgba(115, 120, 152, 0.5);
-  /* display: flex; */
   justify-content: center;
   align-items: center;
   z-index: 1000;
@@ -72,15 +94,11 @@ watch(
   padding: 20px;
   border-radius: 5px;
   width: 400px;
-  /* max-width: 80%; */
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  /* position: relative; */
 }
 
 .modal-header {
-  /* display: flex; */
   justify-content: space-between;
-  /* align-items: center; */
   padding-bottom: 1px;
 }
 
@@ -96,13 +114,10 @@ watch(
   font-size: 20px;
   cursor: pointer;
   padding: 0;
-  /* margin: 0; */
   color: gray;
 }
 
 .modal-footer {
-  /* display: flex; */
-  /* justify-content: flex-end; */
   gap: 10px;
 }
 
