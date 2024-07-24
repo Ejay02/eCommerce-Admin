@@ -118,8 +118,6 @@ const password = ref("");
 const emailError = ref("");
 const passwordError = ref("");
 
-const isLocalhost = window.location.hostname === "localhost";
-
 const validateEmail = () => {
   const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   emailError.value = !emailPattern.test(email.value)
@@ -139,15 +137,14 @@ const isFormValid = computed(() => {
 });
 
 const handleLogin = async () => {
-  const baseURL = isLocalhost
-    ? import.meta.env.VITE_BASE_URL_LOCAL
-    : import.meta.env.VITE_BASE_URL;
-
   try {
-    const response = await axios.post(`${baseURL}/user/admin-login`, {
-      email: email.value,
-      password: password.value,
-    });
+    const response = await axios.post(
+      `${import.meta.env.VITE_BASE_URL}/user/admin-login`,
+      {
+        email: email.value,
+        password: password.value,
+      }
+    );
 
     if (response.data) {
       const userStore = useUserStore();
@@ -173,15 +170,9 @@ const googleLogin = () => {
 };
 
 const githubLogin = () => {
-  const clientId = isLocalhost
-    ? import.meta.env.VITE_GITHUB_CLIENT_ID_LOCAL
-    : import.meta.env.VITE_GITHUB_CLIENT_ID;
-
-  const redirectUri = isLocalhost
-    ? import.meta.env.VITE_GITHUB_REDIRECT_URI_LOCAL
-    : import.meta.env.VITE_GITHUB_REDIRECT_URI;
-
-  const githubAuthUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=read:user`;
+  const githubAuthUrl = `https://github.com/login/oauth/authorize?client_id=${
+    import.meta.env.VITE_GITHUB_CLIENT_ID
+  }&redirect_uri=${import.meta.env.VITE_GITHUB_REDIRECT_URI}&scope=read:user`;
 
   window.location.href = githubAuthUrl;
 };

@@ -35,15 +35,9 @@ import { useNotifications } from "@/composable/globalAlert.js";
 const { notify } = useNotifications();
 const blogs = ref([]);
 
-const isLocalhost = window.location.hostname === "localhost";
-
-const baseURL = isLocalhost
-  ? import.meta.env.VITE_BASE_URL_LOCAL
-  : import.meta.env.VITE_BASE_URL;
-
 const handleFetchBlogs = async () => {
   try {
-    const response = await axios.get(`${baseURL}/blog`);
+    const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/blog`);
 
     if (response.data) {
       blogs.value = response.data;
@@ -55,12 +49,12 @@ const handleFetchBlogs = async () => {
 
 const handleDelete = async (id) => {
   try {
-    const response = await axios.delete(`${baseURL}/blog/${id}`);
+    const response = await axios.delete(
+      `${import.meta.env.VITE_BASE_URL}/blog/${id}`
+    );
 
     if (response.data) {
-      blogs.value = blogs.value.filter(
-        (blog) => blog._id !== id
-      );
+      blogs.value = blogs.value.filter((blog) => blog._id !== id);
       notify("Blog deleted successfully!", "success");
     }
   } catch (error) {

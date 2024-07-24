@@ -1,9 +1,8 @@
-```html
 <template>
   <div class="mt-4 card">
-    <div v-if="categories.length">
+    <div v-if="categoryStore.categories.length">
       <div
-        v-for="category in categories"
+        v-for="category in categoryStore.categories"
         :key="category._id"
         class="category-item"
       >
@@ -17,11 +16,7 @@
         <button class="btn" @click="showDelModal(category._id, category.title)">
           <i class="bi bi-trash"></i>
         </button>
-        <!-- <button class="btn" @click="triggerDeleteModal(category._id)">
-          <i class="bi bi-trash"></i>
-        </button> -->
       </div>
-      <!-- <DeleteModal /> -->
     </div>
     <div v-else>
       <p>No categories available</p>
@@ -30,30 +25,11 @@
 </template>
 
 <script setup>
-import axios from "axios";
-import { ref, onMounted } from "vue";
+import { onMounted } from "vue";
 import { useModalStore } from "@/stores/useModalStore";
-import { useNotifications } from "@/composable/globalAlert.js";
+import { useCategoryStore } from "@/stores/useCategoryStore";
 
-const { notify } = useNotifications();
-const categories = ref([]);
-
-const isLocalhost = window.location.hostname === "localhost";
-
-const handleFetchBlogCat = async () => {
-  const baseURL = isLocalhost
-    ? import.meta.env.VITE_BASE_URL_LOCAL
-    : import.meta.env.VITE_BASE_URL;
-  try {
-    const response = await axios.get(`${baseURL}/blog-category`);
-
-    if (response.data) {
-      categories.value = response.data;
-    }
-  } catch (error) {
-    notify("Error fetching data", "error");
-  }
-};
+const categoryStore = useCategoryStore();
 const modalStore = useModalStore();
 
 const showDelModal = (id, title) => {
@@ -62,8 +38,8 @@ const showDelModal = (id, title) => {
   modalStore.modalTitle = title;
 };
 
-onMounted(() => {
-  handleFetchBlogCat();
+onMounted(async () => {
+  await categoryStore.fetchCategories();
 });
 </script>
 
@@ -98,7 +74,6 @@ onMounted(() => {
 .category-title h4 {
   margin: 0;
   font-size: 1.2rem;
-  /* color: #343a40; */
   color: #6c757d;
 }
 

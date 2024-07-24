@@ -1,5 +1,9 @@
 <template>
-  <div v-if="isModalVisible" class="modal-overlay d-flex" @click="handleCancel">
+  <div
+    v-if="isModalVisible"
+    class="modal-overlay d-flex"
+    @click.self="handleCancel"
+  >
     <div class="modal-card">
       <div class="modal-header mb-2">
         <h3>Delete Confirmation</h3>
@@ -8,7 +12,7 @@
       <div class="modal-body mt-2">
         <p>
           Are you sure you want to delete
-          <b class="">{{ title }}</b> ?
+          <b>{{ title }}</b> ?
         </p>
       </div>
       <div class="modal-footer mt-2">
@@ -23,19 +27,15 @@
 import axios from "axios";
 import { ref, watch } from "vue";
 import { useModalStore } from "@/stores/useModalStore";
+import { useCategoryStore } from "@/stores/useCategoryStore";
 import { useNotifications } from "@/composable/globalAlert.js";
 
 const { notify } = useNotifications();
-
 const modalStore = useModalStore();
 const isModalVisible = ref(modalStore.deleteModal);
+const categoryStore = useCategoryStore();
 
-const isLocalhost = window.location.hostname === "localhost";
-
-const handleCancel = () => {
-  modalStore.deleteModal = false;
-  modalStore.modalId = null;
-};
+const title = ref(modalStore.modalTitle);
 
 watch(
   () => modalStore.deleteModal,
@@ -44,8 +44,6 @@ watch(
   }
 );
 
-const title = ref(modalStore.modalTitle);
-
 watch(
   () => modalStore.modalTitle,
   (newVal) => {
@@ -53,20 +51,19 @@ watch(
   }
 );
 
+const handleCancel = () => {
+  modalStore.deleteModal = false;
+  modalStore.modalId = null;
+};
+
 const handleDelete = async () => {
-  const baseURL = isLocalhost
-    ? import.meta.env.VITE_BASE_URL_LOCAL
-    : import.meta.env.VITE_BASE_URL;
   try {
     const response = await axios.delete(
-      `${baseURL}/blog-category/${modalStore.modalId}`
+      `${import.meta.env.VITE_BASE_URL}/blog-category/${modalStore.modalId}`
     );
 
     if (response.data) {
-      // Optionally filter out the deleted category from the categories array
-      // categories.value = categories.value.filter(
-      //   (category) => category._id !== id
-      // );
+      categoryStore.deleteCategory(modalStore.modalId);
       modalStore.deleteModal = false;
       notify("Category deleted successfully!", "success");
     }

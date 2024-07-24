@@ -33,19 +33,16 @@ import { useNotifications } from "@/composable/globalAlert.js";
 
 const { notify } = useNotifications();
 
-const isLocalhost = window.location.hostname === "localhost";
-
 const title = ref("");
 
 const handleSubmit = async () => {
-  const baseURL = isLocalhost
-    ? import.meta.env.VITE_BASE_URL_LOCAL
-    : import.meta.env.VITE_BASE_URL;
-
   try {
-    const response = await axios.post(`${baseURL}/blog-category`, {
-      title: title.value,
-    });
+    const response = await axios.post(
+      `${import.meta.env.VITE_BASE_URL}/blog-category`,
+      {
+        title: title.value,
+      }
+    );
 
     if (response.data) {
       notify("Category added successfully!", "success");
