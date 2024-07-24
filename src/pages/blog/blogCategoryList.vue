@@ -1,5 +1,6 @@
 <template>
-  <div class="mt-4 card">
+  <LoadingScreen v-if="categoryStore.loading" />
+  <div v-else class="mt-4 card">
     <div v-if="categoryStore.categories.length">
       <div
         v-for="category in categoryStore.categories"
@@ -28,6 +29,7 @@
 import { onMounted } from "vue";
 import { useModalStore } from "@/stores/useModalStore";
 import { useCategoryStore } from "@/stores/useCategoryStore";
+import LoadingScreen from "@/components/loadingScreen.vue";
 
 const categoryStore = useCategoryStore();
 const modalStore = useModalStore();

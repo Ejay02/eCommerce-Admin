@@ -8,9 +8,11 @@ const { notify } = useNotifications();
 export const useCategoryStore = defineStore("category", () => {
   const state = reactive({
     categories: [],
+    loading: false,
   });
 
   const fetchCategories = async () => {
+    state.loading = true;
     try {
       const response = await axios.get(
         `${import.meta.env.VITE_BASE_URL}/blog-category`
@@ -18,6 +20,8 @@ export const useCategoryStore = defineStore("category", () => {
       state.categories = response.data;
     } catch (error) {
       notify("Error fetching categories:", error);
+    } finally {
+      state.loading = false;
     }
   };
 

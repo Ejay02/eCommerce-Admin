@@ -1,4 +1,6 @@
 <template>
+  <LoadingScreen v-if="loading" />
+
   <div class="mt-4 card" v-if="blogs.length">
     <div class="d-flex justify-content-between"></div>
     <div class="m-5">
@@ -30,12 +32,16 @@
 import axios from "axios";
 import { ref, onMounted } from "vue";
 import Empty from "@/components/empty.vue";
+import LoadingScreen from "@/components/loadingScreen.vue";
 import { useNotifications } from "@/composable/globalAlert.js";
+
+const loading = ref(false);
 
 const { notify } = useNotifications();
 const blogs = ref([]);
 
 const handleFetchBlogs = async () => {
+  loading.value = true;
   try {
     const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/blog`);
 
@@ -44,6 +50,8 @@ const handleFetchBlogs = async () => {
     }
   } catch (error) {
     notify("Error fetching blogs", "error");
+  } finally {
+    loading.value = false;
   }
 };
 
