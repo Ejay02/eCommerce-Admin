@@ -42,7 +42,6 @@ const handleSubmit = async () => {
     ? import.meta.env.VITE_BASE_URL_LOCAL
     : import.meta.env.VITE_BASE_URL;
 
-  console.log("Adding category:", title.value);
   try {
     const response = await axios.post(`${baseURL}/blog-category`, {
       title: title.value,

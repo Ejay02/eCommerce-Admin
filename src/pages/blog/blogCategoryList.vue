@@ -1,3 +1,4 @@
+```html
 <template>
   <div class="mt-4 card">
     <div v-if="categories.length">
@@ -13,10 +14,14 @@
             {{ new Date(category.createdAt).toLocaleDateString() }}
           </span>
         </div>
-        <button class="btn" @click="handleDelete(category._id)">
+        <button class="btn" @click="showDelModal(category._id, category.title)">
           <i class="bi bi-trash"></i>
         </button>
+        <!-- <button class="btn" @click="triggerDeleteModal(category._id)">
+          <i class="bi bi-trash"></i>
+        </button> -->
       </div>
+      <!-- <DeleteModal /> -->
     </div>
     <div v-else>
       <p>No categories available</p>
@@ -27,8 +32,9 @@
 <script setup>
 import axios from "axios";
 import { ref, onMounted } from "vue";
-
+import { useModalStore } from "@/stores/useModalStore";
 import { useNotifications } from "@/composable/globalAlert.js";
+// import DeleteModal from "@/components/modals/deleteModal.vue";
 
 const { notify } = useNotifications();
 const categories = ref([]);
@@ -49,25 +55,32 @@ const handleFetchBlogCat = async () => {
     notify("Error fetching data", "error");
   }
 };
+const modalStore = useModalStore();
 
-const handleDelete = async (id) => {
-  const baseURL = isLocalhost
-    ? import.meta.env.VITE_BASE_URL_LOCAL
-    : import.meta.env.VITE_BASE_URL;
-  try {
-    const response = await axios.delete(`${baseURL}/blog-category/${id}`);
-
-    if (response.data) {
-      // Optionally filter out the deleted category from the categories array
-      categories.value = categories.value.filter(
-        (category) => category._id !== id
-      );
-      notify("Category deleted successfully!", "success");
-    }
-  } catch (error) {
-    notify("Error deleting category", "error");
-  }
+const showDelModal = (id, title) => {
+  modalStore.deleteModal = true;
+  modalStore.modalId = id;
+  modalStore.modalTitle = title;
 };
+
+// const handleDelete = async (id) => {
+//   const baseURL = isLocalhost
+//     ? import.meta.env.VITE_BASE_URL_LOCAL
+//     : import.meta.env.VITE_BASE_URL;
+//   try {
+//     const response = await axios.delete(`${baseURL}/blog-category/${id}`);
+
+//     if (response.data) {
+//       // Optionally filter out the deleted category from the categories array
+//       categories.value = categories.value.filter(
+//         (category) => category._id !== id
+//       );
+//       notify("Category deleted successfully!", "success");
+//     }
+//   } catch (error) {
+//     notify("Error deleting category", "error");
+//   }
+// };
 
 onMounted(() => {
   handleFetchBlogCat();
