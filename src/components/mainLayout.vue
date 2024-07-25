@@ -236,11 +236,31 @@ b
             >
               <!-- avatar -->
               <div>
-                <img
-                  src="https://img.freepik.com/free-psd/3d-illustration-person-with-glasses_23-2149436185.jpg?w=996&t=st=1720681827~exp=1720682427~hmac=189dffe3117a9caac144609539d8e4383817c87c0a80116d53cac50c2dd2e54d"
-                  alt="user image"
-                  style="width: 50px; height: 50px; border-radius: 5px"
-                />
+                <div v-if="avatar">
+                  <img
+                    :src="avatar"
+                    alt="user image"
+                    style="width: 50px; height: 50px; border-radius: 5px"
+                  />
+                </div>
+                <div v-else>
+                  <div
+                    class="default-avatar"
+                    :style="{
+                      width: '50px',
+                      height: '50px',
+                      borderRadius: '5px',
+                      background: 'cornflowerblue',
+                      color: 'white',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }"
+                  >
+                    {{ user?.firstname.charAt(0)
+                    }}{{ user?.lastname.charAt(0) }}
+                  </div>
+                </div>
               </div>
               <!-- deets -->
               <div>
@@ -329,9 +349,11 @@ userStore.loadUserFromStorage();
 
 const { user } = storeToRefs(userStore);
 
+const avatar = ref(localStorage.getItem("avatar"));
+
 const handleLogout = async () => {
   try {
-    userStore.clearUser(); 
+    userStore.clearUser();
 
     notify("Logout successful!", "success");
 

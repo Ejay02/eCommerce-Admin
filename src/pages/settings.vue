@@ -9,7 +9,12 @@
       <div class="mb-4">
         <label for="avatar" class="form-label">Avatar</label>
         <div class="d-flex align-items-center">
-          <img :src="avatar" alt="User Avatar" class="avatar-preview me-4" />
+          <div v-if="avatar" class="avatar-preview me-4">
+            <img :src="avatar" alt="User Avatar" class="avatar-image" />
+          </div>
+          <div v-else class="avatar-preview initials-avatar me-4">
+            {{ initials }}
+          </div>
           <div class="">
             <input
               type="file"
@@ -17,9 +22,9 @@
               @change="handleAvatarChange"
               style="color: gray"
             />
-            <small class="form-text text-warning"
-              >.jpg and .png formats only</small
-            >
+            <small class="form-text text-warning">
+              .jpg and .png formats only
+            </small>
             <small class="form-text text-warning">Max size 2MB</small>
           </div>
         </div>
@@ -59,7 +64,7 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, computed,  } from "vue";
 import axios from "axios";
 import { storeToRefs } from "pinia";
 import { useUserStore } from "@/stores/useUserStore";
@@ -68,21 +73,26 @@ import { useNotifications } from "@/composable/globalAlert.js";
 const { notify } = useNotifications();
 
 const userStore = useUserStore();
-
 userStore.loadUserFromStorage();
 
 const { user } = storeToRefs(userStore);
 
-const avatar = ref(
-  "https://img.freepik.com/free-psd/3d-illustration-person-with-glasses_23-2149436185.jpg?w=996&t=st=1720681827~exp=1720682427~hmac=189dffe3117a9caac144609539d8e4383817c87c0a80116d53cac50c2dd2e54d"
-);
+const defaultAvatar = ref(null);
+
+const avatar = ref(localStorage.getItem("avatar") || defaultAvatar.value);
 
 const fn = user.value.firstname;
 const ln = user.value.lastname;
 
 const name = ref(fn + " " + ln);
-
 const email = ref(user.value.email);
+
+const initials = computed(() => {
+  const nameParts = name.value.trim().split(" ");
+  const firstNameInitial = nameParts[0][0];
+  const lastNameInitial = nameParts[1] ? nameParts[1][0] : "";
+  return firstNameInitial + lastNameInitial;
+});
 
 const handleAvatarChange = (event) => {
   const file = event.target.files[0];
@@ -90,9 +100,11 @@ const handleAvatarChange = (event) => {
     const reader = new FileReader();
     reader.onload = (e) => {
       avatar.value = e.target.result;
+      localStorage.setItem("avatar", e.target.result);
     };
     reader.readAsDataURL(file);
   }
+  window.location.reload();
 };
 
 const splitName = (fullName) => {
@@ -116,7 +128,7 @@ const handleUpdate = async () => {
     );
 
     if (response.data) {
-      notify("Deets updated successfully!", "success");
+      notify("Details updated successfully!", "success");
       // Update the user store with the new data
       userStore.setUser({
         ...user.value,
@@ -126,9 +138,15 @@ const handleUpdate = async () => {
       });
     }
   } catch (error) {
-    notify("Error updating deets", "error");
+    notify("Error updating details", "error");
   }
 };
+
+// onMounted(() => {
+//   if (!avatar.value) {
+//     defaultAvatar.value = initials.value;
+//   }
+// });
 </script>
 
 <style scoped>
@@ -140,8 +158,26 @@ const handleUpdate = async () => {
 .avatar-preview {
   width: 100px;
   height: 100px;
-  border-radius: 5%;
+  border-radius: 5%; 
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* background-color: cornflowerblue;  */
+  color: white;
+  font-size: 30px;
+}
+
+.avatar-image {
+  width: 100%;
+  height: 100%;
   object-fit: cover;
+}
+
+.initials-avatar {
+  background-color: cornflowerblue;
+  color: white;
+  font-size: 30px;
 }
 
 .form-text {
