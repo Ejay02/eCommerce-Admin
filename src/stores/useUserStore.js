@@ -27,6 +27,15 @@ export const useUserStore = defineStore("user", {
 
         // Set the Authorization header when the user is set
         axios.defaults.headers.common["Authorization"] = `Bearer ${data.token}`;
+      } else if (data) {
+        this.user = {
+          ...this.user,
+          firstname: data.firstname,
+          lastname: data.lastname,
+          email: data.email,
+          mobile: data.mobile,
+        };
+        localStorage.setItem("user", JSON.stringify(this.user));
       } else {
         notify("Invalid user data:", "error");
       }

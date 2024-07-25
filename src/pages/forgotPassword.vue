@@ -54,7 +54,6 @@ const onSubmit = async () => {
     }
   } catch (e) {
     notify("Problem sending email", "error");
-    console.log(e);
   }
 };
 </script>

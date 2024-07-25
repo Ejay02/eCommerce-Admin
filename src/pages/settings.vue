@@ -50,7 +50,9 @@
       </div>
 
       <div class="d-flex justify-content-end">
-        <button type="submit" class="btn btn-primary">Save Changes</button>
+        <button type="submit" class="btn btn-primary" @click="handleUpdate">
+          Update
+        </button>
       </div>
     </form>
   </div>
@@ -58,12 +60,29 @@
 
 <script setup>
 import { ref } from "vue";
+import axios from "axios";
+import { storeToRefs } from "pinia";
+import { useUserStore } from "@/stores/useUserStore";
+import { useNotifications } from "@/composable/globalAlert.js";
+
+const { notify } = useNotifications();
+
+const userStore = useUserStore();
+
+userStore.loadUserFromStorage();
+
+const { user } = storeToRefs(userStore);
 
 const avatar = ref(
   "https://img.freepik.com/free-psd/3d-illustration-person-with-glasses_23-2149436185.jpg?w=996&t=st=1720681827~exp=1720682427~hmac=189dffe3117a9caac144609539d8e4383817c87c0a80116d53cac50c2dd2e54d"
 );
-const name = ref("Sarah Smith");
-const email = ref("s_smith@example.com");
+
+const fn = user.value.firstname;
+const ln = user.value.lastname;
+
+const name = ref(fn + " " + ln);
+
+const email = ref(user.value.email);
 
 const handleAvatarChange = (event) => {
   const file = event.target.files[0];
@@ -76,13 +95,39 @@ const handleAvatarChange = (event) => {
   }
 };
 
-const updateSettings = () => {
-  // Handle the settings update logic here
-  console.log("Settings updated:", {
-    avatar: avatar.value,
-    name: name.value,
-    email: email.value,
-  });
+const splitName = (fullName) => {
+  const nameParts = fullName.trim().split(" ");
+  const firstname = nameParts[0];
+  const lastname = nameParts.slice(1).join(" ") || "";
+  return { firstname, lastname };
+};
+
+const handleUpdate = async () => {
+  const { firstname, lastname } = splitName(name.value);
+
+  try {
+    const response = await axios.put(
+      `${import.meta.env.VITE_BASE_URL}/user/edit`,
+      {
+        firstname: firstname,
+        lastname: lastname,
+        email: email.value,
+      }
+    );
+
+    if (response.data) {
+      notify("Deets updated successfully!", "success");
+      // Update the user store with the new data
+      userStore.setUser({
+        ...user.value,
+        firstname: firstname,
+        lastname: lastname,
+        email: email.value,
+      });
+    }
+  } catch (error) {
+    notify("Error updating deets", "error");
+  }
 };
 </script>
 

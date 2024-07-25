@@ -49,7 +49,6 @@ const handleSubmit = async () => {
     }
     title.value = "";
   } catch (error) {
-    console.log("error:", error);
     notify("Error adding category", "error");
   }
 };

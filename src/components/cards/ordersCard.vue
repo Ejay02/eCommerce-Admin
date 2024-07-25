@@ -12,7 +12,6 @@
           v-else-if="route.path === '/admin/orders'"
           class="bi bi-three-dots-vertical"
         ></i>
-        <!-- {{props.icon}} -->
       </router-link>
     </div>
 
@@ -177,7 +176,6 @@ const data = [
     date: "2024-05-05",
     total: "$5,984.00",
   },
-
 ];
 </script>
 

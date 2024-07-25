@@ -164,8 +164,6 @@ const handleLogin = async () => {
 };
 
 const googleLogin = () => {
-  console.log("Google OAuth login initiated");
-
   router.push("/admin/dashboard");
 };
 
