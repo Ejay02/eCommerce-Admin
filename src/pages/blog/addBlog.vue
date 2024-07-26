@@ -98,6 +98,8 @@ import { useNotifications } from "@/composable/globalAlert.js";
 
 const { notify } = useNotifications();
 
+const quillEditor = ref(null);
+
 const items = [
   {
     title: "Write blog",
@@ -123,10 +125,15 @@ const formData = ref({
 });
 
 const handleImageUpload = (event) => {
-  formData.value.image = event.target.files[0];
-};
+  const file = event.target.files[0];
+  const reader = new FileReader();
 
-const quillEditor = ref(null);
+  reader.onload = (e) => {
+    formData.value.image = e.target.result;
+  };
+
+  reader.readAsDataURL(file);
+};
 
 const handleSubmit = async () => {
   const description = quillEditor.value.getText();
@@ -144,14 +151,24 @@ const handleSubmit = async () => {
     return;
   }
 
+  // Create FormData object
+  const form = new FormData();
+  form.append("title", formData.value.title);
+  form.append("description", formData.value.description);
+  form.append("category", formData.value.category);
+  form.append("author", formData.value.author);
+  form.append("image", formData.value.image); // Append file
+
   try {
-    const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/blog`, {
-      title: formData.value.title,
-      description: formData.value.description,
-      category: formData.value.category,
-      author: formData.value.author,
-      image: formData.value.image,
-    });
+    const response = await axios.post(
+      `${import.meta.env.VITE_BASE_URL}/blog`,
+      form,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
 
     if (response.data) {
       notify("Blog created successfully!", "success");
@@ -161,7 +178,7 @@ const handleSubmit = async () => {
         description: "",
         category: "",
         author: "",
-        image: "",
+        image: null,
       };
     }
   } catch (error) {
@@ -171,6 +188,17 @@ const handleSubmit = async () => {
 </script>
 
 <style scoped>
+.uploading-image {
+  border-radius: 5px;
+  max-width: 50%;
+  height: auto;
+}
+
+.xi {
+  color: gray;
+  font-size: 12px;
+}
+
 .card {
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
   padding: 16px;
@@ -206,11 +234,6 @@ const handleSubmit = async () => {
 
 .row input::placeholder,
 .span {
-  color: gray;
-  font-size: 12px;
-}
-
-.xi {
   color: gray;
   font-size: 12px;
 }
