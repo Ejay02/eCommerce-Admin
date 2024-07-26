@@ -29,13 +29,16 @@ import { ref, watch } from "vue";
 import { useModalStore } from "@/stores/useModalStore";
 import { useCategoryStore } from "@/stores/useCategoryStore";
 import { useNotifications } from "@/composable/globalAlert.js";
+import { useBlogStore } from "@/stores/useBlogStore";
 
 const { notify } = useNotifications();
 const modalStore = useModalStore();
 const isModalVisible = ref(modalStore.deleteModal);
 const categoryStore = useCategoryStore();
+const blogStore = useBlogStore();
 
 const title = ref(modalStore.modalTitle);
+const source = ref(modalStore.source);
 
 watch(
   () => modalStore.deleteModal,
@@ -51,6 +54,13 @@ watch(
   }
 );
 
+watch(
+  () => modalStore.source,
+  (newVal) => {
+    source.value = newVal;
+  }
+);
+
 const handleCancel = () => {
   modalStore.deleteModal = false;
   modalStore.modalId = null;
@@ -58,15 +68,27 @@ const handleCancel = () => {
 
 const handleDelete = async () => {
   try {
-    const response = await axios.delete(
-      `${import.meta.env.VITE_BASE_URL}/blog-category/${modalStore.modalId}`
-    );
+    let response;
+    if (source.value === "blogCategoryList") {
+      response = await axios.delete(
+        `${import.meta.env.VITE_BASE_URL}/blog-category/${modalStore.modalId}`
+      );
 
-    if (response.data) {
-      categoryStore.deleteCategory(modalStore.modalId);
-      modalStore.deleteModal = false;
-      notify("Category deleted successfully!", "success");
+      if (response.data) {
+        categoryStore.deleteCategory(modalStore.modalId);
+        notify("Category deleted successfully!", "success");
+      }
+    } else if (source.value === "blogList") {
+      response = await axios.delete(
+        `${import.meta.env.VITE_BASE_URL}/blog/${modalStore.modalId}`
+      );
+
+      if (response.data) {
+        blogStore.deleteBlog(modalStore.modalId);
+        notify("Blog deleted successfully!", "success");
+      }
     }
+    modalStore.deleteModal = false;
   } catch (error) {
     notify("Error deleting category", "error");
   }

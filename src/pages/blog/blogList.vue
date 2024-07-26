@@ -1,12 +1,12 @@
 <template>
-  <LoadingScreen v-if="loading" />
+  <LoadingScreen v-if="blogStore.loading" />
 
-  <div class="mt-4 card" v-if="blogs.length">
+  <div class="mt-4 card" v-if="blogStore.blogs.length">
     <div class="d-flex justify-content-between"></div>
     <div class="m-5">
-      <div v-for="blog in blogs" :key="blog._id" class="blog-item">
+      <div v-for="blog in blogStore.blogs" :key="blog._id" class="blog-item">
         <img
-          :src="blog?.image|| 'https://via.placeholder.com/150'"
+          :src="blog?.image || 'https://via.placeholder.com/150'"
           alt="Blog Image"
           class="blog-image"
         />
@@ -17,7 +17,10 @@
           <h6 class="text-muted mb-3">{{ blog?.author }}</h6>
           <span class="category-tag">{{ blog?.category }}</span>
         </div>
-        <button class="btn ml-5" @click="handleDelete(blog._id)">
+        <button
+          class="btn ml-5"
+          @click="showDelModal(blog._id, blog.title, 'blogList')"
+        >
           <i class="bi bi-trash"></i>
         </button>
       </div>
@@ -29,49 +32,24 @@
 </template>
 
 <script setup>
-import axios from "axios";
-import { ref, onMounted } from "vue";
+import { onMounted } from "vue";
 import Empty from "@/components/empty.vue";
 import LoadingScreen from "@/components/loadingScreen.vue";
-import { useNotifications } from "@/composable/globalAlert.js";
+import { useBlogStore } from "@/stores/useBlogStore";
+import { useModalStore } from "@/stores/useModalStore";
 
-const loading = ref(false);
+const blogStore = useBlogStore();
+const modalStore = useModalStore();
 
-const { notify } = useNotifications();
-const blogs = ref([]);
-
-const handleFetchBlogs = async () => {
-  loading.value = true;
-  try {
-    const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/blog`);
-
-    if (response.data) {
-      blogs.value = response.data;
-    }
-  } catch (error) {
-    notify("Error fetching blogs", "error");
-  } finally {
-    loading.value = false;
-  }
+const showDelModal = (id, title, type) => {
+  modalStore.deleteModal = true;
+  modalStore.modalId = id;
+  modalStore.modalTitle = title;
+  modalStore.source = type;
 };
 
-const handleDelete = async (id) => {
-  try {
-    const response = await axios.delete(
-      `${import.meta.env.VITE_BASE_URL}/blog/${id}`
-    );
-
-    if (response.data) {
-      blogs.value = blogs.value.filter((blog) => blog._id !== id);
-      notify("Blog deleted successfully!", "success");
-    }
-  } catch (error) {
-    notify("Error deleting blog", "error");
-  }
-};
-
-onMounted(() => {
-  handleFetchBlogs();
+onMounted(async () => {
+  await blogStore.fetchBlogs();
 });
 </script>
 

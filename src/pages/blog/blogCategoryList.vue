@@ -14,7 +14,12 @@
             {{ new Date(category.createdAt).toLocaleDateString() }}
           </span>
         </div>
-        <button class="btn" @click="showDelModal(category._id, category.title)">
+        <button
+          class="btn"
+          @click="
+            showDelModal(category._id, category.title, 'blogCategoryList')
+          "
+        >
           <i class="bi bi-trash"></i>
         </button>
       </div>
@@ -34,10 +39,11 @@ import LoadingScreen from "@/components/loadingScreen.vue";
 const categoryStore = useCategoryStore();
 const modalStore = useModalStore();
 
-const showDelModal = (id, title) => {
+const showDelModal = (id, title, type) => {
   modalStore.deleteModal = true;
   modalStore.modalId = id;
   modalStore.modalTitle = title;
+  modalStore.source = type;
 };
 
 onMounted(async () => {
