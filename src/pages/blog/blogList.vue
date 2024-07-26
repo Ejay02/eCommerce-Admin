@@ -6,7 +6,7 @@
     <div class="m-5">
       <div v-for="blog in blogs" :key="blog._id" class="blog-item">
         <img
-          :src="blog?.image || 'https://via.placeholder.com/150'"
+          :src="blog?.image|| 'https://via.placeholder.com/150'"
           alt="Blog Image"
           class="blog-image"
         />

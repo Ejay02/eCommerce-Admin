@@ -64,23 +64,27 @@ const iconClass = computed(() => {
 }
 
 .info {
-  background-color: #91caff;
-  border: 1px solid #e6f4ff;
+  color: #0958d9;
+  background: #e6f4ff;
+  border-color: #91caff;
 }
 
 .success {
-  background-color: #b7eb8f;
-  border: 1px solid #f6ffed;
+  color: #389e0d;
+  background: #f6ffed;
+  border-color: #b7eb8f;
 }
 
 .warning {
-  background-color: #ffe58f;
-  border: 1px solid #fffbe6;
+  color: #d46b08;
+  background: #fff7e6;
+  border-color: #ffd591;
 }
 
 .error {
-  background-color: #ffccc7;
-  border: 1px solid #fff2f0;
+  color: #cf1322;
+  background: #fff1f0;
+  border-color: #ffa39e;
 }
 
 .fade-enter-active,

@@ -1,24 +1,24 @@
 <template>
-  <div class="mt-4 card">
+  <LoadingScreen v-if="loading" />
+  <div class="mt-4 card" v-if="custs.length">
     <div class="d-flex justify-content-between align-items-center">
       <h3 class="mb-4"></h3>
       <i class="bi bi-three-dots-vertical"></i>
     </div>
-    <div v-if="customers.length">
-      <div
-        v-for="(customer, index) in sortedCustomers"
-        :key="customer.id"
-        class="customer-item"
-      >
+    <div v-if="custs?.length" class="mt-3">
+     
+      <div v-for="(customer, index) in custs" :key="customer.id" class="customer-item">
         <div class="customer-details">
+          
+       
           <h4>
-            {{ customer.name }}
-            <span v-if="index < 3" class="new-tag">New</span>
+            {{ customer.firstname }} {{ customer.lastname }}
+            <span v-if="index === 0" class="new-tag">New</span>
           </h4>
-          <span class="text-muted">{{ customer.email }}</span>
+          <span class="text-muted1">{{ customer.email }}</span>
         </div>
         <span class="text-muted">{{
-          new Date(customer.joinDate).toLocaleDateString()
+          new Date(customer.createdAt).toLocaleDateString()
         }}</span>
       </div>
     </div>
@@ -26,60 +26,43 @@
       <p>No customers available</p>
     </div>
   </div>
+  <div v-else>
+    <Empty />
+  </div>
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import axios from "axios";
+import { ref, onMounted } from "vue";
+import Empty from "@/components/empty.vue";
+import LoadingScreen from "@/components/loadingScreen.vue";
+import { useNotifications } from "@/composable/globalAlert.js";
 
-const customers = ref([
-  {
-    id: "1",
-    name: "John Doe",
-    email: "john.doe@example.com",
-    joinDate: "2023-01-01T00:00:00Z",
-  },
-  {
-    id: "2",
-    name: "Jane Smith",
-    email: "jane.smith@example.com",
-    joinDate: "2023-02-15T00:00:00Z",
-  },
-  {
-    id: "3",
-    name: "Alice Johnson",
-    email: "alice.johnson@example.com",
-    joinDate: "2023-03-30T00:00:00Z",
-  },
-  {
-    id: "4",
-    name: "Bob Brown",
-    email: "bob.brown@example.com",
-    joinDate: "2023-04-10T00:00:00Z",
-  },
-  {
-    id: "5",
-    name: "Charlie Davis",
-    email: "charlie.davis@example.com",
-    joinDate: "2023-05-05T00:00:00Z",
-  },
-  {
-    id: "6",
-    name: "Diana Evans",
-    email: "diana.evans@example.com",
-    joinDate: "2023-06-20T00:00:00Z",
-  },
-  {
-    id: "7",
-    name: "Evan Frank",
-    email: "evan.frank@example.com",
-    joinDate: "2023-07-10T00:00:00Z",
-  },
-]);
+const loading = ref(false);
 
-const sortedCustomers = computed(() => {
-  return [...customers.value].sort(
-    (a, b) => new Date(b.joinDate) - new Date(a.joinDate)
-  );
+const { notify } = useNotifications();
+
+const custs = ref([]);
+
+const handleFetchCustomers = async () => {
+  loading.value = true;
+  try {
+    const response = await axios.get(
+      `${import.meta.env.VITE_BASE_URL}/user/get-users`
+    );
+
+    if (response.data) {
+      custs.value = response.data;
+    }
+  } catch (error) {
+    notify("Error fetching customers", "error");
+  } finally {
+    loading.value = false;
+  }
+};
+
+onMounted(() => {
+  handleFetchCustomers();
 });
 </script>
 
@@ -115,25 +98,21 @@ const sortedCustomers = computed(() => {
   margin: 0;
   font-size: 1.2rem;
   color: #6c757d;
-  /* color: #343a40; */
 }
 
 .customer-details .new-tag {
-  background-color: #28a745;
-  color: white;
   padding: 2px 6px;
   border-radius: 4px;
   font-size: 0.8rem;
   margin-left: 8px;
+  color: #389e0d;
+  background: #f6ffed;
+  border-color: #b7eb8f;
 }
 
-.customer-details .text-muted {
-  font-size: 0.9rem;
-  color: #6c757d;
-}
-
+.text-muted1,
 .text-muted {
-  font-size: 0.9rem;
-  color: #6c757d;
+  font-size: 12px;
+  color: gray;
 }
 </style>

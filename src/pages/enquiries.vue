@@ -89,7 +89,6 @@ onMounted(() => {
 }
 
 .table th {
-  /* background-color: #ffd333; */
   background-color: gray;
   color: #fff;
 }
