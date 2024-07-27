@@ -26,10 +26,10 @@
 <script setup>
 import axios from "axios";
 import { ref, watch } from "vue";
-import { useModalStore } from "@/stores/useModalStore";
-import { useCategoryStore } from "@/stores/useCategoryStore";
+import { useModalStore } from "@/store/useModalStore";
+import { useCategoryStore } from "@/store/useCategoryStore";
 import { useNotifications } from "@/composable/globalAlert.js";
-import { useBlogStore } from "@/stores/useBlogStore";
+import { useBlogStore } from "@/store/useBlogStore";
 
 const { notify } = useNotifications();
 const modalStore = useModalStore();

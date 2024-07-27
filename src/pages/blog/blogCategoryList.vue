@@ -32,8 +32,8 @@
 
 <script setup>
 import { onMounted } from "vue";
-import { useModalStore } from "@/stores/useModalStore";
-import { useCategoryStore } from "@/stores/useCategoryStore";
+import { useModalStore } from "@/store/useModalStore";
+import { useCategoryStore } from "@/store/useCategoryStore";
 import LoadingScreen from "@/components/loadingScreen.vue";
 
 const categoryStore = useCategoryStore();

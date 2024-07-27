@@ -108,7 +108,7 @@
 import axios from "axios";
 import router from "../router";
 import { ref, computed } from "vue";
-import { useUserStore } from "./../stores/useUserStore";
+import { useUserStore } from "../store/useUserStore";
 import { useNotifications } from "@/composable/globalAlert.js";
 
 const { notify } = useNotifications();

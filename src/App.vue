@@ -5,7 +5,7 @@
 </template>
 
 <script setup>
-import { useModalStore } from "@/stores/useModalStore";
+import { useModalStore } from "@/store/useModalStore";
 import DeleteModal from "@/components/modals/deleteModal.vue";
 import ScrollToTopButton from "@/components/scrollToTopBtn.vue";
 

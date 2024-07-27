@@ -1,10 +1,6 @@
 <template>
   <div>
-    <OrdersCard 
-    :pageSize="10" 
-    
-    />
-    <!-- :title="` Orders`"  -->
+    <OrdersCard :pageSize="10" />
   </div>
 </template>
 

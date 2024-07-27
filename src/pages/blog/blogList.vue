@@ -35,8 +35,8 @@
 import { onMounted } from "vue";
 import Empty from "@/components/empty.vue";
 import LoadingScreen from "@/components/loadingScreen.vue";
-import { useBlogStore } from "@/stores/useBlogStore";
-import { useModalStore } from "@/stores/useModalStore";
+import { useBlogStore } from "@/store/useBlogStore";
+import { useModalStore } from "@/store/useModalStore";
 
 const blogStore = useBlogStore();
 const modalStore = useModalStore();

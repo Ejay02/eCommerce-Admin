@@ -64,10 +64,10 @@
 </template>
 
 <script setup>
-import { ref, computed,  } from "vue";
+import { ref, computed } from "vue";
 import axios from "axios";
 import { storeToRefs } from "pinia";
-import { useUserStore } from "@/stores/useUserStore";
+import { useUserStore } from "@/store/useUserStore";
 import { useNotifications } from "@/composable/globalAlert.js";
 
 const { notify } = useNotifications();
@@ -158,7 +158,7 @@ const handleUpdate = async () => {
 .avatar-preview {
   width: 100px;
   height: 100px;
-  border-radius: 5%; 
+  border-radius: 5%;
   overflow: hidden;
   display: flex;
   align-items: center;

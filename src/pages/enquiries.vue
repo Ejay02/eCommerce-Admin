@@ -1,6 +1,6 @@
 <template>
-  <LoadingScreen v-if="loading" />
-  <div class="mt-4 card p-4" v-if="enqs.length">
+  <LoadingScreen v-if="enqStore.loading" />
+  <div class="mt-4 card p-4" v-if="enqStore.enquiries.length">
     <div class="d-flex justify-content-between mb-3">
       <h3></h3>
       <i class="bi bi-three-dots-vertical"></i>
@@ -18,7 +18,11 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="inquiry in enqs" :key="inquiry.id" class="hover-row">
+          <tr
+            v-for="inquiry in enqStore.enquiries"
+            :key="inquiry.id"
+            class="hover-row"
+          >
             <td>{{ inquiry.name }}</td>
             <td>{{ inquiry.email }}</td>
             <td class="text-truncate">{{ inquiry.comment }}</td>
@@ -40,36 +44,15 @@
 </template>
 
 <script setup>
-import axios from "axios";
-import { ref, onMounted } from "vue";
+import { onMounted } from "vue";
 import Empty from "@/components/empty.vue";
 import LoadingScreen from "@/components/loadingScreen.vue";
-import { useNotifications } from "@/composable/globalAlert.js";
+import { useEnquiryStore } from "@/store/useEnquriesStore";
 
-const loading = ref(false);
+const enqStore = useEnquiryStore();
 
-const { notify } = useNotifications();
-const enqs = ref([]);
-
-const handleFetchEnq = async () => {
-  loading.value = true;
-  try {
-    const response = await axios.get(
-      `${import.meta.env.VITE_BASE_URL}/enquiry`
-    );
-
-    if (response.data) {
-      enqs.value = response.data;
-    }
-  } catch (error) {
-    notify("Error fetching blogs", "error");
-  } finally {
-    loading.value = false;
-  }
-};
-
-onMounted(() => {
-  handleFetchEnq();
+onMounted(async () => {
+  await enqStore.fetchEnquiries();
 });
 </script>
 

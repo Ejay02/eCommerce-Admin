@@ -5,7 +5,7 @@
       <i class="bi bi-three-dots-vertical"></i>
     </div>
     <div class="number-container">
-      <h4 class="text-center number">148</h4>
+      <h4 class="text-center number">{{ totalUsers }}</h4>
     </div>
 
     <div
@@ -27,29 +27,41 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted, computed } from "vue";
+import { useBlogStore } from "@/store/useBlogStore";
+import { useCustomerStore } from "@/store/useCustomerStore";
+import { useEnquiryStore } from "@/store/useEnquriesStore";
+
+const blogStore = useBlogStore();
+const customerStore = useCustomerStore();
+const enqStore = useEnquiryStore();
+
+const blogCount = computed(() => blogStore?.blogs?.length);
+const enqCount = computed(() => enqStore?.enquiries?.length);
+const customerCount = computed(() => customerStore?.customers?.length);
 
 const activePages = ref([
-  { name: "/customers", users: 18 },
-  { name: "/catalog", users: 6 },
+  { name: "/customers", users: customerCount },
+  { name: "/catalog", users: 6 }, //TODO
   { name: "/orders", users: 7 },
-  { name: "/blog", users: 3 },
-  { name: "/enquiries", users: 1 },
+  { name: "/blogs", users: blogCount },
+  { name: "/enquiries", users: enqCount },
 ]);
+
+const totalUsers = computed(() => {
+  return activePages.value.reduce((sum, page) => {
+    return sum + page.users;
+  }, 0);
+});
+
+onMounted(async () => {
+  await blogStore.fetchBlogs();
+  await enqStore.fetchEnquiries();
+  await customerStore.fetchCustomers();
+});
 </script>
 
 <style scoped>
-/* .card {
-  background-color: white;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  flex: 1;
-  min-width: calc(33.3% - 10px);
-  box-sizing: border-box;
-  transition: background-color 0.3s, box-shadow 0.3s;
-} */
-
 .number-container {
   display: flex;
   justify-content: center;

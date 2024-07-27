@@ -1,16 +1,17 @@
 <template>
-  <LoadingScreen v-if="loading" />
-  <div class="mt-4 card" v-if="custs.length">
+  <LoadingScreen v-if="customerStore.loading" />
+  <div class="mt-4 card" v-if="customerStore?.customers?.length">
     <div class="d-flex justify-content-between align-items-center">
       <h3 class="mb-4"></h3>
       <i class="bi bi-three-dots-vertical"></i>
     </div>
-    <div v-if="custs?.length" class="mt-3">
-     
-      <div v-for="(customer, index) in custs" :key="customer.id" class="customer-item">
+    <div v-if="customerStore?.customers?.length" class="mt-3">
+      <div
+        v-for="(customer, index) in customerStore?.customers"
+        :key="customer.id"
+        class="customer-item"
+      >
         <div class="customer-details">
-          
-       
           <h4>
             {{ customer.firstname }} {{ customer.lastname }}
             <span v-if="index === 0" class="new-tag">New</span>
@@ -32,37 +33,15 @@
 </template>
 
 <script setup>
-import axios from "axios";
-import { ref, onMounted } from "vue";
+import { onMounted } from "vue";
 import Empty from "@/components/empty.vue";
 import LoadingScreen from "@/components/loadingScreen.vue";
-import { useNotifications } from "@/composable/globalAlert.js";
+import { useCustomerStore } from "@/store/useCustomerStore";
 
-const loading = ref(false);
+const customerStore = useCustomerStore();
 
-const { notify } = useNotifications();
-
-const custs = ref([]);
-
-const handleFetchCustomers = async () => {
-  loading.value = true;
-  try {
-    const response = await axios.get(
-      `${import.meta.env.VITE_BASE_URL}/user/get-users`
-    );
-
-    if (response.data) {
-      custs.value = response.data;
-    }
-  } catch (error) {
-    notify("Error fetching customers", "error");
-  } finally {
-    loading.value = false;
-  }
-};
-
-onMounted(() => {
-  handleFetchCustomers();
+onMounted(async () => {
+  await customerStore.fetchCustomers();
 });
 </script>
 

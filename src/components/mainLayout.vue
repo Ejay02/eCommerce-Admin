@@ -336,7 +336,8 @@ b
 import { ref } from "vue";
 import router from "../router";
 import { storeToRefs } from "pinia";
-import { useUserStore } from "@/stores/useUserStore";
+
+import { useUserStore } from "@/store/useUserStore";
 import { useNotifications } from "@/composable/globalAlert.js";
 
 const collapsed = ref(false);
@@ -345,6 +346,9 @@ const { notify } = useNotifications();
 
 const userStore = useUserStore();
 
+//
+
+//
 userStore.loadUserFromStorage();
 
 const { user } = storeToRefs(userStore);
