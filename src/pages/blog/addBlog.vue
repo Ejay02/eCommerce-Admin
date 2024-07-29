@@ -39,28 +39,16 @@
               aria-label="Author name"
             />
           </div>
-          <!-- 
-          <a-upload
-            class="upload-list-inline"
-            :max-count="1"
-            v-model="formData.image"
-            :auto-upload="false"
-            aria-label="Upload Image"
-          >
-            <a-button class="span">
-              <i class="bi bi-upload m-2"></i>
-              <span>Upload Image</span>
-            </a-button>
-          </a-upload> -->
 
-          <div>
-            <img :src="formData.image" class="uploading-image mb-5" />
+          <div class="mb-3">
             <input
-              class="xi"
-              type="file"
-              accept="image/jpeg"
-              @change="handleImageUpload"
-              ref="imageInput"
+              type="text"
+              id="image"
+              v-model="formData.image"
+              class="form-control"
+              required
+              placeholder="Blog Image url"
+              aria-label="Image url"
             />
           </div>
         </form>
@@ -121,19 +109,8 @@ const formData = ref({
   description: "",
   category: "",
   author: "",
-  image: null,
+  image: "",
 });
-
-const handleImageUpload = (event) => {
-  const file = event.target.files[0];
-  const reader = new FileReader();
-
-  reader.onload = (e) => {
-    formData.value.image = e.target.result;
-  };
-
-  reader.readAsDataURL(file);
-};
 
 const handleSubmit = async () => {
   const description = quillEditor.value.getText();
@@ -151,34 +128,24 @@ const handleSubmit = async () => {
     return;
   }
 
-  // Create FormData object
-  const form = new FormData();
-  form.append("title", formData.value.title);
-  form.append("description", formData.value.description);
-  form.append("category", formData.value.category);
-  form.append("author", formData.value.author);
-  form.append("image", formData.value.image); // Append file
-
   try {
-    const response = await axios.post(
-      `${import.meta.env.VITE_BASE_URL}/blog`,
-      form,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      }
-    );
+    const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/blog`, {
+      title: formData.value.title,
+      description: formData.value.description,
+      category: formData.value.category,
+      author: formData.value.author,
+      image: formData.value.image,
+    });
 
     if (response.data) {
       notify("Blog created successfully!", "success");
-      // Reset form data
+
       formData.value = {
         title: "",
         description: "",
         category: "",
         author: "",
-        image: null,
+        image: "",
       };
     }
   } catch (error) {

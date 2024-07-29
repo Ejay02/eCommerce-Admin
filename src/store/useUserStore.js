@@ -1,4 +1,5 @@
 import axios from "axios";
+import router from "../router";
 import { defineStore } from "pinia";
 import { useNotifications } from "@/composable/globalAlert.js";
 
@@ -73,6 +74,21 @@ export const useUserStore = defineStore("user", {
       localStorage.removeItem("user");
       // Remove the Authorization header when the user is cleared
       delete axios.defaults.headers.common["Authorization"];
+
+      router.push("/login"); // Redirect to login page
+      notify("You have been logged out due to inactivity.", "info");
     },
   },
 });
+
+// Axios interceptor for handling token expiration
+axios.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response && error.response.status === 401) {
+      const userStore = useUserStore();
+      userStore.clearUser();
+    }
+    return Promise.reject(error);
+  }
+);

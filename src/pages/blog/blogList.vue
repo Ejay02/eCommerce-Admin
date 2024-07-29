@@ -2,7 +2,7 @@
   <LoadingScreen v-if="blogStore.loading" />
 
   <div class="mt-4 card" v-if="blogStore.blogs.length">
-    <div class="d-flex justify-content-between"></div>
+    <!-- <div class="d-flex justify-content-between"></div> -->
     <div class="m-5">
       <div v-for="blog in blogStore.blogs" :key="blog._id" class="blog-item">
         <img
