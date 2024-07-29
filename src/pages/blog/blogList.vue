@@ -2,7 +2,6 @@
   <LoadingScreen v-if="blogStore.loading" />
 
   <div class="mt-4 card" v-if="blogStore.blogs.length">
-    <!-- <div class="d-flex justify-content-between"></div> -->
     <div class="m-5">
       <div v-for="blog in blogStore.blogs" :key="blog._id" class="blog-item">
         <img
@@ -17,12 +16,20 @@
           <h6 class="text-muted mb-3">{{ blog?.author }}</h6>
           <span class="category-tag">{{ blog?.category }}</span>
         </div>
-        <button
-          class="btn ml-5"
-          @click="showDelModal(blog._id, blog.title, 'blogList')"
-        >
-          <i class="bi bi-trash"></i>
-        </button>
+        <div class="d-flex">
+          <router-link
+            :to="{ name: 'edit', params: { id: blog._id } }"
+            class="btn justify-content-center align-content-center"
+          >
+            <i class="bi bi-pencil-square"></i>
+          </router-link>
+          <button
+            class="btn ml-5 x"
+            @click="showDelModal(blog._id, blog.title, 'blogList')"
+          >
+            <i class="bi bi-trash"></i>
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -85,7 +92,6 @@ onMounted(async () => {
 
 .category-tag {
   background-color: rgb(152, 182, 209);
-  /* color: gray; */
   padding: 4px 8px;
   border-radius: 4px;
   font-size: 10px;
@@ -98,5 +104,8 @@ onMounted(async () => {
 .btn {
   text-decoration: none;
   border: none;
+}
+.x {
+  color: red;
 }
 </style>

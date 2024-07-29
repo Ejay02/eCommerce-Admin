@@ -23,6 +23,7 @@ import Color from "./pages/catalog/color.vue";
 import ColorList from "./pages/catalog/colorList.vue";
 import Category from "./pages/catalog/category.vue";
 import CategoryList from "./pages/catalog/categoryList.vue";
+import EditBlog from "./pages/blog/editBlog.vue";
 // import AboutView from "./AboutView.vue";
 
 const routes = [
@@ -98,7 +99,11 @@ const routes = [
       {
         path: "blog",
         component: AddBlog,
-        children: [],
+      },
+      {
+        path: "/edit-blog/:id",
+        component: EditBlog,
+        name: "edit",
       },
       {
         path: "blog/add-blog-category",
