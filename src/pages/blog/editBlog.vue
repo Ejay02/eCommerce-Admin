@@ -60,7 +60,7 @@
             theme="snow"
             rows="12"
             placeholder="Get creative here... 🌠"
-            v-model="formData.description"
+            v-model:content="formData.description"
             aria-label="Blog Description"
           />
         </div>
@@ -69,9 +69,8 @@
     <div class="text-end mt-3">
       <router-link
         type="submit"
-        to="/blog/blog-list"
-        class="btn mt-3 gap-5"
-        @click="handleSubmit"
+        to="/admin/blog/blog-list"
+        class="btn mt-3 gap-5 bn"
       >
         Cancel
       </router-link>
@@ -84,7 +83,7 @@
 
 <script setup>
 import axios from "axios";
-import { h, onMounted, ref } from "vue";
+import { h, onMounted, ref, watch } from "vue";
 import {
   SolutionOutlined,
   LoadingOutlined,
@@ -131,7 +130,11 @@ const fetchBlogDetails = async () => {
     );
 
     Object.assign(formData.value, response.data);
-   
+    if (quillEditor.value) {
+      quillEditor.value.editor.setContents(
+        quillEditor.value.editor.clipboard.convert(response.data.description)
+      );
+    }
   } catch (error) {
     notify(
       "Error fetching blog details: " + error.response.data.message,
@@ -139,6 +142,14 @@ const fetchBlogDetails = async () => {
     );
   }
 };
+
+watch(formData, (newVal) => {
+  if (quillEditor.value) {
+    quillEditor.value.editor.setContents(
+      quillEditor.value.editor.clipboard.convert(newVal.description)
+    );
+  }
+});
 
 const handleSubmit = async () => {
   try {
@@ -209,5 +220,11 @@ onMounted(() => {
 .span {
   color: gray;
   font-size: 12px;
+}
+
+.bn {
+  border: 1px solid gray;
+  margin-right: 8px;
+  color: gray;
 }
 </style>

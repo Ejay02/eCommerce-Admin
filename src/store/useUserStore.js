@@ -75,7 +75,7 @@ export const useUserStore = defineStore("user", {
       // Remove the Authorization header when the user is cleared
       delete axios.defaults.headers.common["Authorization"];
 
-      router.push("/login"); // Redirect to login page
+      router.push("/"); // Redirect to login page
       notify("You have been logged out due to inactivity.", "info");
     },
   },
