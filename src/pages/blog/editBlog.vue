@@ -235,5 +235,6 @@ onMounted(() => {
 .ce {
   font-size: 12px;
   text-decoration-line: underline;
+  color: #007bff;
 }
 </style>

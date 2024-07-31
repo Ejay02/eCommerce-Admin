@@ -219,6 +219,7 @@ const handleSubmit = async () => {
 }
 
 .ce {
+  color: #007bff;
   font-size: 12px;
   text-decoration-line: underline;
 }
