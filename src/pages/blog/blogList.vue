@@ -2,7 +2,6 @@
   <LoadingScreen v-if="blogStore.loading" />
 
   <div class="mt-4 card" v-if="blogStore.blogs.length">
-    <!-- <div class="d-flex justify-content-between"></div> -->
     <div class="m-5">
       <div v-for="blog in blogStore.blogs" :key="blog._id" class="blog-item">
         <img
@@ -12,13 +11,15 @@
         />
         <div class="blog-content">
           <h4>{{ blog.title }}</h4>
-          <p>{{ blog.description }}</p>
+          <div
+            class="desc"
+            v-html="truncateDescription(blog.description)"
+          ></div>
 
           <h6 class="text-muted mb-3">{{ blog?.author }}</h6>
           <span class="category-tag">{{ blog?.category }}</span>
         </div>
         <div class="d-flex">
-          <!-- to="/admin/blog/edit" -->
           <router-link
             :to="{ name: 'edit', params: { id: blog._id } }"
             class="btn justify-content-center align-content-center"
@@ -55,6 +56,18 @@ const showDelModal = (id, title, type) => {
   modalStore.modalId = id;
   modalStore.modalTitle = title;
   modalStore.source = type;
+};
+
+// Function to trim excess whitespace and truncate description to 80 words
+const truncateDescription = (description) => {
+  // Remove excess whitespace
+  const cleanedDescription = description.replace(/\s+/g, " ").trim();
+  // Split the cleaned description into words
+  const words = cleanedDescription.split(" ");
+  // Check if the number of words exceeds 80
+  return words.length > 5
+    ? words.slice(0, 5).join(" ") + "..."
+    : cleanedDescription;
 };
 
 onMounted(async () => {

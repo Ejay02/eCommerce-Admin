@@ -2,8 +2,9 @@
   <div class="mt-4 card p-4">
     <div class="text-end mb-3">
       <span class="ce" @click="togglePreview">{{
-        showPreview ? "Continue editing" : "Preview"
+        showPreview ? "Continue writing" : "Preview"
       }}</span>
+      ✨
     </div>
 
     <div v-if="!showPreview">
@@ -72,6 +73,7 @@
           </div>
         </div>
       </div>
+      <!-- button -->
       <div class="text-end mt-3">
         <button
           type="submit"
@@ -93,7 +95,7 @@
 <script setup>
 import axios from "axios";
 import { ref } from "vue";
-
+import router from "@/router";
 import BlogPreview from "@/components/blogPreview.vue";
 import { useNotifications } from "@/composable/globalAlert.js";
 
@@ -151,7 +153,8 @@ const handleSubmit = async () => {
         author: "",
         image: "",
       };
-      // showPreview.value = false;
+
+      router.push("/admin/blog/blog-list");
     }
   } catch (error) {
     notify("Error creating blog: " + error.response.data.message, "error");
@@ -209,6 +212,7 @@ const handleSubmit = async () => {
   color: gray;
   font-size: 12px;
 }
+
 .ce {
   font-size: 12px;
   text-decoration-line: underline;

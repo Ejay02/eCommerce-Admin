@@ -1,87 +1,102 @@
 <template>
   <div class="mt-4 card p-4">
-    <div class="row">
-      <div class="col-md-6">
-        <form @submit.prevent="handleSubmit">
-          <div class="mb-3">
-            <input
-              type="text"
-              id="title"
-              v-model="formData.title"
-              class="form-control"
-              required
-              autofocus
-              placeholder="Blog Title"
-              aria-label="Blog Title"
-            />
-          </div>
-          <div class="mb-3">
-            <input
-              type="text"
-              id="category"
-              v-model="formData.category"
-              class="form-control"
-              required
-              placeholder="Blog Category"
-              aria-label="Blog Category"
-            />
-          </div>
-          <div class="mb-3">
-            <input
-              type="text"
-              id="author"
-              v-model="formData.author"
-              class="form-control"
-              required
-              placeholder="Author name"
-              aria-label="Author name"
-            />
-          </div>
+    <div class="text-end mb-3">
+      <span class="ce" @click="togglePreview">{{
+        showPreview ? "Continue editing " : "Preview"
+      }}</span>
+      ✨
+    </div>
 
-          <div class="mb-3">
-            <input
-              type="text"
-              id="image"
-              v-model="formData.image"
-              class="form-control"
-              required
-              placeholder="Blog Image url"
-              aria-label="Image url"
-            />
-          </div>
-        </form>
-      </div>
-      <div class="col-md-6 mb-4">
-        <div class="mb-5 quill">
-          <QuillEditor
-            ref="quillEditor"
-            theme="snow"
-            rows="12"
-            placeholder="Get creative here... 🌠"
-            v-model:content="formData.description"
-            content-type="html"
-            aria-label="Blog Description"
-          />
+    <div v-if="!showPreview">
+      <div class="row">
+        <div class="col-md-6">
+          <form @submit.prevent="handleSubmit">
+            <div class="mb-3">
+              <input
+                type="text"
+                id="title"
+                v-model="formData.title"
+                class="form-control"
+                required
+                autofocus
+                placeholder="Blog Title"
+                aria-label="Blog Title"
+              />
+            </div>
+            <div class="mb-3">
+              <input
+                type="text"
+                id="category"
+                v-model="formData.category"
+                class="form-control"
+                required
+                placeholder="Blog Category"
+                aria-label="Blog Category"
+              />
+            </div>
+            <div class="mb-3">
+              <input
+                type="text"
+                id="author"
+                v-model="formData.author"
+                class="form-control"
+                required
+                placeholder="Author name"
+                aria-label="Author name"
+              />
+            </div>
+
+            <div class="mb-3">
+              <input
+                type="text"
+                id="image"
+                v-model="formData.image"
+                class="form-control"
+                required
+                placeholder="Blog Image url"
+                aria-label="Image url"
+              />
+            </div>
+          </form>
         </div>
-      </div>
-      <!-- two -->
+        <div class="col-md-6 mb-4">
+          <div class="mb-5 quill">
+            <QuillEditor
+              ref="quillEditor"
+              theme="snow"
+              rows="12"
+              placeholder="Get creative here... 🌠"
+              v-model:content="formData.description"
+              content-type="html"
+              aria-label="Blog Description"
+            />
+          </div>
+        </div>
+        <!-- two -->
 
-      <!-- end -->
+        <!-- end -->
+      </div>
+      <div class="text-end mt-3">
+        <router-link
+          type="submit"
+          to="/admin/blog/blog-list"
+          class="btn mt-3 gap-5 bn"
+        >
+          Cancel
+        </router-link>
+        <button
+          type="submit"
+          class="btn btn-primary mt-3"
+          @click="handleSubmit"
+        >
+          Update
+        </button>
+      </div>
     </div>
-    <div class="text-end mt-3">
-      <router-link
-        type="submit"
-        to="/admin/blog/blog-list"
-        class="btn mt-3 gap-5 bn"
-      >
-        Cancel
-      </router-link>
-      <button type="submit" class="btn btn-primary mt-3" @click="handleSubmit">
-        Update
-      </button>
-    </div>
-    <div class="">
-      <Markdown :source="source" />
+
+    <div v-else>
+      <!-- preview page -->
+      <BlogPreview :formData="formData" />
     </div>
   </div>
 </template>
@@ -92,7 +107,7 @@ import { onMounted, ref, watch } from "vue";
 
 import { useRoute } from "vue-router";
 import router from "@/router";
-import Markdown from "vue3-markdown-it";
+import BlogPreview from "@/components/blogPreview.vue";
 import { useNotifications } from "@/composable/globalAlert.js";
 
 const { notify } = useNotifications();
@@ -108,7 +123,11 @@ const formData = ref({
   description: "",
 });
 
+const showPreview = ref(false);
 
+const togglePreview = () => {
+  showPreview.value = !showPreview.value;
+};
 
 const fetchBlogDetails = async () => {
   const blogId = route.params.id;
@@ -211,5 +230,10 @@ onMounted(() => {
   border: 1px solid gray;
   margin-right: 8px;
   color: gray;
+}
+
+.ce {
+  font-size: 12px;
+  text-decoration-line: underline;
 }
 </style>

@@ -1,24 +1,21 @@
 <template>
   <div>
     <h3 class="title">{{ formData.title }}</h3>
+    <span class="author mb-2">{{ formData.author }}</span> <br />
     <p class="date">{{ new Date().toLocaleDateString() }}</p>
-    <span class="author">{{ formData?.author }}</span> <br />
-    <span class="category-tag">{{ formData?.category }}</span>
+    <span class="category-tag">{{ formData.category }}</span>
 
     <img
       :src="formData.image"
       class="img-fluid blog-image my-4 w-100"
       alt="Blog Image"
     />
-    <div class="desc">
-      <Markdown :source="formData.description" />
-    </div>
+    <div class="desc" v-html="formData.description"></div>
   </div>
 </template>
 
 <script setup>
 import { defineProps } from "vue";
-import Markdown from "vue3-markdown-it";
 
 defineProps({
   formData: Object,
@@ -53,6 +50,7 @@ defineProps({
 
 .title {
   color: black;
+  margin-bottom: 0px;
 }
 
 .date {
