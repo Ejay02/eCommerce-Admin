@@ -1,108 +1,105 @@
 <template>
   <div class="mt-4 card p-4">
-    <a-steps :items="items" class="mb-3"></a-steps>
+    <div class="text-end mb-3">
+      <span class="ce" @click="togglePreview">{{
+        showPreview ? "Continue editing" : "Preview"
+      }}</span>
+    </div>
 
-    <div class="row">
-      <div class="col-md-6">
-        <form @submit.prevent="handleSubmit">
-          <div class="mb-3">
-            <input
-              type="text"
-              id="title"
-              v-model="formData.title"
-              class="form-control"
-              required
-              autofocus
-              placeholder="Blog Title"
-              aria-label="Blog Title"
+    <div v-if="!showPreview">
+      <!-- edit page -->
+      <div class="row">
+        <div class="col-md-6">
+          <form @submit.prevent="handleSubmit">
+            <div class="mb-3">
+              <input
+                type="text"
+                id="title"
+                v-model="formData.title"
+                class="form-control"
+                required
+                autofocus
+                placeholder="Blog Title"
+                aria-label="Blog Title"
+              />
+            </div>
+            <div class="mb-3">
+              <input
+                type="text"
+                id="category"
+                v-model="formData.category"
+                class="form-control"
+                required
+                placeholder="Blog Category"
+                aria-label="Blog Category"
+              />
+            </div>
+            <div class="mb-3">
+              <input
+                type="text"
+                id="author"
+                v-model="formData.author"
+                class="form-control"
+                required
+                placeholder="Author name"
+                aria-label="Author name"
+              />
+            </div>
+            <div class="mb-3">
+              <input
+                type="text"
+                id="image"
+                v-model="formData.image"
+                class="form-control"
+                required
+                placeholder="Blog Image url"
+                aria-label="Image url"
+              />
+            </div>
+          </form>
+        </div>
+        <div class="col-md-6 mb-4">
+          <div class="mb-5 quill">
+            <QuillEditor
+              ref="quillEditor"
+              theme="snow"
+              rows="12"
+              placeholder="Get creative here... 🌠"
+              v-model:content="formData.description"
+              content-type="html"
+              aria-label="Blog Description"
             />
           </div>
-          <div class="mb-3">
-            <input
-              type="text"
-              id="category"
-              v-model="formData.category"
-              class="form-control"
-              required
-              placeholder="Blog Category"
-              aria-label="Blog Category"
-            />
-          </div>
-          <div class="mb-3">
-            <input
-              type="text"
-              id="author"
-              v-model="formData.author"
-              class="form-control"
-              required
-              placeholder="Author name"
-              aria-label="Author name"
-            />
-          </div>
-
-          <div class="mb-3">
-            <input
-              type="text"
-              id="image"
-              v-model="formData.image"
-              class="form-control"
-              required
-              placeholder="Blog Image url"
-              aria-label="Image url"
-            />
-          </div>
-        </form>
-      </div>
-      <div class="col-md-6 mb-4">
-        <div class="mb-5 quill">
-          <QuillEditor
-            ref="quillEditor"
-            theme="snow"
-            rows="12"
-            placeholder="Get creative here... 🌠"
-            v-model="formData.description"
-            aria-label="Blog Description"
-          />
         </div>
       </div>
+      <div class="text-end mt-3">
+        <button
+          type="submit"
+          class="btn btn-primary mt-3"
+          @click="handleSubmit"
+        >
+          Create
+        </button>
+      </div>
     </div>
-    <div class="text-end mt-3">
-      <button type="submit" class="btn btn-primary mt-3" @click="handleSubmit">
-        Create
-      </button>
+
+    <div v-else>
+      <!-- preview page -->
+      <BlogPreview :formData="formData" />
     </div>
   </div>
 </template>
 
 <script setup>
 import axios from "axios";
-import { h, ref } from "vue";
-import {
-  SolutionOutlined,
-  LoadingOutlined,
-  SmileOutlined,
-} from "@ant-design/icons-vue";
+import { ref } from "vue";
+
+import BlogPreview from "@/components/blogPreview.vue";
 import { useNotifications } from "@/composable/globalAlert.js";
 
 const { notify } = useNotifications();
 
 const quillEditor = ref(null);
-
-const items = [
-  {
-    title: "Write blog",
-    status: "finish",
-    icon: h(LoadingOutlined),
-    textValue: "Write blog",
-  },
-  {
-    title: "Preview",
-    status: "wait",
-    icon: h(SolutionOutlined),
-    textValue: "Preview",
-  },
-  { title: "Post", status: "wait", icon: h(SmileOutlined), textValue: "Post" },
-];
 
 const formData = ref({
   title: "",
@@ -112,7 +109,14 @@ const formData = ref({
   image: "",
 });
 
+const showPreview = ref(false);
+
+const togglePreview = () => {
+  showPreview.value = !showPreview.value;
+};
+
 const handleSubmit = async () => {
+  // const description = quillEditor.value.root.innerHTML; // Get HTML content
   const description = quillEditor.value.getText();
   formData.value.description = description;
 
@@ -147,6 +151,7 @@ const handleSubmit = async () => {
         author: "",
         image: "",
       };
+      // showPreview.value = false;
     }
   } catch (error) {
     notify("Error creating blog: " + error.response.data.message, "error");
@@ -203,5 +208,9 @@ const handleSubmit = async () => {
 .span {
   color: gray;
   font-size: 12px;
+}
+.ce {
+  font-size: 12px;
+  text-decoration-line: underline;
 }
 </style>

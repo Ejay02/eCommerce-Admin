@@ -1,7 +1,5 @@
 <template>
   <div class="mt-4 card p-4">
-    <a-steps :items="items" class="mb-3"></a-steps>
-
     <div class="row">
       <div class="col-md-6">
         <form @submit.prevent="handleSubmit">
@@ -61,10 +59,14 @@
             rows="12"
             placeholder="Get creative here... 🌠"
             v-model:content="formData.description"
+            content-type="html"
             aria-label="Blog Description"
           />
         </div>
       </div>
+      <!-- two -->
+
+      <!-- end -->
     </div>
     <div class="text-end mt-3">
       <router-link
@@ -78,41 +80,25 @@
         Update
       </button>
     </div>
+    <div class="">
+      <Markdown :source="source" />
+    </div>
   </div>
 </template>
 
 <script setup>
 import axios from "axios";
-import { h, onMounted, ref, watch } from "vue";
-import {
-  SolutionOutlined,
-  LoadingOutlined,
-  SmileOutlined,
-} from "@ant-design/icons-vue";
+import { onMounted, ref, watch } from "vue";
+
 import { useRoute } from "vue-router";
 import router from "@/router";
+import Markdown from "vue3-markdown-it";
 import { useNotifications } from "@/composable/globalAlert.js";
 
 const { notify } = useNotifications();
 const route = useRoute();
 
 const quillEditor = ref(null);
-
-const items = [
-  {
-    title: "Edit blog",
-    status: "finish",
-    icon: h(LoadingOutlined),
-    textValue: "Edit blog",
-  },
-  {
-    title: "Preview",
-    status: "wait",
-    icon: h(SolutionOutlined),
-    textValue: "Preview",
-  },
-  { title: "Post", status: "wait", icon: h(SmileOutlined), textValue: "Post" },
-];
 
 const formData = ref({
   title: "",
@@ -121,6 +107,8 @@ const formData = ref({
   image: "",
   description: "",
 });
+
+
 
 const fetchBlogDetails = async () => {
   const blogId = route.params.id;
@@ -136,10 +124,7 @@ const fetchBlogDetails = async () => {
       );
     }
   } catch (error) {
-    notify(
-      "Error fetching blog details: " + error.response.data.message,
-      "error"
-    );
+    notify("Error fetching blog details");
   }
 };
 

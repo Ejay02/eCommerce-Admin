@@ -10,11 +10,14 @@ import vue3GoogleLogin from "vue3-google-login";
 import { QuillEditor } from "@vueup/vue-quill";
 import "@vueup/vue-quill/dist/vue-quill.snow.css";
 import { plugin, defaultConfig } from "@formkit/vue";
+import Markdown from "vue3-markdown-it";
+import "highlight.js/styles/monokai.css";
 
 createApp(App)
   .use(createPinia())
   .use(router)
   .use(Antd)
+  .use(Markdown)
   .component("QuillEditor", QuillEditor)
   .use(plugin, defaultConfig)
   .use(vue3GoogleLogin, {
