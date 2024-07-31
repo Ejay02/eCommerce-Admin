@@ -1,9 +1,7 @@
 <template>
   <div class="mt-4 card p-4">
     <div class="text-end mb-3">
-      <span class="ce" @click="togglePreview">{{
-        showPreview ? "Continue writing" : "Preview"
-      }}</span>
+      <span class="ce" :class="{ 'disabled': !isFormFilled }" @click="togglePreview" :style="{ cursor: isFormFilled ? 'pointer' : 'not-allowed' }">{{ showPreview ? "Continue writing" : "Preview" }}</span>
       ✨
     </div>
 
@@ -79,6 +77,7 @@
           type="submit"
           class="btn btn-primary mt-3"
           @click="handleSubmit"
+          :disabled="!isFormFilled"
         >
           Create
         </button>
@@ -94,7 +93,7 @@
 
 <script setup>
 import axios from "axios";
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import router from "@/router";
 import BlogPreview from "@/components/blogPreview.vue";
 import { useNotifications } from "@/composable/globalAlert.js";
@@ -114,8 +113,20 @@ const formData = ref({
 const showPreview = ref(false);
 
 const togglePreview = () => {
-  showPreview.value = !showPreview.value;
+  if (isFormFilled.value) {
+    showPreview.value = !showPreview.value;
+  }
 };
+
+const isFormFilled = computed(() => {
+  return (
+    formData.value.title &&
+    formData.value.description &&
+    formData.value.category &&
+    formData.value.author &&
+    formData.value.image
+  );
+});
 
 const handleSubmit = async () => {
   // const description = quillEditor.value.root.innerHTML; // Get HTML content
@@ -123,13 +134,7 @@ const handleSubmit = async () => {
   formData.value.description = description;
 
   // Validate form data
-  if (
-    !formData.value.title ||
-    !formData.value.description ||
-    !formData.value.category ||
-    !formData.value.author ||
-    !formData.value.image
-  ) {
+  if (!isFormFilled.value) {
     notify("Please fill in all required fields", "error");
     return;
   }
@@ -216,5 +221,9 @@ const handleSubmit = async () => {
 .ce {
   font-size: 12px;
   text-decoration-line: underline;
+}
+
+.ce.disabled {
+  color: lightgray;
 }
 </style>
