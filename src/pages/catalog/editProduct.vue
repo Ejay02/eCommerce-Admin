@@ -40,10 +40,9 @@
           </div>
           <!-- tags -->
           <div class="mb-3">
-            <!-- tag -->
             <div class="tags mb-2">
               <span
-                v-for="(tag, index) in tags"
+                v-for="(tag, index) in formData.tags"
                 :key="index"
                 class="category-tag"
               >
@@ -52,14 +51,14 @@
               </span>
             </div>
             <!--  -->
+
             <input
+              v-model="newTag"
               type="text"
               id="tags"
-              v-model="formData.tags"
               class="form-control"
-              required
-              placeholder="Tags( ',' separated)"
-              @keyup="addTags"
+              placeholder="Add new tag and press Enter"
+              @keyup.enter="addTag"
             />
           </div>
 
@@ -162,21 +161,28 @@ const { notify } = useNotifications();
 const quillEditor = ref(null);
 const route = useRoute();
 
-const tags = ref([]);
-const tagInput = ref("");
+const newTag = ref("");
 
-const addTags = (event) => {
-  if (event.key === ",") {
-    const newTag = tagInput.value.trim();
-    if (newTag && newTag.endsWith(",")) {
-      tags.value.push(newTag.slice(0, -1)); // Add the category without the comma
-      tagInput.value = ""; // Clear the input
-    }
+// const addTag = () => {
+//   const tag = newTag.value.trim();
+//   if (tag && !formData.value.tags.includes(tag)) {
+//     formData.value.tags.push(tag);
+//     newTag.value = "";
+//   }
+// };
+
+const addTag = () => {
+  let tag = newTag.value.trim();
+  // Remove any commas from the tag
+  tag = tag.replace(/,+$/, "").replace(/^,+/, "");
+  if (tag && !formData.value.tags.includes(tag)) {
+    formData.value.tags.push(tag);
+    newTag.value = "";
   }
 };
 
 const removeTag = (index) => {
-  tags.value.splice(index, 1);
+  formData.value.tags.splice(index, 1);
 };
 
 const formData = ref({
@@ -185,7 +191,7 @@ const formData = ref({
   category: "",
   slug: "",
   price: "",
-  tags: "",
+  tags: [],
   color: "",
   images: [],
   brand: "",
@@ -200,15 +206,6 @@ const fetchProductDetails = async () => {
     );
 
     Object.assign(formData.value, response.data);
-
-    // Update tags
-    tags.value = response.data.tags.split(",").map((tag) => tag.trim());
-
-    if (quillEditor.value) {
-      quillEditor.value.editor.setContents(
-        quillEditor.value.editor.clipboard.convert(response.data.description)
-      );
-    }
   } catch (error) {
     notify("Error fetching product details", "warning");
   }
@@ -224,12 +221,9 @@ watch(formData, (newVal) => {
 
 const handleSubmit = async () => {
   try {
-    // Convert tags array to a comma-separated string
-    const dataToSubmit = { ...formData.value, tags: tags.value.join(",") };
-
     const res = await axios.put(
       `${import.meta.env.VITE_BASE_URL}/product/${route.params.id}`,
-      dataToSubmit
+      formData.value
     );
     if (res.data) {
       notify("Product edited successfully!", "success");
