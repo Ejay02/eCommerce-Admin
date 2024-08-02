@@ -163,17 +163,8 @@ const route = useRoute();
 
 const newTag = ref("");
 
-// const addTag = () => {
-//   const tag = newTag.value.trim();
-//   if (tag && !formData.value.tags.includes(tag)) {
-//     formData.value.tags.push(tag);
-//     newTag.value = "";
-//   }
-// };
-
 const addTag = () => {
   let tag = newTag.value.trim();
-  // Remove any commas from the tag
   tag = tag.replace(/,+$/, "").replace(/^,+/, "");
   if (tag && !formData.value.tags.includes(tag)) {
     formData.value.tags.push(tag);

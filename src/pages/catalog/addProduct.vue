@@ -60,10 +60,9 @@
               v-model="tagInput"
               class="form-control"
               required
-              placeholder="Tags(, separated)"
+              placeholder="Add new tag and press Enter"
               @keyup="addTags"
             />
-            <!-- @keyup.enter="addTags" -->
           </div>
 
           <!-- color -->
@@ -88,8 +87,6 @@
               <span> upload Image(s) </span>
             </a-button>
           </a-upload>
-
-          <!-- <button type="submit" class="btn btn-primary mt-3">Create</button> -->
         </form>
       </div>
       <div class="col-md-6 mb-4">
@@ -194,24 +191,13 @@ const tagInput = ref("");
 
 const addTags = (event) => {
   if (event.key === "," || event.key === "Enter") {
-    // Handle both comma and Enter
     const newTag = tagInput.value.trim();
     if (newTag) {
-      tags.value.push(newTag); // Add tag directly
+      tags.value.push(newTag.replace(/,$/, "")); // Remove trailing comma if present
       tagInput.value = ""; // Clear the input
     }
   }
 };
-
-// const addTags = (event) => {
-//   if (event.key === ",") {
-//     const newTag = tagInput.value.trim();
-//     if (newTag && newTag.endsWith(",")) {
-//       tags.value.push(newTag.slice(0, -1)); // Add the category without the comma
-//       tagInput.value = ""; // Clear the input
-//     }
-//   }
-// };
 
 const removeTag = (index) => {
   tags.value.splice(index, 1);
