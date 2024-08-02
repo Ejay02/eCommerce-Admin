@@ -1,6 +1,7 @@
 <template>
   <LoadingScreen v-if="orderStore?.loading" />
   <div class="mt-4 card p-4" v-if="orderStore?.orders?.length">
+    <!-- <div class="mt-4 card p-4"> -->
     <div class="d-flex justify-content-between align-items-center mb-4">
       <h3></h3>
       <i class="bi bi-three-dots-vertical"></i>
@@ -22,16 +23,16 @@
           <tr
             class="hover-row"
             v-for="order in orderStore?.orders"
-            :key="order.id"
+            :key="order?.id"
           >
-            <td>{{ order?.orderBy?.id }}</td>
-            <td>{{ order?.orderStatus }}</td>
+            <td>{{ orderNo }}</td>
+            <!-- <td>{{ order?.status }}</td> -->
+            <td>{{ getStatusTag(order?.status) }}</td>
             <td>{{ order?.comment }}</td>
-            <td>
-              {{ order?.orderBy?.firstname }} {{ order?.orderBy?.lastname }}
-            </td>
-            <td>{{ order?.createdAt }}</td>
-            <td>{{ order?.total }}</td>
+            <td>{{ order?.firstname }} {{ order?.lastname }}</td>
+            <!-- <td>{{ order?.createdAt }}</td> -->
+            <td>{{ new Date(order?.createdAt).toLocaleDateString() }}</td>
+            <td>{{ order?.total || "N/A" }}</td>
           </tr>
         </tbody>
       </table>
@@ -43,7 +44,7 @@
 </template>
 
 <script setup>
-import { h, onMounted } from "vue";
+import { h, onMounted, ref } from "vue";
 import { Tag } from "ant-design-vue";
 import Empty from "@/components/empty.vue";
 import { useOrderStore } from "@/store/useOrdersStore";
@@ -85,8 +86,23 @@ const getStatusTag = (status) => {
 };
 
 const orderStore = useOrderStore();
+console.log("orderStore:", orderStore); // #TODO : fix issue with display order
 
-onMounted(async () => await orderStore.fetchOrders());
+// onMounted(async () => await orderStore.fetchOrders());
+onMounted(async () => {
+  await orderStore.fetchOrders(), console.log("Order:", orderStore.orders);
+});
+
+const generateOrderNo = (length = 4) => {
+  const chars = "0123456789";
+  let result = "";
+  for (let i = 0; i < length; i++) {
+    result += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return `#${result}`;
+};
+
+const orderNo = ref(generateOrderNo());
 </script>
 
 <style scoped>

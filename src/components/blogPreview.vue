@@ -15,8 +15,6 @@
 </template>
 
 <script setup>
-import { defineProps } from "vue";
-
 defineProps({
   formData: Object,
 });

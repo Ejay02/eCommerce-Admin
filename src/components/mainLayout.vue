@@ -346,9 +346,6 @@ const { notify } = useNotifications();
 
 const userStore = useUserStore();
 
-//
-
-//
 userStore.loadUserFromStorage();
 
 const { user } = storeToRefs(userStore);

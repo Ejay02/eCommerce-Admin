@@ -23,7 +23,8 @@
         <tr>
           <th scope="col" class="text-secondary">Product</th>
           <th scope="col" class="text-secondary">
-            <i class="fa-solid fa-sort m-2"></i>Category
+            <i class="fa-solid fa-sort m-2"></i>
+            <span> Category </span>
           </th>
           <th scope="col" class="text-secondary">
             <i class="fa-solid fa-sort m-2"></i> Stock
@@ -34,27 +35,28 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="product in products" :key="product.id">
-          <td>
+        <tr v-for="product in productStore.products" :key="product._id">
+          <td class="d-flex">
             <img
-              :src="product.image"
+              :src="product?.images[0] || product?.images"
               alt="product"
               class="product-image text-body-tertiary"
             />
             <div class="product-details">
-              <strong class="text-secondary">{{ product.name }}</strong>
+              <strong class="text-secondary">{{ product?.title }}</strong>
               <div class="text-body-tertiary d-flex sku">
-                ID: {{ product.id }} | SKU: {{ product.sku }}
+                ID: {{ product?._id.slice(4, 8) || "N/A" }} | SKU:
+                {{ productSKU || "N/A" }}
               </div>
             </div>
           </td>
-          <td class="text-body-tertiary">{{ product.category }}</td>
+          <td class="text-body-tertiary">{{ product?.category }}</td>
           <td>
-            <span :class="statusClass(product.stockStatus)">
-              {{ product.stockStatus }}
+            <span :class="statusClass(product)">
+              {{ product?.quantity > 0 ? "In Stock" : "Out of Stock" }}
             </span>
           </td>
-          <td class="text-body-tertiary">{{ product.price }}</td>
+          <td class="text-body-tertiary">{{ product?.price }}</td>
           <td>
             <i class="bi bi-three-dots-vertical text-secondary"></i>
           </td>
@@ -65,62 +67,39 @@
 </template>
 
 <script setup>
+import { useProductStore } from "@/store/useProductStore";
+import { onMounted } from "vue";
+
 import { ref } from "vue";
 
-const products = ref([
-  {
-    id: 1022,
-    sku: "AC6660KW",
-    name: "Ash's Chainsaw 3.5kW",
-    category: "Power Tools",
-    stockStatus: "Out of Stock",
-    price: "$666.99",
-    image: "path/to/image1.png",
-  },
-  {
-    id: 4402,
-    sku: "DELTA500",
-    name: "Brandix Air Compressor DELTA500",
-    category: "Compressors",
-    stockStatus: "7 In Stock",
-    price: "$1,800.00",
-    image: "path/to/image2.png",
-  },
-  {
-    id: 7203,
-    sku: "KZX389PQ",
-    name: "Brandix Angle Grinder KZX389PQ",
-    category: "Power Tools",
-    stockStatus: "2 In Stock",
-    price: "$649.00",
-    image: "path/to/image3.png",
-  },
-  {
-    id: 4402,
-    sku: "DM2019KW",
-    name: "Brandix Drilling Machine DM2019KW 4kW",
-    category: "Drills",
-    stockStatus: "On Backorder",
-    price: "$3,199.00",
-    image: "path/to/image4.png",
-  },
-  {
-    id: 5221,
-    sku: "JIG7000B",
-    name: "Brandix Electric Jigsaw JIG7000B",
-    category: "Power Tools",
-    stockStatus: "1 In Stock",
-    price: "$290.00",
-    image: "path/to/image5.png",
-  },
-]);
+const generateRandomSKU = () => {
+  const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  const numbers = "0123456789";
+  const randomLetters = () =>
+    Array.from({ length: 2 }, () =>
+      letters.charAt(Math.floor(Math.random() * letters.length))
+    ).join("");
+  const randomNumbers = () =>
+    Array.from({ length: 4 }, () =>
+      numbers.charAt(Math.floor(Math.random() * numbers.length))
+    ).join("");
 
-const statusClass = (status) => {
-  if (status === "Out of Stock") return "badge bg-danger";
-  if (status.includes("In Stock")) return "badge bg-success";
-  if (status === "On Backorder") return "badge bg-warning";
+  return `${randomLetters()}${randomNumbers()}${randomLetters()}`;
+};
+
+const productSKU = ref(generateRandomSKU());
+
+const statusClass = (product) => {
+  if (product.quantity === 0) return "badge bg-danger"; // Out of Stock
+  if (product.quantity > 0) return "badge bg-success"; // In Stock
   return "";
 };
+
+const productStore = useProductStore();
+
+onMounted(async () => {
+  await productStore.fetchProducts();
+});
 </script>
 
 <style scoped>

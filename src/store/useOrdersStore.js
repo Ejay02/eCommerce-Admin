@@ -17,8 +17,9 @@ export const useOrderStore = defineStore("order", () => {
       const response = await axios.get(
         `${import.meta.env.VITE_BASE_URL}/user/get-orders`
       );
-
-      state.orders = response.data;
+      
+      console.log('response:', response.data)
+      state.orders = response?.data;
     } catch (error) {
       notify("Error fetching orders", "error");
     } finally {
