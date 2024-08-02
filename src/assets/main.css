@@ -70,3 +70,15 @@ html::-webkit-scrollbar {
   top: 12px;
   right: -9px;
 }
+
+.category-tag {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 10px;
+  color: #531dab;
+  border-color: #f9f0ff;
+  background-color: #d3adf7;
+  margin-right: 4px;
+  margin-top: 4px;
+  display: inline-block;
+}

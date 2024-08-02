@@ -1,7 +1,13 @@
 <template>
   <div class="mt-4 card p-4">
     <div class="text-end mb-3">
-      <span class="ce" :class="{ 'disabled': !isFormFilled }" @click="togglePreview" :style="{ cursor: isFormFilled ? 'pointer' : 'not-allowed' }">{{ showPreview ? "Continue writing" : "Preview" }}</span>
+      <span
+        class="ce"
+        :class="{ disabled: !isFormFilled }"
+        @click="togglePreview"
+        :style="{ cursor: isFormFilled ? 'pointer' : 'not-allowed' }"
+        >{{ showPreview ? "Continue writing" : "Preview" }}</span
+      >
       ✨
     </div>
 
@@ -86,7 +92,7 @@
 
     <div v-else>
       <!-- preview page -->
-      <BlogPreview :formData="formData" />
+      <BlogPreview :formData="formData" :categories="categories" />
     </div>
   </div>
 </template>

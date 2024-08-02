@@ -4,6 +4,15 @@
     <span class="author mb-2">{{ formData.author }}</span> <br />
     <p class="date">{{ new Date().toLocaleDateString() }}</p>
     <span class="category-tag">{{ formData.category }}</span>
+    <!-- <span>
+      <span
+        v-for="(category, index) in categories"
+        :key="index"
+        class="category-tag"
+      >
+        {{ category }}
+      </span></span
+    > -->
 
     <img
       :src="formData.image"
@@ -17,6 +26,7 @@
 <script setup>
 defineProps({
   formData: Object,
+  // categories: Array,
 });
 </script>
 
@@ -37,13 +47,6 @@ defineProps({
 .ce {
   font-size: 10px;
   text-decoration-line: underline;
-}
-
-.category-tag {
-  background-color: rgb(152, 182, 209);
-  padding: 4px 8px;
-  border-radius: 4px;
-  font-size: 10px;
 }
 
 .title {

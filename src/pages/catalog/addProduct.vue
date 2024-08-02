@@ -42,14 +42,28 @@
           </div>
           <!-- tags -->
           <div class="mb-3">
+            <!-- tag -->
+            <div class="tags mb-2">
+              <span
+                v-for="(tag, index) in tags"
+                :key="index"
+                class="category-tag"
+              >
+                {{ tag }}
+                <span class="remove-tag" @click="removeTag(index)">x</span>
+              </span>
+            </div>
+            <!--  -->
             <input
               type="text"
               id="tags"
-              v-model="formData.tags"
+              v-model="tagInput"
               class="form-control"
               required
-              placeholder="Tags"
+              placeholder="Tags(, separated)"
+              @keyup="addTags"
             />
+            <!-- @keyup.enter="addTags" -->
           </div>
 
           <!-- color -->
@@ -175,6 +189,23 @@ const items = [
 
 const quillEditor = ref(null);
 
+const tags = ref([]);
+const tagInput = ref("");
+
+const addTags = (event) => {
+  if (event.key === ",") {
+    const newTag = tagInput.value.trim();
+    if (newTag && newTag.endsWith(",")) {
+      tags.value.push(newTag.slice(0, -1)); // Add the category without the comma
+      tagInput.value = ""; // Clear the input
+    }
+  }
+};
+
+const removeTag = (index) => {
+  tags.value.splice(index, 1);
+};
+
 const formData = ref({
   title: "",
   description: "",
@@ -195,7 +226,7 @@ const isFormFilled = computed(() => {
     formData.value.category &&
     formData.value.slug &&
     formData.value.price &&
-    formData.value.tags &&
+    tags.value.length > 0 &&
     formData.value.color &&
     formData.value.images.length > 0 &&
     formData.value.brand &&
@@ -281,5 +312,19 @@ const handleSubmit = async () => {
 #price {
   color: gray;
   font-size: 12px;
+}
+
+/* .category-tag {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 10px;
+  color: #531dab;
+  border-color: #f9f0ff;
+  background-color: #d3adf7;
+} */
+
+.remove-tag {
+  cursor: pointer;
+  margin-left: 4px;
 }
 </style>

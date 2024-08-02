@@ -25,7 +25,7 @@
               {{ stat.trendPercentage }}
             </span>
           </h6>
-          <p>Compared To {{ stat.comparisonPeriod }}</p>
+          <p>Compared To {{ comparisonPeriod }}</p>
         </div>
       </div>
     </div>
@@ -34,6 +34,7 @@
 
 <script setup>
 import { ref } from "vue";
+import { computed } from "vue";
 
 const stats = ref([
   {
@@ -42,15 +43,13 @@ const stats = ref([
     trend: "down",
     trendIcon: "fa-solid fa-arrow-trend-down",
     trendPercentage: "32%",
-    comparisonPeriod: "June 2024",
   },
   {
-    title: "Average order value",
+    title: "Average Order Value",
     amount: "19203.29",
     trend: "down",
     trendIcon: "fa-solid fa-arrow-trend-down",
     trendPercentage: "32%",
-    comparisonPeriod: "June 2024",
   },
   {
     title: "Total Orders",
@@ -58,9 +57,29 @@ const stats = ref([
     trend: "up",
     trendIcon: "fa-solid fa-arrow-trend-up",
     trendPercentage: "32%",
-    comparisonPeriod: "June 2024",
   },
 ]);
+
+const comparisonPeriod = computed(() => {
+  const now = new Date();
+  const currentYear = now.getFullYear();
+  const currentMonth = now.getMonth();
+
+  // Calculate the last month
+  let lastMonth = currentMonth - 1;
+  let year = currentYear;
+
+  if (lastMonth < 0) {
+    lastMonth = 11; // December of the previous year
+    year -= 1;
+  }
+
+  // Get the month name
+  const monthNames = new Intl.DateTimeFormat("en-US", { month: "long" }).format;
+  const lastMonthName = monthNames(new Date(year, lastMonth));
+
+  return `${lastMonthName} ${year}`;
+});
 </script>
 
 <style scoped>

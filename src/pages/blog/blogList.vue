@@ -44,9 +44,9 @@
 <script setup>
 import { onMounted } from "vue";
 import Empty from "@/components/empty.vue";
-import LoadingScreen from "@/components/loadingScreen.vue";
 import { useBlogStore } from "@/store/useBlogStore";
 import { useModalStore } from "@/store/useModalStore";
+import LoadingScreen from "@/components/loadingScreen.vue";
 
 const blogStore = useBlogStore();
 const modalStore = useModalStore();
@@ -106,10 +106,12 @@ onMounted(async () => {
 }
 
 .category-tag {
-  background-color: rgb(152, 182, 209);
   padding: 4px 8px;
   border-radius: 4px;
   font-size: 10px;
+  color: #531dab;
+  border-color: #f9f0ff;
+  background-color: #d3adf7;
 }
 
 .blog-content h6 {
@@ -120,6 +122,7 @@ onMounted(async () => {
   text-decoration: none;
   border: none;
 }
+
 .x {
   color: red;
 }

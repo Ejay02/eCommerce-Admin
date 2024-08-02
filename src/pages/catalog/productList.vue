@@ -1,5 +1,6 @@
 <template>
-  <div class="mt-4 card p-4">
+  <LoadingScreen v-if="productStore.loading" />
+  <div class="mt-4 card p-4" v-if="productStore.products.length">
     <div class="d-flex justify-content-between align-items-center mb-4">
       <h3 class="mb-0">Product List</h3>
       <div>
@@ -51,7 +52,7 @@
       </thead>
       <tbody>
         <tr v-for="product in productStore.products" :key="product._id">
-          <td class="d-flex">
+          <td class="d-flex align-items-center">
             <img
               :src="product?.images[0] || product?.images"
               alt="product"
@@ -65,7 +66,11 @@
               </div>
             </div>
           </td>
-          <td class="text-body-tertiary">{{ product?.category }}</td>
+          <td class="text-body-tertiary">
+            <span class="cat">
+              {{ product?.category }}
+            </span>
+          </td>
           <td>
             <span :class="statusClass(product)">
               {{ product?.quantity > 0 ? "In Stock" : "Out of Stock" }}
@@ -73,21 +78,46 @@
           </td>
           <td class="text-body-tertiary">{{ product?.price }}</td>
           <td>
-            <i class="bi bi-three-dots-vertical text-secondary"></i>
+            <!-- <i class="bi bi-three-dots-vertical text-secondary"></i> -->
+            <div class="">
+              <div class="btn">
+                <i class="bi bi-pencil-square"></i>
+              </div>
+              <div
+                class="btn"
+                @click="showDelModal(product._id, product.title, 'productList')"
+              >
+                <i class="bi bi-trash"></i>
+              </div>
+            </div>
           </td>
         </tr>
       </tbody>
     </table>
   </div>
+  <div v-else>
+    <Empty />
+  </div>
 </template>
 
 <script setup>
+import Empty from "@/components/empty.vue";
 import { ref, watch, onMounted } from "vue";
+import { useModalStore } from "@/store/useModalStore";
 import { useProductStore } from "@/store/useProductStore";
+import LoadingScreen from "@/components/loadingScreen.vue";
 
 const searchQuery = ref("");
 const sortField = ref("");
 const sortOrder = ref("asc");
+const modalStore = useModalStore();
+
+const showDelModal = (id, title, type) => {
+  modalStore.deleteModal = true;
+  modalStore.modalId = id;
+  modalStore.modalTitle = title;
+  modalStore.source = type;
+};
 
 const productStore = useProductStore();
 
@@ -205,5 +235,20 @@ onMounted(() => {
 
 .sku {
   font-size: 12px;
+}
+
+.cat {
+  /* background-color: #2db7f5; */
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 10px;
+  color: #531dab;
+  background: #f9f0ff;
+  border-color: #d3adf7;
+}
+
+.btn {
+  text-decoration: none;
+  border: none;
 }
 </style>
