@@ -127,7 +127,12 @@
     </div>
     <!--  -->
     <div class="text-end">
-      <button type="submit" class="btn btn-primary mt-3" @click="handleSubmit">
+      <button
+        type="submit"
+        class="btn btn-primary mt-3"
+        @click="handleSubmit"
+        :disabled="!isFormFilled"
+      >
         Create
       </button>
     </div>

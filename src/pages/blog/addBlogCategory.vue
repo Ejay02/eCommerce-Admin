@@ -18,7 +18,12 @@
       </div>
 
       <div class="text-end gap-2">
-        <button type="submit" class="btn btn-primary" @click="handleSubmit">
+        <button
+          type="submit"
+          class="btn btn-primary"
+          @click="handleSubmit"
+          :disabled="!isFormFilled"
+        >
           Add
         </button>
       </div>
@@ -28,7 +33,7 @@
 
 <script setup>
 import axios from "axios";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { useNotifications } from "@/composable/globalAlert.js";
 
 const { notify } = useNotifications();
@@ -52,6 +57,10 @@ const handleSubmit = async () => {
     notify("Error adding category", "error");
   }
 };
+
+const isFormFilled = computed(() => {
+  return title.value;
+});
 </script>
 
 <style scoped>

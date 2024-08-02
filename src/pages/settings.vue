@@ -55,7 +55,11 @@
       </div>
 
       <div class="d-flex justify-content-end">
-        <button type="submit" class="btn btn-primary" @click="handleUpdate">
+        <button 
+        type="submit" 
+        class="btn btn-primary" 
+        @click="handleUpdate"
+        >
           Update
         </button>
       </div>
