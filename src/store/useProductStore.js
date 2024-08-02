@@ -11,11 +11,12 @@ export const useProductStore = defineStore("product", () => {
     loading: false,
   });
 
-  const fetchProducts = async () => {
+  const fetchProducts = async (params = {}) => {
     state.loading = true;
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_BASE_URL}/product`
+        `${import.meta.env.VITE_BASE_URL}/product`,
+        { params }
       );
 
       state.products = response?.data;

@@ -10,27 +10,42 @@
       </div>
     </div>
     <div class="d-flex p-2 text-secondary input">
-      <i class="bi bi-sliders2 fs-6 m-2"></i>
+      <!-- <i class="bi bi-sliders2 fs-6 m-2"></i> -->
       <input
         type="text"
         class="form-control mb-3"
-        placeholder="Start typing to search for products"
+        placeholder="🔎Search for products"
+        v-model="searchQuery"
+        @input="fetchProducts"
       />
     </div>
 
     <table class="table">
       <thead>
         <tr>
-          <th scope="col" class="text-secondary">Product</th>
-          <th scope="col" class="text-secondary">
-            <i class="fa-solid fa-sort m-2"></i>
-            <span> Category </span>
+          <th scope="col" class="text-secondary" @click="sortProducts('title')">
+            Product
+            <i :class="getSortIcon('title')"></i>
           </th>
-          <th scope="col" class="text-secondary">
-            <i class="fa-solid fa-sort m-2"></i> Stock
+          <th
+            scope="col"
+            class="text-secondary"
+            @click="sortProducts('category')"
+          >
+            Category
+            <i :class="getSortIcon('category')"></i>
           </th>
-          <th scope="col" class="text-secondary">
-            <i class="fa-solid fa-sort m-2"></i> Price
+          <th
+            scope="col"
+            class="text-secondary"
+            @click="sortProducts('quantity')"
+          >
+            Stock
+            <i :class="getSortIcon('quantity')"></i>
+          </th>
+          <th scope="col" class="text-secondary" @click="sortProducts('price')">
+            Price
+            <i :class="getSortIcon('price')"></i>
           </th>
         </tr>
       </thead>
@@ -67,10 +82,42 @@
 </template>
 
 <script setup>
+import { ref, watch, onMounted } from "vue";
 import { useProductStore } from "@/store/useProductStore";
-import { onMounted } from "vue";
 
-import { ref } from "vue";
+const searchQuery = ref("");
+const sortField = ref("");
+const sortOrder = ref("asc");
+
+const productStore = useProductStore();
+
+const fetchProducts = async () => {
+  await productStore.fetchProducts({
+    search: searchQuery.value,
+    sort: sortField.value ? `${sortField.value} ${sortOrder.value}` : "",
+  });
+};
+
+const sortProducts = (field) => {
+  if (sortField.value === field) {
+    sortOrder.value = sortOrder.value === "asc" ? "desc" : "asc";
+  } else {
+    sortField.value = field;
+    sortOrder.value = "asc";
+  }
+  fetchProducts();
+};
+
+const getSortIcon = (field) => {
+  if (sortField.value === field) {
+    return sortOrder.value === "asc"
+      ? "fa-solid fa-arrow-up"
+      : "fa-solid fa-arrow-down";
+  }
+  return "fa-solid fa-sort";
+};
+
+watch([searchQuery, sortField, sortOrder], fetchProducts);
 
 const generateRandomSKU = () => {
   const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -95,10 +142,8 @@ const statusClass = (product) => {
   return "";
 };
 
-const productStore = useProductStore();
-
-onMounted(async () => {
-  await productStore.fetchProducts();
+onMounted(() => {
+  fetchProducts();
 });
 </script>
 
