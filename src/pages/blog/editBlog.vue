@@ -226,12 +226,6 @@ onMounted(() => {
   font-size: 12px;
 }
 
-.bn {
-  border: 1px solid gray;
-  margin-right: 8px;
-  color: gray;
-}
-
 .ce {
   font-size: 12px;
   text-decoration-line: underline;

@@ -82,3 +82,15 @@ html::-webkit-scrollbar {
   margin-top: 4px;
   display: inline-block;
 }
+
+.bn {
+  border: 1px solid gray;
+  margin-right: 8px;
+  color: gray;
+}
+
+.remove-tag {
+  cursor: pointer;
+  margin-left: 4px;
+}
+

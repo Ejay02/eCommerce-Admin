@@ -24,6 +24,7 @@ import ColorList from "./pages/catalog/colorList.vue";
 import Category from "./pages/catalog/category.vue";
 import CategoryList from "./pages/catalog/categoryList.vue";
 import EditBlog from "./pages/blog/editBlog.vue";
+import EditProduct from "./pages/catalog/editProduct.vue";
 
 // import AboutView from "./AboutView.vue";
 
@@ -68,6 +69,11 @@ const routes = [
         path: "product",
         component: AddProduct,
         children: [],
+      },
+      {
+        path: "/edit-product/:id",
+        component: EditProduct,
+        name: "editProduct",
       },
       {
         path: "product/product-list",

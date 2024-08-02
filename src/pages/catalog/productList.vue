@@ -80,9 +80,12 @@
           <td>
             <!-- <i class="bi bi-three-dots-vertical text-secondary"></i> -->
             <div class="">
-              <div class="btn">
-                <i class="bi bi-pencil-square"></i>
-              </div>
+              <router-link
+                :to="{ name: 'editProduct', params: { id: product._id } }"
+                class="btn"
+              >
+                <i class="bix bi-pencil-square"></i>
+              </router-link>
               <div
                 class="btn"
                 @click="showDelModal(product._id, product.title, 'productList')"
@@ -250,5 +253,13 @@ onMounted(() => {
 .btn {
   text-decoration: none;
   border: none;
+}
+
+.bi {
+  color: red;
+}
+
+.bix {
+  color: gray;
 }
 </style>

@@ -1,7 +1,5 @@
 <template>
   <div class="mt-4 card p-4">
-    <a-steps :items="items" class="mb-3"></a-steps>
-
     <div class="row">
       <div class="col-md-6">
         <form @submit.prevent="handleSubmit">
@@ -57,13 +55,12 @@
             <input
               type="text"
               id="tags"
-              v-model="tagInput"
+              v-model="formData.tags"
               class="form-control"
               required
-              placeholder="Tags(, separated)"
+              placeholder="Tags( ',' separated)"
               @keyup="addTags"
             />
-            <!-- @keyup.enter="addTags" -->
           </div>
 
           <!-- color -->
@@ -88,8 +85,6 @@
               <span> upload Image(s) </span>
             </a-button>
           </a-upload>
-
-          <!-- <button type="submit" class="btn btn-primary mt-3">Create</button> -->
         </form>
       </div>
       <div class="col-md-6 mb-4">
@@ -140,78 +135,45 @@
       </div>
     </div>
     <!--  -->
-    <div class="text-end">
-      <button
+    <div class="text-end mt-3">
+      <router-link
         type="submit"
-        class="btn btn-primary mt-3"
-        @click="handleSubmit"
-        :disabled="!isFormFilled"
+        to="/admin/product/product-list"
+        class="btn mt-3 gap-5 bn"
       >
-        Create
+        Cancel
+      </router-link>
+      <button type="submit" class="btn btn-primary mt-3" @click="handleSubmit">
+        Update
       </button>
     </div>
   </div>
 </template>
 
 <script setup>
-import { computed, ref } from "vue";
-import { h } from "vue";
 import axios from "axios";
-import {
-  SolutionOutlined,
-  LoadingOutlined,
-  SmileOutlined,
-} from "@ant-design/icons-vue";
-
 import router from "@/router";
-
+import { useRoute } from "vue-router";
+import { onMounted, ref, watch } from "vue";
 import { useNotifications } from "@/composable/globalAlert.js";
 
 const { notify } = useNotifications();
 
-const items = [
-  {
-    title: "Add Product deets",
-    status: "finish",
-    icon: h(LoadingOutlined),
-  },
-  {
-    title: "Preview",
-    status: "wait",
-    icon: h(SolutionOutlined),
-  },
-  {
-    title: "Post",
-    status: "wait",
-    icon: h(SmileOutlined),
-  },
-];
-
 const quillEditor = ref(null);
+const route = useRoute();
 
 const tags = ref([]);
 const tagInput = ref("");
 
 const addTags = (event) => {
-  if (event.key === "," || event.key === "Enter") {
-    // Handle both comma and Enter
+  if (event.key === ",") {
     const newTag = tagInput.value.trim();
-    if (newTag) {
-      tags.value.push(newTag); // Add tag directly
+    if (newTag && newTag.endsWith(",")) {
+      tags.value.push(newTag.slice(0, -1)); // Add the category without the comma
       tagInput.value = ""; // Clear the input
     }
   }
 };
-
-// const addTags = (event) => {
-//   if (event.key === ",") {
-//     const newTag = tagInput.value.trim();
-//     if (newTag && newTag.endsWith(",")) {
-//       tags.value.push(newTag.slice(0, -1)); // Add the category without the comma
-//       tagInput.value = ""; // Clear the input
-//     }
-//   }
-// };
 
 const removeTag = (index) => {
   tags.value.splice(index, 1);
@@ -230,53 +192,61 @@ const formData = ref({
   quantity: "",
 });
 
-const isFormFilled = computed(() => {
-  return (
-    formData.value.title &&
-    formData.value.description &&
-    formData.value.category &&
-    formData.value.slug &&
-    formData.value.price &&
-    tags.value.length > 0 &&
-    formData.value.color &&
-    formData.value.images.length > 0 &&
-    formData.value.brand &&
-    formData.value.quantity
-  );
+const fetchProductDetails = async () => {
+  const productId = route.params.id;
+  try {
+    const response = await axios.get(
+      `${import.meta.env.VITE_BASE_URL}/product/${productId}`
+    );
+
+    Object.assign(formData.value, response.data);
+
+    // Update tags
+    tags.value = response.data.tags.split(",").map((tag) => tag.trim());
+
+    if (quillEditor.value) {
+      quillEditor.value.editor.setContents(
+        quillEditor.value.editor.clipboard.convert(response.data.description)
+      );
+    }
+  } catch (error) {
+    notify("Error fetching product details", "warning");
+  }
+};
+
+watch(formData, (newVal) => {
+  if (quillEditor.value) {
+    quillEditor.value.editor.setContents(
+      quillEditor.value.editor.clipboard.convert(newVal.description)
+    );
+  }
 });
 
 const handleSubmit = async () => {
-  if (!quillEditor.value) {
-    notify("Error with Quill Editor instance", "error");
-    return;
-  }
-
-  const description = quillEditor.value.getText();
-  formData.value.description = description;
-  formData.value.tags = tags.value;
-
-  if (!isFormFilled.value) {
-    notify("Please fill in all required fields", "error");
-    return;
-  }
-
   try {
-    const res = await axios.post(
-      `${import.meta.env.VITE_BASE_URL}/product`,
-      formData.value
+    // Convert tags array to a comma-separated string
+    const dataToSubmit = { ...formData.value, tags: tags.value.join(",") };
+
+    const res = await axios.put(
+      `${import.meta.env.VITE_BASE_URL}/product/${route.params.id}`,
+      dataToSubmit
     );
     if (res.data) {
-      notify("Product added successfully!", "success");
+      notify("Product edited successfully!", "success");
     }
     router.push("/admin/product/product-list");
   } catch (error) {
     notify(
-      "Error adding product: " +
+      "Error editing product: " +
         (error.response?.data?.message || error.message),
       "error"
     );
   }
 };
+
+onMounted(() => {
+  fetchProductDetails();
+});
 </script>
 
 <style scoped>
