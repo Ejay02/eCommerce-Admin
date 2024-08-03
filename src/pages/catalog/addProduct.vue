@@ -247,10 +247,30 @@ const handleSubmit = async () => {
   }
 
   try {
+    const formDataToSend = new FormData();
+
+    // Append text fields
+    Object.keys(formData.value).forEach((key) => {
+      if (key !== "images") {
+        formDataToSend.append(key, formData.value[key]);
+      }
+    });
+
+    // Append images
+    formData.value.images.forEach((file) => {
+      formDataToSend.append("images", file.originFileObj);
+    });
+
     const res = await axios.post(
       `${import.meta.env.VITE_BASE_URL}/product`,
-      formData.value
+      formDataToSend,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
     );
+
     if (res.data) {
       notify("Product added successfully!", "success");
     }
