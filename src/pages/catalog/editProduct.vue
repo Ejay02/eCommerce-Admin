@@ -41,8 +41,9 @@
           <!-- tags -->
           <div class="mb-3">
             <div class="tags mb-2">
+              <!-- v-for="(tag, index) in formData.tags" -->
               <span
-                v-for="(tag, index) in formData.tags"
+                v-for="(tag, index) in processedTags"
                 :key="index"
                 class="category-tag"
               >
@@ -74,6 +75,7 @@
             />
           </div>
 
+          <!-- image -->
           <a-upload
             list-type="picture"
             class="upload-list-inline"
@@ -88,6 +90,7 @@
           </a-upload>
         </form>
       </div>
+      <!-- right -->
       <div class="col-md-6 mb-4">
         <!-- category -->
         <div class="mb-3 mt-2">
@@ -135,7 +138,7 @@
         </div>
       </div>
     </div>
-    <!--  -->
+    <!-- button -->
     <div class="text-end mt-3">
       <router-link
         type="submit"
@@ -157,6 +160,7 @@ import router from "@/router";
 import { useRoute } from "vue-router";
 import { onMounted, ref, watch } from "vue";
 import { useNotifications } from "@/composable/globalAlert.js";
+import { computed } from "vue";
 
 const { notify } = useNotifications();
 
@@ -164,19 +168,6 @@ const quillEditor = ref(null);
 const route = useRoute();
 
 const newTag = ref("");
-
-const addTag = () => {
-  let tag = newTag.value.trim();
-  tag = tag.replace(/,+$/, "").replace(/^,+/, "");
-  if (tag && !formData.value.tags.includes(tag)) {
-    formData.value.tags.push(tag);
-    newTag.value = "";
-  }
-};
-
-const removeTag = (index) => {
-  formData.value.tags.splice(index, 1);
-};
 
 const formData = ref({
   title: "",
@@ -191,12 +182,55 @@ const formData = ref({
   quantity: "",
 });
 
+const processedTags = computed(() => {
+  if (typeof formData.value.tags === "string") {
+    // If tags is a string, split it by commas, double commas, or spaces
+    return formData.value.tags
+      .split(/,{1,2}|\s+/)
+      .filter((tag) => tag.trim() !== "");
+  } else if (Array.isArray(formData.value.tags)) {
+    // If tags is already an array, process each element
+    return formData.value.tags.flatMap((tag) =>
+      typeof tag === "string"
+        ? tag.split(/,{1,2}|\s+/).filter((t) => t.trim() !== "")
+        : []
+    );
+  }
+  return [];
+});
+
+const addTag = () => {
+  let tag = newTag.value.trim();
+  if (tag && !processedTags.value.includes(tag)) {
+    if (Array.isArray(formData.value.tags)) {
+      formData.value.tags.push(tag);
+    } else {
+      formData.value.tags = [tag];
+    }
+    newTag.value = "";
+  }
+};
+
+const removeTag = (index) => {
+  const updatedTags = processedTags.value.filter((_, i) => i !== index);
+  formData.value.tags = updatedTags;
+};
+
 const fetchProductDetails = async () => {
   const productId = route.params.id;
   try {
     const response = await axios.get(
       `${import.meta.env.VITE_BASE_URL}/product/${productId}`
     );
+
+    // Ensure tags are in the correct format
+    if (response.data.tags && typeof response.data.tags === "string") {
+      response.data.tags = response.data.tags
+        .split(/,{1,2}|\s+/)
+        .filter((tag) => tag.trim() !== "");
+    } else if (!Array.isArray(response.data.tags)) {
+      response.data.tags = [];
+    }
 
     Object.assign(formData.value, response.data);
   } catch (error) {
@@ -306,3 +340,11 @@ onMounted(() => {
   font-size: 12px;
 }
 </style>
+
+<!-- <div class="d-flex align-items-center">
+  <img
+    :src="formData.images[0]?.url"
+    alt="product"
+    class="product-image text-body-tertiary"
+  />
+</div> -->

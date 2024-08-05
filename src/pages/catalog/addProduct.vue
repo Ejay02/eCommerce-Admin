@@ -251,9 +251,14 @@ const handleSubmit = async () => {
 
     // Append text fields
     Object.keys(formData.value).forEach((key) => {
-      if (key !== "images") {
+      if (key !== "images" && key !== "tags") {
         formDataToSend.append(key, formData.value[key]);
       }
+    });
+
+    // Append tags as separate entries
+    formData.value.tags.forEach((tag, index) => {
+      formDataToSend.append(`tags[${index}]`, tag);
     });
 
     // Append images
