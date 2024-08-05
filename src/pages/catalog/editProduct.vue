@@ -77,8 +77,10 @@
           <a-upload
             list-type="picture"
             class="upload-list-inline"
-            v-model:fileList="formData.images"
+            v-model:fileList="fileList"
+            :beforeUpload="() => false"
           >
+            <!-- v-model:fileList="formData.images" -->
             <a-button class="span">
               <i class="bi bi-upload m-2"></i>
               <span> upload Image(s) </span>
@@ -209,12 +211,35 @@ watch(formData, (newVal) => {
     );
   }
 });
+const fileList = ref([]);
 
 const handleSubmit = async () => {
   try {
+    // Create a new FormData instance
+    const formDataToSend = new FormData();
+
+    // Append text fields
+    Object.keys(formData.value).forEach((key) => {
+      if (key !== "images") {
+        formDataToSend.append(key, formData.value[key]);
+      }
+    });
+
+    // Append images
+    fileList.value.forEach((file) => {
+      if (file.originFileObj) {
+        formDataToSend.append("images", file.originFileObj);
+      }
+    });
+
     const res = await axios.put(
       `${import.meta.env.VITE_BASE_URL}/product/${route.params.id}`,
-      formData.value
+      formDataToSend,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
     );
     if (res.data) {
       notify("Product edited successfully!", "success");

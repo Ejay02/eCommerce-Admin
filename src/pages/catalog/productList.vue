@@ -54,10 +54,11 @@
         <tr v-for="product in productStore.products" :key="product._id">
           <td class="d-flex align-items-center">
             <img
-              :src="product?.images[0]?.url || product?.images[0]"
+              :src="product?.images[0]?.url || product?.images[1]?.url"
               alt="product"
               class="product-image text-body-tertiary"
             />
+
             <div class="product-details">
               <strong class="text-secondary">{{ product?.title }}</strong>
               <div class="text-body-tertiary d-flex sku">
