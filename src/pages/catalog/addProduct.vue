@@ -53,7 +53,6 @@
                 <span class="remove-tag" @click="removeTag(index)">x</span>
               </span>
             </div>
-            <!--  -->
             <input
               type="text"
               id="tags"
@@ -65,8 +64,40 @@
             />
           </div>
 
-          <!-- color -->
+          <!-- Colors -->
           <div class="mb-3">
+            <div class="colors mb-2">
+              <span
+                v-for="(color, index) in colors"
+                :key="index"
+                class="color-tag"
+                :style="{ backgroundColor: color }"
+              >
+                {{ color }}
+                <span class="remove-color" @click="removeColor(index)">x</span>
+              </span>
+            </div>
+            <div class="d-flex">
+              <input
+                type="color"
+                id="colorPicker"
+                v-model="colorInput"
+                class="form-control form-control-color"
+              />
+              <input
+                type="text"
+                v-model="colorInput"
+                class="form-control ms-2"
+                placeholder="Enter color name or hex"
+              />
+              <button @click.prevent="addColor" class="btn btn-secondary ms-2">
+                Add Color
+              </button>
+            </div>
+          </div>
+
+          <!-- color -->
+          <!-- <div class="mb-3">
             <input
               type="text"
               id="color"
@@ -75,8 +106,9 @@
               required
               placeholder="Color"
             />
-          </div>
+          </div> -->
 
+          <!-- img -->
           <a-upload
             list-type="picture"
             class="upload-list-inline"
@@ -136,7 +168,7 @@
         </div>
       </div>
     </div>
-    <!--  -->
+    <!-- Button -->
     <div class="text-end">
       <button
         type="submit"
@@ -189,6 +221,9 @@ const quillEditor = ref(null);
 const tags = ref([]);
 const tagInput = ref("");
 
+const colors = ref([]);
+const colorInput = ref("#000000");
+
 const addTags = (event) => {
   if (event.key === "," || event.key === "Enter") {
     const newTag = tagInput.value.trim();
@@ -203,6 +238,18 @@ const removeTag = (index) => {
   tags.value.splice(index, 1);
 };
 
+const addColor = () => {
+  if (colorInput.value && !colors.value.includes(colorInput.value)) {
+    colors.value.push(colorInput.value);
+    colorInput.value = "#000000"; // Reset to default color
+    console.log("Color added:", colors.value); // Debug log
+  }
+};
+
+const removeColor = (index) => {
+  colors.value.splice(index, 1);
+};
+
 const formData = ref({
   title: "",
   description: "",
@@ -210,7 +257,7 @@ const formData = ref({
   slug: "",
   price: "",
   tags: "",
-  color: "",
+  colors: "",
   images: [],
   brand: "",
   quantity: "",
@@ -224,7 +271,8 @@ const isFormFilled = computed(() => {
     formData.value.slug &&
     formData.value.price &&
     tags.value.length > 0 &&
-    formData.value.color &&
+    colors.value.length > 0 &&
+    // formData.value.color &&
     formData.value.images.length > 0 &&
     formData.value.brand &&
     formData.value.quantity
@@ -240,6 +288,11 @@ const handleSubmit = async () => {
   const description = quillEditor.value.getText();
   formData.value.description = description;
   formData.value.tags = tags.value;
+  formData.value.colors = colors.value;
+
+  
+  console.log("Colors array:", colors.value); // Debug log
+  console.log("FormData before submission:", formData.value); // Debug log
 
   if (!isFormFilled.value) {
     notify("Please fill in all required fields", "error");
@@ -265,6 +318,14 @@ const handleSubmit = async () => {
     formData.value.images.forEach((file) => {
       formDataToSend.append("images", file.originFileObj);
     });
+
+    // Append colors as separate entries
+    formData.value.colors.forEach((color, index) => {
+      formDataToSend.append(`colors[${index}]`, color);
+    });
+
+
+    console.log("FormData after preparation:", Object.fromEntries(formDataToSend)); // Debug log
 
     const res = await axios.post(
       `${import.meta.env.VITE_BASE_URL}/product`,
@@ -335,5 +396,24 @@ const handleSubmit = async () => {
 #price {
   color: gray;
   font-size: 12px;
+}
+
+.remove-color {
+  cursor: pointer;
+  margin-left: 5px;
+}
+
+.form-control-color {
+  width: 50px;
+}
+
+.color-tag {
+  display: inline-block;
+  padding: 2px 8px;
+  margin-right: 5px;
+  margin-bottom: 5px;
+  border-radius: 4px;
+  color: white;
+  position: relative;
 }
 </style>

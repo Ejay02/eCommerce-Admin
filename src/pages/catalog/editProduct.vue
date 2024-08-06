@@ -51,7 +51,6 @@
                 <span class="remove-tag" @click="removeTag(index)">x</span>
               </span>
             </div>
-            <!--  -->
 
             <input
               v-model="newTag"
@@ -65,14 +64,36 @@
 
           <!-- color -->
           <div class="mb-3">
-            <input
-              type="text"
-              id="color"
-              v-model="formData.color"
-              class="form-control"
-              required
-              placeholder="Color"
-            />
+            <div
+              v-for="(color, index) in processedColors"
+              :key="index"
+              class="color-tag border"
+              :style="{ backgroundColor: color }"
+            >
+              {{ color }}
+              <span @click="removeColor(index)" class="remove-color">x</span>
+            </div>
+
+            <div class="d-flex">
+              <input
+                type="color"
+                id="colorPicker"
+                v-model="colorInput"
+                class="form-control form-control-color"
+              />
+              <input
+                type="text"
+                v-model="colorInput"
+                class="form-control ms-2 color"
+                placeholder="Enter color name or hex"
+              />
+              <button
+                @click.prevent="addColor"
+                class="cbtn btn ms-2 text-center"
+              >
+                + Add
+              </button>
+            </div>
           </div>
 
           <!-- image -->
@@ -82,7 +103,6 @@
             v-model:fileList="fileList"
             :beforeUpload="() => false"
           >
-            <!-- v-model:fileList="formData.images" -->
             <a-button class="span">
               <i class="bi bi-upload m-2"></i>
               <span> upload Image(s) </span>
@@ -168,6 +188,7 @@ const quillEditor = ref(null);
 const route = useRoute();
 
 const newTag = ref("");
+const colorInput = ref("");
 
 const formData = ref({
   title: "",
@@ -176,7 +197,7 @@ const formData = ref({
   slug: "",
   price: "",
   tags: [],
-  color: "",
+  colors: [],
   images: [],
   brand: "",
   quantity: "",
@@ -184,15 +205,28 @@ const formData = ref({
 
 const processedTags = computed(() => {
   if (typeof formData.value.tags === "string") {
-    // If tags is a string, split it by commas, double commas, or spaces
     return formData.value.tags
       .split(/,{1,2}|\s+/)
       .filter((tag) => tag.trim() !== "");
   } else if (Array.isArray(formData.value.tags)) {
-    // If tags is already an array, process each element
     return formData.value.tags.flatMap((tag) =>
       typeof tag === "string"
         ? tag.split(/,{1,2}|\s+/).filter((t) => t.trim() !== "")
+        : []
+    );
+  }
+  return [];
+});
+
+const processedColors = computed(() => {
+  if (typeof formData.value.colors === "string") {
+    return formData.value.colors
+      .split(/,{1,2}|\s+/)
+      .filter((color) => color.trim() !== "");
+  } else if (Array.isArray(formData.value.colors)) {
+    return formData.value.colors.flatMap((color) =>
+      typeof color === "string"
+        ? color.split(/,{1,2}|\s+/).filter((c) => c.trim() !== "")
         : []
     );
   }
@@ -216,6 +250,23 @@ const removeTag = (index) => {
   formData.value.tags = updatedTags;
 };
 
+const addColor = () => {
+  let color = colorInput.value.trim();
+  if (color && !processedColors.value.includes(color)) {
+    if (Array.isArray(formData.value.colors)) {
+      formData.value.colors.push(color);
+    } else {
+      formData.value.colors = [color];
+    }
+    colorInput.value = ""; // Reset colorInput after adding
+  }
+};
+
+const removeColor = (index) => {
+  const updatedColors = processedColors.value.filter((_, i) => i !== index);
+  formData.value.colors = updatedColors;
+};
+
 const fetchProductDetails = async () => {
   const productId = route.params.id;
   try {
@@ -223,13 +274,20 @@ const fetchProductDetails = async () => {
       `${import.meta.env.VITE_BASE_URL}/product/${productId}`
     );
 
-    // Ensure tags are in the correct format
     if (response.data.tags && typeof response.data.tags === "string") {
       response.data.tags = response.data.tags
         .split(/,{1,2}|\s+/)
         .filter((tag) => tag.trim() !== "");
     } else if (!Array.isArray(response.data.tags)) {
       response.data.tags = [];
+    }
+
+    if (response.data.colors && typeof response.data.colors === "string") {
+      response.data.colors = response.data.colors
+        .split(/,{1,2}|\s+/)
+        .filter((color) => color.trim() !== "");
+    } else if (!Array.isArray(response.data.colors)) {
+      response.data.colors = [];
     }
 
     Object.assign(formData.value, response.data);
@@ -245,21 +303,19 @@ watch(formData, (newVal) => {
     );
   }
 });
+
 const fileList = ref([]);
 
 const handleSubmit = async () => {
   try {
-    // Create a new FormData instance
     const formDataToSend = new FormData();
 
-    // Append text fields
     Object.keys(formData.value).forEach((key) => {
       if (key !== "images") {
         formDataToSend.append(key, formData.value[key]);
       }
     });
 
-    // Append images
     fileList.value.forEach((file) => {
       if (file.originFileObj) {
         formDataToSend.append("images", file.originFileObj);
@@ -339,12 +395,38 @@ onMounted(() => {
   color: gray;
   font-size: 12px;
 }
-</style>
 
-<!-- <div class="d-flex align-items-center">
-  <img
-    :src="formData.images[0]?.url"
-    alt="product"
-    class="product-image text-body-tertiary"
-  />
-</div> -->
+.remove-color {
+  cursor: pointer;
+  margin-left: 5px;
+}
+
+.form-control-color {
+  width: 50px;
+}
+
+.color-tag {
+  display: inline-block;
+  padding: 2px 8px;
+  margin-right: 5px;
+  margin-bottom: 5px;
+  border-radius: 4px;
+  color: white;
+  position: relative;
+}
+
+.color {
+  height: 38px;
+}
+
+.cbtn {
+  height: 38px;
+  font-size: 10px;
+  /* text-align: center; */
+  border-radius: 4px;
+  /* padding: 2px; */
+  background-color: cornflowerblue;
+
+  /* margin-left: 10px; */
+}
+</style>
