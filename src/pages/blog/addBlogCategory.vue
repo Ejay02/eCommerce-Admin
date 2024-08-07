@@ -1,19 +1,21 @@
 <template>
   <div class="mt-4 card p-4">
     <div class="d-flex justify-content-between align-items-center">
-      <h3 class="mb-4 text-capitalize">Add Blog Category</h3>
+      <h3 class="mb-4 text-capitalize"></h3>
       <i class="bi bi-three-dots-vertical"></i>
     </div>
 
     <form @submit.prevent="handleSubmit">
       <div class="mb-3">
-        <label for="title" class="form-label">Category Name</label>
+        <label for="title" class="form-label"></label>
         <input
           type="text"
           id="title"
           v-model="title"
           class="form-control"
           required
+          autofocus
+          placeholder="Blog Category title..."
         />
       </div>
 

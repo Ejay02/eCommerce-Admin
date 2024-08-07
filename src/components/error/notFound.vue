@@ -8,13 +8,13 @@
           </div>
           <div class="four_zero_four_bg"></div>
           <div class="content_box_404">
-            <h3>Look like you're lost</h3>
+            <h3>Hmmm, looks like you're lost</h3>
             <p>The page you are looking for is not available!</p>
             <button
               class="btn border-0 px-3 py-2 text-white fw-bold w-30 text-center te"
               type="submit"
             >
-              <a href="/admin/dashboard" class="link_404">Home</a>
+              <a href="/admin/dashboard" class="link_404">Go Home</a>
             </button>
           </div>
         </div>

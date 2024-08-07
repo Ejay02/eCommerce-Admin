@@ -19,8 +19,8 @@ import AddProduct from "./pages/catalog/addProduct.vue";
 import ProductList from "./pages/catalog/productList.vue";
 import Brand from "./pages/catalog/brand.vue";
 import BrandList from "./pages/catalog/brandList.vue";
-import Color from "./pages/catalog/color.vue";
-import ColorList from "./pages/catalog/colorList.vue";
+// import Color from "./pages/catalog/color.vue";
+// import ColorList from "./pages/catalog/colorList.vue";
 import Category from "./pages/catalog/category.vue";
 import CategoryList from "./pages/catalog/categoryList.vue";
 import EditBlog from "./pages/blog/editBlog.vue";
@@ -87,14 +87,14 @@ const routes = [
         path: "product/brand-list",
         component: BrandList,
       },
-      {
-        path: "product/color",
-        component: Color,
-      },
-      {
-        path: "product/color-list",
-        component: ColorList,
-      },
+      // {
+      //   path: "product/color",
+      //   component: Color,
+      // },
+      // {
+      //   path: "product/color-list",
+      //   component: ColorList,
+      // },
       {
         path: "product/category",
         component: Category,

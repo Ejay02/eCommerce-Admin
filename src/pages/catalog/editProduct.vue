@@ -41,7 +41,6 @@
           <!-- tags -->
           <div class="mb-3">
             <div class="tags mb-2">
-              <!-- v-for="(tag, index) in formData.tags" -->
               <span
                 v-for="(tag, index) in processedTags"
                 :key="index"
@@ -67,13 +66,19 @@
             <div
               v-for="(color, index) in processedColors"
               :key="index"
-              class="color-tag border"
-              :style="{ backgroundColor: color }"
+              class="category-tag mb-2"
+              :style="{
+                backgroundColor: color,
+                color: isLightColor(color) ? 'black' : 'white',
+              }"
             >
               {{ color }}
-              <span @click="removeColor(index)" class="remove-color">x</span>
+              <span
+                @click="removeColor(index)"
+                :style="{ color: isLightColor(color) ? 'black' : 'white' }"
+                >x</span
+              >
             </div>
-
             <div class="d-flex">
               <input
                 type="color"
@@ -89,25 +94,83 @@
               />
               <button
                 @click.prevent="addColor"
-                class="cbtn btn ms-2 text-center"
+                class="cbtn btn btn-secondary ms-2"
               >
-                + Add
+                + Color
               </button>
             </div>
           </div>
 
           <!-- image -->
-          <a-upload
-            list-type="picture"
-            class="upload-list-inline"
-            v-model:fileList="fileList"
-            :beforeUpload="() => false"
-          >
-            <a-button class="span">
-              <i class="bi bi-upload m-2"></i>
-              <span> upload Image(s) </span>
-            </a-button>
-          </a-upload>
+          <!-- <div class="image-container">
+            <div
+              v-for="(image, index) in formData?.images"
+              :key="index"
+              class="image-item"
+            >
+              <img :src="image.url" alt="User Avatar" class="avatar-image" />
+              <i class="bi bi-trash3"></i>
+            </div>
+
+            <a-upload
+              list-type="picture"
+              class="upload-list-inline"
+              v-model:fileList="fileList"
+              :beforeUpload="() => false"
+            >
+              <a-button class="upload-button mt-2">
+                <i class="bi bi-upload m-2"></i>
+                <span>upload Image(s)</span>
+              </a-button>
+            </a-upload>
+          </div> -->
+
+          <!-- middle -->
+          <div class="image-container">
+            <div
+              v-for="(image, index) in formData?.images"
+              :key="index"
+              class="image-item"
+            >
+              <img :src="image.url" alt="User Avatar" class="avatar-image" />
+              <i class="bi bi-trash3"></i>
+            </div>
+
+            <a-upload
+              list-type="picture"
+              class="upload-list-inline"
+              v-model:fileList="fileList"
+              :beforeUpload="() => false"
+            >
+              <a-button class="upload-button">
+                <i class="bi bi-upload m-2"></i>
+                <span>upload Image(s)</span>
+              </a-button>
+            </a-upload>
+          </div>
+          <!-- end -->
+          <!-- <div class="">
+            <div
+              v-for="(image, index) in formData?.images"
+              :key="index"
+              class="d-flex imd"
+            >
+              <img :src="image.url" alt="User Avatar" class="avatar-image" />
+              <i class="bi bi-trash3"></i>
+            </div>
+
+            <a-upload
+              list-type="picture"
+              class="upload-list-inline"
+              v-model:fileList="fileList"
+              :beforeUpload="() => false"
+            >
+              <a-button class="span">
+                <i class="bi bi-upload m-2"></i>
+                <span> upload Image(s) </span>
+              </a-button>
+            </a-upload>
+          </div> -->
         </form>
       </div>
       <!-- right -->
@@ -176,11 +239,12 @@
 
 <script setup>
 import axios from "axios";
+import { computed } from "vue";
 import router from "@/router";
 import { useRoute } from "vue-router";
 import { onMounted, ref, watch } from "vue";
+import { isLightColor } from "@/utils/colorHelper";
 import { useNotifications } from "@/composable/globalAlert.js";
-import { computed } from "vue";
 
 const { notify } = useNotifications();
 
@@ -189,6 +253,8 @@ const route = useRoute();
 
 const newTag = ref("");
 const colorInput = ref("");
+
+const fileList = ref([]);
 
 const formData = ref({
   title: "",
@@ -202,6 +268,8 @@ const formData = ref({
   brand: "",
   quantity: "",
 });
+
+console.log(formData.value.images);
 
 const processedTags = computed(() => {
   if (typeof formData.value.tags === "string") {
@@ -303,8 +371,6 @@ watch(formData, (newVal) => {
     );
   }
 });
-
-const fileList = ref([]);
 
 const handleSubmit = async () => {
   try {
@@ -422,11 +488,95 @@ onMounted(() => {
 .cbtn {
   height: 38px;
   font-size: 10px;
-  /* text-align: center; */
   border-radius: 4px;
-  /* padding: 2px; */
   background-color: cornflowerblue;
-
-  /* margin-left: 10px; */
 }
+
+.avatar-image {
+  width: 50px;
+  height: 50px;
+}
+
+.imd {
+  /* justify-content: center; */
+  align-items: center;
+  border: 1px solid #d9d9d9;
+  width: 200px;
+  margin-bottom: 5px;
+  position: relative;
+  display: inline-block;
+  justify-content: space-between;
+  padding: 6px;
+  border-radius: 4px;
+}
+
+.bi {
+  color: gray;
+}
+
+.image-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  /* align-items: center; */
+  align-items: flex-start;
+}
+
+.image-item {
+  display: flex;
+  align-items: center;
+  border: 1px solid #d9d9d9;
+  padding: 6px;
+  border-radius: 4px;
+  width: 200px;
+}
+
+.avatar-image {
+  width: 50px;
+  height: 50px;
+  margin-right: 10px;
+}
+
+.bi-trash3 {
+  margin-left: auto;
+  color: gray;
+  cursor: pointer;
+}
+
+.upload-list-inline {
+  display: inline-block;
+}
+
+.upload-list-inline :deep(.ant-upload-list-item) {
+  float: left;
+  width: 200px;
+  margin-right: 8px;
+}
+
+/* .upload-button {
+  height: 38px;
+  font-size: 10px;
+  border-radius: 4px;
+  background-color: cornflowerblue;
+  color: white;
+} */
+
+/* .upload-button {
+  height: 38px;
+  font-size: 10px;
+  border-radius: 4px;
+  background-color: cornflowerblue;
+  color: white;
+} */
 </style>
+
+<!--   padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 10px;
+  color: #531dab;
+  border-color: #f9f0ff;
+  background-color: #d3adf7;
+  margin-right: 5px;
+  margin-top: 4px;
+  display: inline-block;
+  position: relative; -->

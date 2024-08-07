@@ -164,6 +164,7 @@
             placeholder="Product description"
             ref="quillEditor"
             content-type="html"
+            
           />
         </div>
       </div>

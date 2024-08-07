@@ -5,7 +5,7 @@ import { useNotifications } from "@/composable/globalAlert.js";
 
 const { notify } = useNotifications();
 
-export const useCategoryStore = defineStore("category", () => {
+export const useBlogCategoryStore = defineStore("category", () => {
   const state = reactive({
     categories: [],
     loading: false,

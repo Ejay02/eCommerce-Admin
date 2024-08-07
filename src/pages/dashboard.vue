@@ -5,7 +5,7 @@
     <ActiveUsersCard class="flex-grow-0" />
     <ChartCard />
   </div>
-  // #TODO fix pagination and return card
+   <!-- #TODO fix pagination and return card -->
   <!-- <OrdersCard :pageSize="4" :title="`Recent Orders`" /> -->
   <div class="d-flex justify-content-between gap-3">
     <ActivityCard />

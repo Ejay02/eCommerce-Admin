@@ -103,7 +103,7 @@ b
           </a-menu-item>
 
           <!-- color -->
-          <a-menu-item key="9">
+          <!-- <a-menu-item key="9">
             <router-link
               to="/admin/product/color"
               style="text-decoration: none"
@@ -120,19 +120,19 @@ b
               <i class="fa-solid fa-list"></i>
               <span class="m-4">Color List</span>
             </router-link>
-          </a-menu-item>
+          </a-menu-item> -->
           <!--  -->
         </a-sub-menu>
 
         <!-- orders -->
-        <a-menu-item key="11">
+        <!-- <a-menu-item key="11">
           <router-link to="/admin/orders" style="text-decoration: none">
             <span>
               <i class="fa-solid fa-cart-shopping"></i>
               <span class="m-4">Orders</span>
             </span>
           </router-link>
-        </a-menu-item>
+        </a-menu-item> -->
 
         <!-- enquiry -->
         <a-menu-item key="12">

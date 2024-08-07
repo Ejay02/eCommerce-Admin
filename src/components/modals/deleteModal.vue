@@ -29,13 +29,13 @@ import { ref, watch } from "vue";
 import { useBlogStore } from "@/store/useBlogStore";
 import { useModalStore } from "@/store/useModalStore";
 import { useProductStore } from "@/store/useProductStore";
-import { useCategoryStore } from "@/store/useCategoryStore";
+import { useBlogCategoryStore } from "@/store/useBlogCategoryStore";
 import { useNotifications } from "@/composable/globalAlert.js";
 
 const { notify } = useNotifications();
 const modalStore = useModalStore();
 const isModalVisible = ref(modalStore.deleteModal);
-const categoryStore = useCategoryStore();
+const categoryStore = useBlogCategoryStore();
 const blogStore = useBlogStore();
 const productStore = useProductStore();
 
@@ -96,6 +96,14 @@ const handleDelete = async () => {
       if (response.data) {
         productStore.deleteProduct(modalStore.modalId);
         notify("Product deleted successfully!", "success");
+      }
+    }else if (source.value === "brandList") {
+      response = await axios.delete(
+        `${import.meta.env.VITE_BASE_URL}/brand/${modalStore.modalId}`
+      );
+      if (response.data) {
+        productStore.deleteProduct(modalStore.modalId);
+        notify("Brand deleted successfully!", "success");
       }
     }
     modalStore.deleteModal = false;

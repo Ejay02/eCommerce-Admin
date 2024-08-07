@@ -1,7 +1,7 @@
 <template>
   <LoadingScreen v-if="categoryStore.loading" />
-  <div v-else class="mt-4 card">
-    <div v-if="categoryStore.categories.length">
+  <div v-if="categoryStore.categories.length" class="mt-4 card">
+    <div>
       <div
         v-for="category in categoryStore.categories"
         :key="category._id"
@@ -24,19 +24,20 @@
         </button>
       </div>
     </div>
-    <div v-else>
-      <p>No categories available</p>
-    </div>
+  </div>
+  <div v-else>
+    <Empty />
   </div>
 </template>
 
 <script setup>
 import { onMounted } from "vue";
+import Empty from "@/components/empty.vue";
 import { useModalStore } from "@/store/useModalStore";
-import { useCategoryStore } from "@/store/useCategoryStore";
 import LoadingScreen from "@/components/loadingScreen.vue";
+import { useBlogCategoryStore } from "@/store/useBlogCategoryStore";
 
-const categoryStore = useCategoryStore();
+const categoryStore = useBlogCategoryStore();
 const modalStore = useModalStore();
 
 const showDelModal = (id, title, type) => {
@@ -52,44 +53,6 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-.card {
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-  padding: 16px;
-}
-
-.category-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 16px;
-  padding: 16px;
-  border-radius: 8px;
-  background-color: #f9f9f9;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: background-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-.category-item:hover {
-  background-color: #e9e9e9;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-.category-title {
-  display: flex;
-  flex-direction: column;
-}
-
-.category-title h4 {
-  margin: 0;
-  font-size: 1.2rem;
-  color: #6c757d;
-}
-
-.category-title .text-muted {
-  font-size: 0.9rem;
-  color: #6c757d;
-}
-
 .bi {
   color: red;
 }
