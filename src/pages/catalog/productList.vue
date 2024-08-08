@@ -11,7 +11,6 @@
       </div>
     </div>
     <div class="d-flex p-2 text-secondary input">
-      <!-- <i class="bi bi-sliders2 fs-6 m-2"></i> -->
       <input
         type="text"
         class="form-control mb-3"
@@ -79,7 +78,6 @@
           </td>
           <td class="text-body-tertiary">{{ product?.price }}</td>
           <td>
-            <!-- <i class="bi bi-three-dots-vertical text-secondary"></i> -->
             <div class="">
               <router-link
                 :to="{ name: 'editProduct', params: { id: product._id } }"
@@ -91,13 +89,34 @@
                 class="btn"
                 @click="showDelModal(product._id, product.title, 'productList')"
               >
-              <i class="bi bi-trash del-btn"></i>
+                <i class="bi bi-trash del-btn"></i>
               </div>
             </div>
           </td>
         </tr>
       </tbody>
     </table>
+
+    <div class="pagination">
+      <button
+        class="btn btn-light"
+        :disabled="productStore.currentPage === 1"
+        @click="goToPage(productStore.currentPage - 1)"
+      >
+        Previous
+      </button>
+      <span class="text-center mt-2 p-2"
+        >Page {{ productStore.currentPage }} of
+        {{ productStore.totalPages }}</span
+      >
+      <button
+        class="btn btn-light"
+        :disabled="productStore.currentPage === productStore.totalPages"
+        @click="goToPage(productStore.currentPage + 1)"
+      >
+        Next
+      </button>
+    </div>
   </div>
   <div v-else>
     <Empty />
@@ -125,10 +144,12 @@ const showDelModal = (id, title, type) => {
 
 const productStore = useProductStore();
 
-const fetchProducts = async () => {
+const fetchProducts = async (page = 1) => {
   await productStore.fetchProducts({
     search: searchQuery.value,
     sort: sortField.value ? `${sortField.value} ${sortOrder.value}` : "",
+    page: page,
+    limit: 10,
   });
 };
 
@@ -151,7 +172,13 @@ const getSortIcon = (field) => {
   return "fa-solid fa-sort";
 };
 
-watch([searchQuery, sortField, sortOrder], fetchProducts);
+watch([searchQuery, sortField, sortOrder], () => fetchProducts());
+
+const goToPage = (page) => {
+  if (page > 0 && page <= productStore.totalPages) {
+    fetchProducts(page);
+  }
+};
 
 const generateRandomSKU = () => {
   const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -256,11 +283,20 @@ onMounted(() => {
   border: none;
 }
 
-/* .bi {
-  color: red;
-} */
-
 .bix {
   color: gray;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.pagination .btn {
+  margin: 0 5px;
+  font-size: 12px;
+  color: gray;
+  border: 1px solid cornflowerblue;
 }
 </style>

@@ -136,3 +136,7 @@ html::-webkit-scrollbar {
 .del-btn {
   color: red;
 }
+
+.bi-pencil-square {
+  color: gray;
+}
