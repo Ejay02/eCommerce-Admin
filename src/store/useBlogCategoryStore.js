@@ -5,7 +5,7 @@ import { useNotifications } from "@/composable/globalAlert.js";
 
 const { notify } = useNotifications();
 
-export const useBlogCategoryStore = defineStore("category", () => {
+export const useBlogCategoryStore = defineStore("blog-category", () => {
   const state = reactive({
     categories: [],
     loading: false,
@@ -19,7 +19,7 @@ export const useBlogCategoryStore = defineStore("category", () => {
       );
       state.categories = response.data;
     } catch (error) {
-      notify("Error fetching categories:", error);
+      notify("Error fetching blog categories:", error);
     } finally {
       state.loading = false;
     }

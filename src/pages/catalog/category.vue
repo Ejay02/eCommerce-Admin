@@ -37,6 +37,7 @@
 import axios from "axios";
 import { computed, ref } from "vue";
 import { useNotifications } from "@/composable/globalAlert.js";
+import router from "@/router";
 
 const { notify } = useNotifications();
 
@@ -53,8 +54,8 @@ const handleSubmit = async () => {
 
     if (response.data) {
       notify("Category added successfully!", "success");
+      router.push("/admin/product/category-list");
     }
-    title.value = "";
   } catch (error) {
     notify("Error adding category", "error");
   }
@@ -65,6 +66,4 @@ const isFormFilled = computed(() => {
 });
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
