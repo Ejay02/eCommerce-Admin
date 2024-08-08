@@ -22,7 +22,6 @@ export const useProductStore = defineStore("product", () => {
         { params }
       );
 
-      // state.products = response?.data;
       state.products = response.data.products;
       state.total = response.data.total;
       state.currentPage = params.page || 1;

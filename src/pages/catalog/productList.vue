@@ -97,25 +97,11 @@
       </tbody>
     </table>
 
-    <div class="pagination">
-      <button
-        class="btn btn-light me-2"
-        :disabled="productStore.currentPage === 1"
-        @click="goToPage(productStore.currentPage - 1)"
-      >
-        Previous
-      </button>
-      <button class="page">
-        Page {{ productStore.currentPage }} of {{ productStore.totalPages }}
-      </button>
-      <button
-        class="btn btn-light me-2"
-        :disabled="productStore.currentPage === productStore.totalPages"
-        @click="goToPage(productStore.currentPage + 1)"
-      >
-        Next
-      </button>
-    </div>
+    <Pagination
+      :currentPage="productStore.currentPage"
+      :totalPages="productStore.totalPages"
+      @pageChange="goToPage"
+    />
   </div>
   <div v-else>
     <Empty />
@@ -128,11 +114,13 @@ import { ref, watch, onMounted } from "vue";
 import { useModalStore } from "@/store/useModalStore";
 import { useProductStore } from "@/store/useProductStore";
 import LoadingScreen from "@/components/loadingScreen.vue";
+import Pagination from "@/components/pagination.vue";
 
 const searchQuery = ref("");
 const sortField = ref("");
 const sortOrder = ref("asc");
 const modalStore = useModalStore();
+const productStore = useProductStore();
 
 const showDelModal = (id, title, type) => {
   modalStore.deleteModal = true;
@@ -141,9 +129,7 @@ const showDelModal = (id, title, type) => {
   modalStore.source = type;
 };
 
-const productStore = useProductStore();
-
-const fetchProducts = async (page = 1) => {
+const fetchProducts = async (page = productStore.currentPage) => {
   await productStore.fetchProducts({
     search: searchQuery.value,
     sort: sortField.value ? `${sortField.value} ${sortOrder.value}` : "",
@@ -283,27 +269,5 @@ onMounted(() => {
 
 .bix {
   color: gray;
-}
-
-.pagination {
-  display: flex;
-  justify-content: center;
-  align-content: center;
-  margin-top: 20px;
-  font-size: 12px;
-  color: gray;
-}
-
-.pagination .btn {
-  margin: 0 5px;
-  font-size: 12px;
-  color: gray;
-  border: 1px solid cornflowerblue;
-}
-
-.page {
-  text-decoration: none;
-  border: none;
-  background: white;
 }
 </style>

@@ -35,6 +35,12 @@
         </div>
       </div>
     </div>
+
+    <Pagination
+      :currentPage="brandStore.currentPage"
+      :totalPages="brandStore.totalPages"
+      @pageChange="goToPage"
+    />
   </div>
   <div v-else>
     <Empty />
@@ -47,6 +53,7 @@ import Empty from "@/components/empty.vue";
 import { useBrandStore } from "@/store/useBrandStore";
 import { useModalStore } from "@/store/useModalStore";
 import LoadingScreen from "@/components/loadingScreen.vue";
+import Pagination from "@/components/pagination.vue";
 
 const brandStore = useBrandStore();
 const modalStore = useModalStore();
@@ -58,8 +65,21 @@ const showDelModal = (id, title, type) => {
   modalStore.source = type;
 };
 
+const fetchBrands = async (page = brandStore.currentPage) => {
+  await brandStore.fetchBrands({
+    page: page,
+    limit: 10,
+  });
+};
+
+const goToPage = (page) => {
+  if (page > 0 && page <= brandStore.totalPages) {
+    fetchBrands(page);
+  }
+};
+
 onMounted(async () => {
-  await brandStore.fetchBrands();
+  await brandStore?.fetchBrands();
 });
 </script>
 
