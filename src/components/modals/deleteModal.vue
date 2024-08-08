@@ -31,6 +31,7 @@ import { useModalStore } from "@/store/useModalStore";
 import { useProductStore } from "@/store/useProductStore";
 import { useBlogCategoryStore } from "@/store/useBlogCategoryStore";
 import { useNotifications } from "@/composable/globalAlert.js";
+import { useProductCategoryStore } from "@/store/useProductCategoryStore";
 
 const { notify } = useNotifications();
 const modalStore = useModalStore();
@@ -38,6 +39,7 @@ const isModalVisible = ref(modalStore.deleteModal);
 const categoryStore = useBlogCategoryStore();
 const blogStore = useBlogStore();
 const productStore = useProductStore();
+const prodCategoryStore = useProductCategoryStore();
 
 const title = ref(modalStore.modalTitle);
 const source = ref(modalStore.source);
@@ -97,12 +99,20 @@ const handleDelete = async () => {
         productStore.deleteProduct(modalStore.modalId);
         notify("Product deleted successfully!", "success");
       }
-    }else if (source.value === "brandList") {
+    } else if (source.value === "brandList") {
       response = await axios.delete(
         `${import.meta.env.VITE_BASE_URL}/brand/${modalStore.modalId}`
       );
       if (response.data) {
         productStore.deleteProduct(modalStore.modalId);
+        notify("Brand deleted successfully!", "success");
+      }
+    } else if (source.value === "prodCatList") {
+      response = await axios.delete(
+        `${import.meta.env.VITE_BASE_URL}/category/${modalStore.modalId}`
+      );
+      if (response.data) {
+        prodCategoryStore.deleteProdCategory(modalStore.modalId);
         notify("Brand deleted successfully!", "success");
       }
     }

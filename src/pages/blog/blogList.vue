@@ -27,10 +27,10 @@
             <i class="bi bi-pencil-square"></i>
           </router-link>
           <button
-            class="btn ml-5 x"
+            class="btn ml-5"
             @click="showDelModal(blog._id, blog.title, 'blogList')"
           >
-            <i class="bi bi-trash"></i>
+            <i class="bi bi-trash del-btn"></i>
           </button>
         </div>
       </div>

@@ -103,10 +103,9 @@
 
 <script setup>
 import axios from "axios";
-import { onMounted, ref, watch } from "vue";
-
-import { useRoute } from "vue-router";
 import router from "@/router";
+import { useRoute } from "vue-router";
+import { onMounted, ref, watch } from "vue";
 import BlogPreview from "@/components/blogPreview.vue";
 import { useNotifications } from "@/composable/globalAlert.js";
 

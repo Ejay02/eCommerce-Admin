@@ -6,7 +6,7 @@
       <i class="bi bi-three-dots-vertical"></i>
     </div>
 
-    <div class="">
+    <div class="mt-4">
       <div
         class="category-item"
         v-for="brand in brandStore?.brands"
@@ -23,7 +23,7 @@
           class="btn"
           @click="showDelModal(brand._id, brand.title, 'brandList')"
         >
-          <i class="bi bi-trash"></i>
+          <i class="bi bi-trash del-btn"></i>
         </button>
       </div>
     </div>
@@ -56,12 +56,6 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-
-
-.bi {
-  color: red;
-}
-
 .btn {
   text-decoration: none;
   border: none;

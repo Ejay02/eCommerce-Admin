@@ -91,7 +91,7 @@
                 class="btn"
                 @click="showDelModal(product._id, product.title, 'productList')"
               >
-                <i class="bi bi-trash"></i>
+              <i class="bi bi-trash del-btn"></i>
               </div>
             </div>
           </td>
@@ -256,9 +256,9 @@ onMounted(() => {
   border: none;
 }
 
-.bi {
+/* .bi {
   color: red;
-}
+} */
 
 .bix {
   color: gray;

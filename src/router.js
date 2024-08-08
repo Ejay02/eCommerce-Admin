@@ -25,6 +25,8 @@ import Category from "./pages/catalog/category.vue";
 import CategoryList from "./pages/catalog/categoryList.vue";
 import EditBlog from "./pages/blog/editBlog.vue";
 import EditProduct from "./pages/catalog/editProduct.vue";
+import EditBlogCategory from "./pages/blog/editBlogCategory.vue";
+import EditCategoryList from "./pages/catalog/editCategoryList.vue";
 
 // import AboutView from "./AboutView.vue";
 
@@ -100,6 +102,11 @@ const routes = [
         component: Category,
       },
       {
+        path: "product/edit-category/:id",
+        component: EditCategoryList,
+        name: "editCategory",
+      },
+      {
         path: "product/category-list",
         component: CategoryList,
       },
@@ -117,9 +124,15 @@ const routes = [
         component: AddBlogCategory,
       },
       {
+        path: "/edit-blog-category/:id",
+        component: EditBlogCategory,
+        name: "editBlogCategory",
+      },
+      {
         path: "blog/blog-category-list",
         component: BlogCategoryList,
       },
+
       {
         path: "blog/blog-list",
         component: BlogList,

@@ -6,7 +6,7 @@
       <i class="bi bi-three-dots-vertical"></i>
     </div>
 
-    <div class="">
+    <div class="mt-4">
       <div
         class="category-item"
         v-for="prod in prodCategoryStore?.categories"
@@ -19,12 +19,21 @@
           </span>
         </div>
 
-        <button
-          class="btn"
-          @click="showDelModal(prod._id, prod.title, 'prodList')"
-        >
-          <i class="bi bi-trash"></i>
-        </button>
+        <div class="d-flex">
+          <router-link
+            :to="{ name: 'editCategory', params: { id: prod._id } }"
+            class="btn justify-content-center align-content-center"
+          >
+            <i class="bi bi-pencil-square"></i>
+          </router-link>
+
+          <button
+            class="btn"
+            @click="showDelModal(prod._id, prod.title, 'prodCatList')"
+          >
+            <i class="bi bi-trash del-btn"></i>
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -56,10 +65,6 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-.bi {
-  color: red;
-}
-
 .btn {
   text-decoration: none;
   border: none;

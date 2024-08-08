@@ -1,7 +1,12 @@
 <template>
   <LoadingScreen v-if="categoryStore.loading" />
   <div v-if="categoryStore.categories.length" class="mt-4 card">
-    <div>
+    <div class="d-flex justify-content-between">
+      <h3 class="mb-4"></h3>
+      <i class="bi bi-three-dots-vertical"></i>
+    </div>
+
+    <div class="mt-4">
       <div
         v-for="category in categoryStore.categories"
         :key="category._id"
@@ -14,14 +19,22 @@
             {{ new Date(category.createdAt).toLocaleDateString() }}
           </span>
         </div>
-        <button
-          class="btn"
-          @click="
-            showDelModal(category._id, category.title, 'blogCategoryList')
-          "
-        >
-          <i class="bi bi-trash"></i>
-        </button>
+        <div class="d-flex">
+          <router-link
+            class="btn justify-content-center align-content-center"
+            :to="{ name: 'editBlogCategory', params: { id: category._id } }"
+          >
+            <i class="bi bi-pencil-square"></i>
+          </router-link>
+          <button
+            class="btn"
+            @click="
+              showDelModal(category._id, category.title, 'blogCategoryList')
+            "
+          >
+            <i class="bi bi-trash del-btn"></i>
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -53,10 +66,6 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-.bi {
-  color: red;
-}
-
 .btn {
   text-decoration: none;
   border: none;

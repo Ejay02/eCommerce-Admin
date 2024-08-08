@@ -35,6 +35,7 @@
 
 <script setup>
 import axios from "axios";
+import router from "@/router";
 import { computed, ref } from "vue";
 import { useNotifications } from "@/composable/globalAlert.js";
 
@@ -53,8 +54,8 @@ const handleSubmit = async () => {
 
     if (response.data) {
       notify("Category added successfully!", "success");
+      router.push("/admin/blog/blog-category-list");
     }
-    title.value = "";
   } catch (error) {
     notify("Error adding category", "error");
   }
