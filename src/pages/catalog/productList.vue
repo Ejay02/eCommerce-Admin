@@ -99,18 +99,17 @@
 
     <div class="pagination">
       <button
-        class="btn btn-light"
+        class="btn btn-light me-2"
         :disabled="productStore.currentPage === 1"
         @click="goToPage(productStore.currentPage - 1)"
       >
         Previous
       </button>
-      <span class="text-center mt-2 p-2"
-        >Page {{ productStore.currentPage }} of
-        {{ productStore.totalPages }}</span
-      >
+      <button class="page">
+        Page {{ productStore.currentPage }} of {{ productStore.totalPages }}
+      </button>
       <button
-        class="btn btn-light"
+        class="btn btn-light me-2"
         :disabled="productStore.currentPage === productStore.totalPages"
         @click="goToPage(productStore.currentPage + 1)"
       >
@@ -269,7 +268,6 @@ onMounted(() => {
 }
 
 .cat {
-  /* background-color: #2db7f5; */
   padding: 4px 8px;
   border-radius: 4px;
   font-size: 10px;
@@ -290,7 +288,10 @@ onMounted(() => {
 .pagination {
   display: flex;
   justify-content: center;
+  align-content: center;
   margin-top: 20px;
+  font-size: 12px;
+  color: gray;
 }
 
 .pagination .btn {
@@ -298,5 +299,11 @@ onMounted(() => {
   font-size: 12px;
   color: gray;
   border: 1px solid cornflowerblue;
+}
+
+.page {
+  text-decoration: none;
+  border: none;
+  background: white;
 }
 </style>
