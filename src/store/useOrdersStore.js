@@ -18,7 +18,6 @@ export const useOrderStore = defineStore("order", () => {
         `${import.meta.env.VITE_BASE_URL}/user/get-orders`
       );
       
-      console.log('response:', response.data)
       state.orders = response?.data;
     } catch (error) {
       notify("Error fetching orders", "error");

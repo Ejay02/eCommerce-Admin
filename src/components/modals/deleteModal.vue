@@ -32,6 +32,7 @@ import { useProductStore } from "@/store/useProductStore";
 import { useBlogCategoryStore } from "@/store/useBlogCategoryStore";
 import { useNotifications } from "@/composable/globalAlert.js";
 import { useProductCategoryStore } from "@/store/useProductCategoryStore";
+import { useBrandStore } from "@/store/useBrandStore";
 
 const { notify } = useNotifications();
 const modalStore = useModalStore();
@@ -40,6 +41,7 @@ const categoryStore = useBlogCategoryStore();
 const blogStore = useBlogStore();
 const productStore = useProductStore();
 const prodCategoryStore = useProductCategoryStore();
+const brandStore = useBrandStore();
 
 const title = ref(modalStore.modalTitle);
 const source = ref(modalStore.source);
@@ -104,7 +106,7 @@ const handleDelete = async () => {
         `${import.meta.env.VITE_BASE_URL}/brand/${modalStore.modalId}`
       );
       if (response.data) {
-        productStore.deleteProduct(modalStore.modalId);
+        brandStore.deleteBrand(modalStore.modalId);
         notify("Brand deleted successfully!", "success");
       }
     } else if (source.value === "prodCatList") {
@@ -113,7 +115,7 @@ const handleDelete = async () => {
       );
       if (response.data) {
         prodCategoryStore.deleteProdCategory(modalStore.modalId);
-        notify("Brand deleted successfully!", "success");
+        notify("Prod Category deleted successfully!", "success");
       }
     }
     modalStore.deleteModal = false;

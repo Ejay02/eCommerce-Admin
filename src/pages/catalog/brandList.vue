@@ -19,12 +19,20 @@
           </span>
         </div>
 
-        <button
-          class="btn"
-          @click="showDelModal(brand._id, brand.title, 'brandList')"
-        >
-          <i class="bi bi-trash del-btn"></i>
-        </button>
+        <div class="d-flex">
+          <router-link
+            :to="{ name: 'editBrand', params: { id: brand._id } }"
+            class="btn justify-content-center align-content-center"
+          >
+            <i class="bi bi-pencil-square"></i>
+          </router-link>
+          <button
+            class="btn"
+            @click="showDelModal(brand._id, brand.title, 'brandList')"
+          >
+            <i class="bi bi-trash del-btn"></i>
+          </button>
+        </div>
       </div>
     </div>
   </div>

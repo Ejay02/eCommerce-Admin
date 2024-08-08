@@ -26,8 +26,8 @@ export const useBrandStore = defineStore("brand", () => {
   };
 
   const deleteBrand = (id) => {
-    state.categories = state.categories.filter(
-      (category) => category._id !== id
+    state.brands = state.brands.filter(
+      (brand) => brand._id !== id
     );
   };
 

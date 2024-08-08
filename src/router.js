@@ -27,6 +27,7 @@ import EditBlog from "./pages/blog/editBlog.vue";
 import EditProduct from "./pages/catalog/editProduct.vue";
 import EditBlogCategory from "./pages/blog/editBlogCategory.vue";
 import EditCategoryList from "./pages/catalog/editCategoryList.vue";
+import EditBrand from "./pages/catalog/editBrand.vue";
 
 // import AboutView from "./AboutView.vue";
 
@@ -88,6 +89,11 @@ const routes = [
       {
         path: "product/brand-list",
         component: BrandList,
+      },
+      {
+        path: "product/edit-brand/:id",
+        component: EditBrand,
+        name: "editBrand",
       },
       // {
       //   path: "product/color",

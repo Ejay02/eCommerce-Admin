@@ -37,6 +37,7 @@
 
 <script setup>
 import axios from "axios";
+import router from "@/router";
 import { computed, ref } from "vue";
 import { useNotifications } from "@/composable/globalAlert.js";
 
@@ -55,10 +56,10 @@ const handleSubmit = async () => {
 
     if (response.data) {
       notify("Brand added successfully!", "success");
+      router.push("/admin/product/brand-list");
     }
-    title.value = "";
   } catch (error) {
-    notify("Error adding brand", "error");
+    notify("Error adding brand: " + error.response.data.message, "error");
   }
 };
 

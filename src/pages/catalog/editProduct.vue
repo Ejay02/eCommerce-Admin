@@ -269,8 +269,6 @@ const formData = ref({
   quantity: "",
 });
 
-console.log(formData.value.images);
-
 const processedTags = computed(() => {
   if (typeof formData.value.tags === "string") {
     return formData.value.tags
