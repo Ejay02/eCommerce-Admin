@@ -135,13 +135,20 @@ const fetchBlogDetails = async () => {
       `${import.meta.env.VITE_BASE_URL}/blog/${blogId}`
     );
 
+    console.log(response.data.description);
     Object.assign(formData.value, response.data);
-    if (quillEditor.value) {
+
+    if (
+      quillEditor.value &&
+      quillEditor.value.editor &&
+      quillEditor.value.editor.clipboard
+    ) {
       quillEditor.value.editor.setContents(
-        quillEditor.value.editor.clipboard.convert(response.data.description)
+        quillEditor.value.editor.clipboard.convert(response?.data?.description)
       );
     }
   } catch (error) {
+    console.log("error:", error);
     notify("Error fetching blog details");
   }
 };

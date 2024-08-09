@@ -63,7 +63,7 @@ const fetchBlogCatDetails = async () => {
 
     Object.assign(formData.value, response.data);
   } catch (error) {
-    notify("Error fetching blog details", "error");
+    notify("Error fetching blog category", "error");
   }
 };
 
@@ -78,7 +78,7 @@ const handleSubmit = async () => {
       router.push("/admin/blog/blog-category-list");
     }
   } catch (error) {
-    notify("Error updating category: " + error.response.data.message, "error");
+    notify("Error updating category: ", "error");
   }
 };
 
