@@ -168,7 +168,7 @@ const handleSubmit = async () => {
       router.push("/admin/blog/blog-list");
     }
   } catch (error) {
-    notify("Error creating blog: " + error.response.data.message, "error");
+    notify("Error creating blog", "error");
   }
 };
 </script>

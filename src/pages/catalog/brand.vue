@@ -59,7 +59,7 @@ const handleSubmit = async () => {
       router.push("/admin/product/brand-list");
     }
   } catch (error) {
-    notify("Error adding brand: " + error.response.data.message, "error");
+    notify("Error adding brand", "error");
   }
 };
 

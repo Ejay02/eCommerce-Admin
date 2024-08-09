@@ -165,7 +165,7 @@ const handleSubmit = async () => {
       router.push("/admin/blog/blog-list");
     }
   } catch (error) {
-    notify("Error updating blog: " + error.response.data.message, "error");
+    notify("Error updating blog", "error");
   }
 };
 
