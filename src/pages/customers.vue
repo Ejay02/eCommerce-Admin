@@ -23,9 +23,11 @@
         }}</span>
       </div>
     </div>
-    <div v-else>
-      <p>No customers available</p>
-    </div>
+    <Pagination
+      :currentPage="customerStore.currentPage"
+      :totalPages="customerStore.totalPages"
+      @pageChange="goToPage"
+    />
   </div>
   <div v-else>
     <Empty />
@@ -35,13 +37,28 @@
 <script setup>
 import { onMounted } from "vue";
 import Empty from "@/components/empty.vue";
+import Pagination from "@/components/pagination.vue";
 import LoadingScreen from "@/components/loadingScreen.vue";
 import { useCustomerStore } from "@/store/useCustomerStore";
 
 const customerStore = useCustomerStore();
 
+
+const fetchCustomers = async (page = customerStore?.currentPage) => {
+  await customerStore?.fetchCustomers({
+    page: page,
+    limit: 10,
+  });
+};
+
+const goToPage = (page) => {
+  if (page > 0 && page <= customerStore?.totalPages) {
+    fetchCustomers(page);
+  }
+};
+
 onMounted(async () => {
-  await customerStore.fetchCustomers();
+  await customerStore?.fetchCustomers();
 });
 </script>
 
