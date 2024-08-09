@@ -9,14 +9,23 @@ export const useBlogStore = defineStore("blog", () => {
   const state = reactive({
     blogs: [],
     loading: false,
+    totalPages: 0,
+    currentPage: 1,
+    total: 0,
   });
 
-  const fetchBlogs = async () => {
+  const fetchBlogs = async (params = {}) => {
     state.loading = true;
     try {
-      const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/blog`);
+      const response = await axios.get(
+        `${import.meta.env.VITE_BASE_URL}/blog`,
+        { params }
+      );
 
-      state.blogs = response.data;
+      state.blogs = response?.data?.blog; // Update with paginated data
+      state.total = response.data?.total;
+      state.currentPage = params.page || 1; // Update current page
+      state.totalPages = Math.ceil(state.total / (params.limit || 10)); // Update total pages
     } catch (error) {
       notify("Error fetching blogs", "error");
     } finally {

@@ -1,7 +1,7 @@
 <template>
-  <LoadingScreen v-if="blogStore.loading" />
+  <LoadingScreen v-if="blogStore?.loading" />
 
-  <div class="mt-4 card" v-if="blogStore.blogs.length">
+  <div class="mt-4 card" v-if="blogStore?.blogs?.length">
     <div class="m-5">
       <div v-for="blog in blogStore.blogs" :key="blog._id" class="blog-item">
         <img
@@ -13,7 +13,7 @@
           <h4>{{ blog.title }}</h4>
           <div
             class="desc"
-            v-html="truncateDescription(blog.description)"
+            v-html="truncateDescription(blog?.description)"
           ></div>
 
           <h6 class="text-muted mb-3">{{ blog?.author }}</h6>
@@ -35,6 +35,12 @@
         </div>
       </div>
     </div>
+
+    <Pagination
+      :currentPage="blogStore?.currentPage"
+      :totalPages="blogStore?.totalPages"
+      @pageChange="goToPage"
+    />
   </div>
   <div v-else>
     <Empty />
@@ -45,6 +51,7 @@
 import { onMounted } from "vue";
 import Empty from "@/components/empty.vue";
 import { useBlogStore } from "@/store/useBlogStore";
+import Pagination from "@/components/pagination.vue";
 import { useModalStore } from "@/store/useModalStore";
 import LoadingScreen from "@/components/loadingScreen.vue";
 
@@ -56,6 +63,19 @@ const showDelModal = (id, title, type) => {
   modalStore.modalId = id;
   modalStore.modalTitle = title;
   modalStore.source = type;
+};
+
+const fetchBlogs = async (page = blogStore.currentPage) => {
+  await blogStore.fetchBlogs({
+    page: page,
+    limit: 10,
+  });
+};
+
+const goToPage = (page) => {
+  if (page > 0 && page <= blogStore.totalPages) {
+    fetchBlogs(page);
+  }
 };
 
 // Function to trim excess whitespace and truncate description to 80 words
