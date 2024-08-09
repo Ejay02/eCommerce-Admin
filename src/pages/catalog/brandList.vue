@@ -37,8 +37,8 @@
     </div>
 
     <Pagination
-      :currentPage="brandStore.currentPage"
-      :totalPages="brandStore.totalPages"
+      :currentPage="brandStore?.currentPage"
+      :totalPages="brandStore?.totalPages"
       @pageChange="goToPage"
     />
   </div>
