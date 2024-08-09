@@ -135,7 +135,6 @@ const fetchBlogDetails = async () => {
       `${import.meta.env.VITE_BASE_URL}/blog/${blogId}`
     );
 
-    console.log(response.data.description);
     Object.assign(formData.value, response.data);
 
     if (

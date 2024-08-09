@@ -1,6 +1,6 @@
 <template>
   <LoadingScreen v-if="enqStore.loading" />
-  <div class="mt-4 card p-4" v-if="enqStore.enquiries.length">
+  <div class="mt-4 card p-4" v-if="enqStore?.enquiries?.length">
     <div class="d-flex justify-content-between mb-3">
       <h3></h3>
       <i class="bi bi-three-dots-vertical"></i>
@@ -37,6 +37,11 @@
         </tbody>
       </table>
     </div>
+    <Pagination
+      :currentPage="enqStore?.currentPage"
+      :totalPages="enqStore?.totalPages"
+      @pageChange="goToPage"
+    />
   </div>
   <div v-else>
     <Empty />
@@ -46,13 +51,27 @@
 <script setup>
 import { onMounted } from "vue";
 import Empty from "@/components/empty.vue";
+import Pagination from "@/components/pagination.vue";
 import LoadingScreen from "@/components/loadingScreen.vue";
 import { useEnquiryStore } from "@/store/useEnquriesStore";
 
 const enqStore = useEnquiryStore();
 
+const fetchEnqs = async (page = enqStore?.currentPage) => {
+  await enqStore?.fetchEnquiries({
+    page: page,
+    limit: 10,
+  });
+};
+
+const goToPage = (page) => {
+  if (page > 0 && page <= enqStore?.totalPages) {
+    fetchEnqs(page);
+  }
+};
+
 onMounted(async () => {
-  await enqStore.fetchEnquiries();
+  await enqStore?.fetchEnquiries();
 });
 </script>
 
