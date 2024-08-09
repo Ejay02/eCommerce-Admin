@@ -24,7 +24,7 @@ export const useBrandStore = defineStore("brand", () => {
         }
       );
 
-      state.brands = response?.data?.brands; // Update brands with paginated data
+      state.brands = response?.data?.brands; // Update with paginated data
       state.total = response.data?.total;
       state.currentPage = params.page || 1; // Update current page
       state.totalPages = Math.ceil(state.total / (params.limit || 10)); // Update total pages

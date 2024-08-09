@@ -50,10 +50,10 @@
 <script setup>
 import { onMounted } from "vue";
 import Empty from "@/components/empty.vue";
+import Pagination from "@/components/pagination.vue";
 import { useBrandStore } from "@/store/useBrandStore";
 import { useModalStore } from "@/store/useModalStore";
 import LoadingScreen from "@/components/loadingScreen.vue";
-import Pagination from "@/components/pagination.vue";
 
 const brandStore = useBrandStore();
 const modalStore = useModalStore();
