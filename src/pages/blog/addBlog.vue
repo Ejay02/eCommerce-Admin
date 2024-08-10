@@ -64,6 +64,23 @@
           </form>
         </div>
         <div class="col-md-6 mb-4">
+          <div class="mb-2">
+            <button
+              @click="generateBlogContent"
+              class="btn btn-secondary gbc"
+              :disabled="!formData.title || isGenerating"
+            >
+              {{ isGenerating ? "Generating..." : "Generate Blog Content ?" }}
+            </button>
+          </div>
+          <div v-if="isGenerating" class="d-flex">
+            <i class="bi bi-exclamation-triangle me-2 text-center"></i>
+            <span class="warn mb-2"
+              >Might be some errors, repetition or inconsistency in the
+              generated text. You might need to do some manual editing of the
+              final result.</span
+            >
+          </div>
           <div class="mb-5 quill">
             <QuillEditor
               ref="quillEditor"
@@ -99,8 +116,9 @@
 
 <script setup>
 import axios from "axios";
-import { ref, computed } from "vue";
 import router from "@/router";
+import { ref, computed } from "vue";
+import aiService from "@/utils/aiService";
 import BlogPreview from "@/components/blogPreview.vue";
 import { useNotifications } from "@/composable/globalAlert.js";
 
@@ -117,6 +135,7 @@ const formData = ref({
 });
 
 const showPreview = ref(false);
+const isGenerating = ref(false);
 
 const togglePreview = () => {
   if (isFormFilled.value) {
@@ -133,6 +152,45 @@ const isFormFilled = computed(() => {
     formData.value.image
   );
 });
+
+const generateBlogContent = async () => {
+  if (!formData.value.title) {
+    notify("Please enter a blog title first", "error");
+    return;
+  }
+  isGenerating.value = true;
+  try {
+    let fullContent = "";
+    const numberOfGenerations = 8;
+
+    for (let i = 0; i < numberOfGenerations; i++) {
+      let prompt;
+      if (i === 0) {
+        prompt = `Write the beginning of a blog post about: ${formData.value.title}`;
+      } else {
+        prompt = `Continue the following blog post: ${fullContent.slice(-100)}`;
+      }
+      let generatedContent = await aiService.generateContent(prompt);
+
+      // Remove the prompt if it's included in the response
+      const promptIndex = generatedContent.indexOf(prompt);
+      if (promptIndex !== -1) {
+        generatedContent = generatedContent
+          .substring(promptIndex + prompt.length)
+          .trim();
+      }
+
+      fullContent += " " + generatedContent;
+    }
+    formData.value.description = fullContent.trim();
+    notify("Blog content generated successfully!", "success");
+  } catch (error) {
+    console.log("error:", error);
+    notify("Error generating blog content", "error");
+  } finally {
+    isGenerating.value = false;
+  }
+};
 
 const handleSubmit = async () => {
   // const description = quillEditor.value.root.innerHTML; // Get HTML content
@@ -232,5 +290,18 @@ const handleSubmit = async () => {
 
 .ce.disabled {
   color: lightgray;
+}
+
+.gbc {
+  font-size: 10px;
+}
+
+.warn {
+  font-size: 10px;
+  color: gray;
+}
+
+.bi {
+  color: #d46b08;
 }
 </style>

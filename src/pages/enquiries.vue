@@ -82,6 +82,7 @@ onMounted(async () => {
 
 .table-responsive {
   margin-top: 20px;
+  overflow: hidden;
 }
 
 .table th,
