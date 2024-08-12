@@ -48,11 +48,11 @@ const handleSubmit = async () => {
     const response = await axios.post(
       `${import.meta.env.VITE_BASE_URL}/blog-category`,
       {
-        title: title.value,
+        title: title?.value,
       }
     );
 
-    if (response.data) {
+    if (response?.data) {
       notify("Category added successfully!", "success");
       router.push("/admin/blog/blog-category-list");
     }

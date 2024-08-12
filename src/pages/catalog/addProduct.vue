@@ -28,6 +28,7 @@
               placeholder="Product Slug"
             />
           </div>
+
           <!-- price -->
           <div class="mb-3">
             <input
@@ -40,9 +41,9 @@
               min="1"
             />
           </div>
+
           <!-- tags -->
           <div class="mb-3">
-            <!-- tag -->
             <div class="tags mb-2">
               <span
                 v-for="(tag, index) in tags"
@@ -133,6 +134,7 @@
             placeholder="Category"
           />
         </div>
+        
         <!-- brand -->
         <div class="mb-3">
           <input
@@ -144,6 +146,7 @@
             placeholder="Brand"
           />
         </div>
+
         <!-- quantity -->
         <div class="mb-3">
           <input
@@ -156,24 +159,45 @@
             min="1"
           />
         </div>
+
         <!-- desc -->
         <div class="quill mt-2 mb-5">
-          <QuillEditor
-            v-model:content="formData.description"
-            theme="snow"
-            placeholder="Product description"
-            ref="quillEditor"
-            content-type="html"
-            
-          />
+          <div class="mb-2" v-if="formData.title">
+            <button
+              @click="generateProductDesc"
+              class="btn btn-secondary gbc"
+              :disabled="!formData.title || isGenerating"
+            >
+              {{
+                isGenerating ? "Generating..." : "Generate Product description?"
+              }}
+            </button>
+          </div>
+          <div v-if="isGenerating" class="d-flex">
+            <i class="bi bi-exclamation-triangle me-2 text-center"></i>
+            <span class="warn mb-2"
+              >Might be some errors, repetition or inconsistency in the
+              generated text. You might need to do some manual editing of the
+              final result.</span
+            >
+          </div>
+          <div class="mb-5 quill">
+            <QuillEditor
+              v-model:content="formData.description"
+              theme="snow"
+              placeholder="Product description"
+              ref="quillEditor"
+              content-type="html"
+            />
+          </div>
         </div>
       </div>
     </div>
     <!-- Button -->
-    <div class="text-end">
+    <div class="text-end mt-3">
       <button
         type="submit"
-        class="btn btn-primary mt-3"
+        class="btn btn-primary mt-4"
         @click="handleSubmit"
         :disabled="!isFormFilled"
       >
@@ -187,13 +211,14 @@
 import { computed, ref } from "vue";
 import { h } from "vue";
 import axios from "axios";
+import router from "@/router";
 import {
   SolutionOutlined,
   LoadingOutlined,
   SmileOutlined,
 } from "@ant-design/icons-vue";
 
-import router from "@/router";
+import aiService from "@/utils/aiService";
 
 import { useNotifications } from "@/composable/globalAlert.js";
 
@@ -224,6 +249,8 @@ const tagInput = ref("");
 
 const colors = ref([]);
 const colorInput = ref("#000000");
+
+const isGenerating = ref(false);
 
 const addTags = (event) => {
   if (event.key === "," || event.key === "Enter") {
@@ -280,6 +307,46 @@ const isFormFilled = computed(() => {
   );
 });
 
+const generateProductDesc = async () => {
+  if (!formData.value.title) {
+    notify("Please enter a product title first", "error");
+    return;
+  }
+  isGenerating.value = true;
+  try {
+    let fullContent = "";
+    const numberOfGenerations = 5;
+
+    for (let i = 0; i < numberOfGenerations; i++) {
+      let prompt;
+      if (i === 0) {
+        prompt = `Write a compelling and informative product description for: ${formData.value.title}. Highlight the key features, benefits and unique selling points. Address the target audience's needs, pain points and interests. Use a friendly and motivational tone and include a clear call-to-action`;
+      } else {
+        prompt = `Continue the following description: ${fullContent.slice(
+          -100
+        )}`;
+      }
+      let generatedContent = await aiService.generateContent(prompt);
+
+      // Remove the prompt if it's included in the response
+      const promptIndex = generatedContent.indexOf(prompt);
+      if (promptIndex !== -1) {
+        generatedContent = generatedContent
+          .substring(promptIndex + prompt.length)
+          .trim();
+      }
+
+      fullContent += " " + generatedContent;
+    }
+    formData.value.description = fullContent.trim();
+    notify("Product description generated successfully!", "success");
+  } catch (error) {
+    notify("Error generating product description", "error");
+  } finally {
+    isGenerating.value = false;
+  }
+};
+
 const handleSubmit = async () => {
   if (!quillEditor.value) {
     notify("Error with Quill Editor instance", "error");
@@ -291,7 +358,6 @@ const handleSubmit = async () => {
   formData.value.tags = tags.value;
   formData.value.colors = colors.value;
 
-  
   console.log("Colors array:", colors.value); // Debug log
   console.log("FormData before submission:", formData.value); // Debug log
 
@@ -325,8 +391,10 @@ const handleSubmit = async () => {
       formDataToSend.append(`colors[${index}]`, color);
     });
 
-
-    console.log("FormData after preparation:", Object.fromEntries(formDataToSend)); // Debug log
+    console.log(
+      "FormData after preparation:",
+      Object.fromEntries(formDataToSend)
+    ); // Debug log
 
     const res = await axios.post(
       `${import.meta.env.VITE_BASE_URL}/product`,
@@ -416,5 +484,18 @@ const handleSubmit = async () => {
   border-radius: 4px;
   color: white;
   position: relative;
+}
+
+.gbc {
+  font-size: 10px;
+}
+
+.warn {
+  font-size: 10px;
+  color: gray;
+}
+
+.bi {
+  color: #d46b08;
 }
 </style>

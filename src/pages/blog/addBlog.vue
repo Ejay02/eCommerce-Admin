@@ -64,13 +64,13 @@
           </form>
         </div>
         <div class="col-md-6 mb-4">
-          <div class="mb-2">
+          <div class="mb-2" v-if="formData.title">
             <button
               @click="generateBlogContent"
               class="btn btn-secondary gbc"
               :disabled="!formData.title || isGenerating"
             >
-              {{ isGenerating ? "Generating..." : "Generate Blog Content ?" }}
+              {{ isGenerating ? "Generating..." : "Generate Blog Content?" }}
             </button>
           </div>
           <div v-if="isGenerating" class="d-flex">
@@ -166,7 +166,8 @@ const generateBlogContent = async () => {
     for (let i = 0; i < numberOfGenerations; i++) {
       let prompt;
       if (i === 0) {
-        prompt = `Write the beginning of a blog post about: ${formData.value.title}`;
+        // prompt = `Write the beginning of a blog post about: ${formData.value.title}`;
+        prompt = `Write a comprehensive and engaging blog post on: ${formData.value.title}. Provide an introduction that grabs the reader's attention, followed by 3-5 key points that explore the topic in-depth`;
       } else {
         prompt = `Continue the following blog post: ${fullContent.slice(-100)}`;
       }
@@ -185,7 +186,6 @@ const generateBlogContent = async () => {
     formData.value.description = fullContent.trim();
     notify("Blog content generated successfully!", "success");
   } catch (error) {
-    console.log("error:", error);
     notify("Error generating blog content", "error");
   } finally {
     isGenerating.value = false;

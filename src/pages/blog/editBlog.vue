@@ -11,6 +11,7 @@
       <div class="row">
         <div class="col-md-6">
           <form @submit.prevent="handleSubmit">
+            <!-- title -->
             <div class="mb-3">
               <input
                 type="text"
@@ -23,6 +24,8 @@
                 aria-label="Blog Title"
               />
             </div>
+
+            <!-- category -->
             <div class="mb-3">
               <input
                 type="text"
@@ -34,6 +37,8 @@
                 aria-label="Blog Category"
               />
             </div>
+            
+            <!-- author -->
             <div class="mb-3">
               <input
                 type="text"
@@ -46,6 +51,7 @@
               />
             </div>
 
+            <!-- img -->
             <div class="mb-3">
               <input
                 type="text"
@@ -59,6 +65,8 @@
             </div>
           </form>
         </div>
+
+        <!-- desc -->
         <div class="col-md-6 mb-4">
           <div class="mb-5 quill">
             <QuillEditor

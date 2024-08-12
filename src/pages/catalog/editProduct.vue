@@ -15,6 +15,7 @@
               placeholder="Product Name"
             />
           </div>
+
           <!-- slug -->
           <div class="mb-3">
             <input
@@ -26,6 +27,7 @@
               placeholder="Product Slug"
             />
           </div>
+
           <!-- price -->
           <div class="mb-3">
             <input
@@ -38,6 +40,7 @@
               min="1"
             />
           </div>
+          
           <!-- tags -->
           <div class="mb-3">
             <div class="tags mb-2">
