@@ -82,6 +82,7 @@ html::-webkit-scrollbar {
   margin-top: 4px;
   display: inline-block;
   position: relative;
+  border: 1px solid rgb(120, 127, 141);
 }
 
 .bn {
@@ -140,5 +141,3 @@ html::-webkit-scrollbar {
 .bi-pencil-square {
   color: gray;
 }
-
-

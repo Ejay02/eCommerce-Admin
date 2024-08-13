@@ -40,7 +40,7 @@
               min="1"
             />
           </div>
-          
+
           <!-- tags -->
           <div class="mb-3">
             <div class="tags mb-2">
@@ -104,31 +104,6 @@
             </div>
           </div>
 
-          <!-- image -->
-          <!-- <div class="image-container">
-            <div
-              v-for="(image, index) in formData?.images"
-              :key="index"
-              class="image-item"
-            >
-              <img :src="image.url" alt="User Avatar" class="avatar-image" />
-              <i class="bi bi-trash3"></i>
-            </div>
-
-            <a-upload
-              list-type="picture"
-              class="upload-list-inline"
-              v-model:fileList="fileList"
-              :beforeUpload="() => false"
-            >
-              <a-button class="upload-button mt-2">
-                <i class="bi bi-upload m-2"></i>
-                <span>upload Image(s)</span>
-              </a-button>
-            </a-upload>
-          </div> -->
-
-          <!-- middle -->
           <div class="image-container">
             <div
               v-for="(image, index) in formData?.images"
@@ -151,29 +126,6 @@
               </a-button>
             </a-upload>
           </div>
-          <!-- end -->
-          <!-- <div class="">
-            <div
-              v-for="(image, index) in formData?.images"
-              :key="index"
-              class="d-flex imd"
-            >
-              <img :src="image.url" alt="User Avatar" class="avatar-image" />
-              <i class="bi bi-trash3"></i>
-            </div>
-
-            <a-upload
-              list-type="picture"
-              class="upload-list-inline"
-              v-model:fileList="fileList"
-              :beforeUpload="() => false"
-            >
-              <a-button class="span">
-                <i class="bi bi-upload m-2"></i>
-                <span> upload Image(s) </span>
-              </a-button>
-            </a-upload>
-          </div> -->
         </form>
       </div>
       <!-- right -->
@@ -553,31 +505,4 @@ onMounted(() => {
   width: 200px;
   margin-right: 8px;
 }
-
-/* .upload-button {
-  height: 38px;
-  font-size: 10px;
-  border-radius: 4px;
-  background-color: cornflowerblue;
-  color: white;
-} */
-
-/* .upload-button {
-  height: 38px;
-  font-size: 10px;
-  border-radius: 4px;
-  background-color: cornflowerblue;
-  color: white;
-} */
 </style>
-
-<!--   padding: 2px 8px;
-  border-radius: 4px;
-  font-size: 10px;
-  color: #531dab;
-  border-color: #f9f0ff;
-  background-color: #d3adf7;
-  margin-right: 5px;
-  margin-top: 4px;
-  display: inline-block;
-  position: relative; -->

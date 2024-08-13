@@ -155,7 +155,6 @@ const fetchBlogDetails = async () => {
       );
     }
   } catch (error) {
-    console.log("error:", error);
     notify("Error fetching blog details");
   }
 };

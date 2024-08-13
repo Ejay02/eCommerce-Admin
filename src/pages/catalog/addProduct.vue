@@ -67,16 +67,21 @@
 
           <!-- Colors -->
           <div class="mb-3">
-            <div class="colors mb-2">
+            <div
+              v-for="(color, index) in processedColors"
+              :key="index"
+              class="category-tag mb-2"
+              :style="{
+                backgroundColor: color,
+                color: isLightColor(color) ? 'black' : 'white',
+              }"
+            >
+              {{ color }}
               <span
-                v-for="(color, index) in colors"
-                :key="index"
-                class="color-tag"
-                :style="{ backgroundColor: color }"
+                @click="removeColor(index)"
+                :style="{ color: isLightColor(color) ? 'black' : 'white' }"
+                >x</span
               >
-                {{ color }}
-                <span class="remove-color" @click="removeColor(index)">x</span>
-              </span>
             </div>
             <div class="d-flex">
               <input
@@ -92,22 +97,10 @@
                 placeholder="Enter color name or hex"
               />
               <button @click.prevent="addColor" class="btn btn-secondary ms-2">
-                Add Color
+                + Color
               </button>
             </div>
           </div>
-
-          <!-- color -->
-          <!-- <div class="mb-3">
-            <input
-              type="text"
-              id="color"
-              v-model="formData.color"
-              class="form-control"
-              required
-              placeholder="Color"
-            />
-          </div> -->
 
           <!-- img -->
           <a-upload
@@ -134,7 +127,7 @@
             placeholder="Category"
           />
         </div>
-        
+
         <!-- brand -->
         <div class="mb-3">
           <input
@@ -197,9 +190,9 @@
     <div class="text-end mt-3">
       <button
         type="submit"
+        :disabled="!isFormFilled"
         class="btn btn-primary mt-4"
         @click="handleSubmit"
-        :disabled="!isFormFilled"
       >
         Create
       </button>
@@ -219,7 +212,7 @@ import {
 } from "@ant-design/icons-vue";
 
 import aiService from "@/utils/aiService";
-
+import { isLightColor } from "@/utils/colorHelper";
 import { useNotifications } from "@/composable/globalAlert.js";
 
 const { notify } = useNotifications();
@@ -248,7 +241,7 @@ const tags = ref([]);
 const tagInput = ref("");
 
 const colors = ref([]);
-const colorInput = ref("#000000");
+const colorInput = ref("");
 
 const isGenerating = ref(false);
 
@@ -262,20 +255,40 @@ const addTags = (event) => {
   }
 };
 
+const processedColors = computed(() => {
+  if (typeof formData.value.colors === "string") {
+    return formData.value.colors
+      .split(/,{1,2}|\s+/)
+      .filter((color) => color.trim() !== "");
+  } else if (Array.isArray(formData.value.colors)) {
+    return formData.value.colors.flatMap((color) =>
+      typeof color === "string"
+        ? color.split(/,{1,2}|\s+/).filter((c) => c.trim() !== "")
+        : []
+    );
+  }
+  return [];
+});
+
 const removeTag = (index) => {
   tags.value.splice(index, 1);
 };
 
 const addColor = () => {
-  if (colorInput.value && !colors.value.includes(colorInput.value)) {
-    colors.value.push(colorInput.value);
-    colorInput.value = "#000000"; // Reset to default color
-    console.log("Color added:", colors.value); // Debug log
+  let color = colorInput.value.trim();
+  if (color && !processedColors.value.includes(color)) {
+    if (Array.isArray(formData.value.colors)) {
+      formData.value.colors.push(color);
+    } else {
+      formData.value.colors = [color];
+    }
+    colorInput.value = ""; // Reset colorInput after adding
   }
 };
 
 const removeColor = (index) => {
-  colors.value.splice(index, 1);
+  const updatedColors = processedColors.value.filter((_, i) => i !== index);
+  formData.value.colors = updatedColors;
 };
 
 const formData = ref({
@@ -358,9 +371,6 @@ const handleSubmit = async () => {
   formData.value.tags = tags.value;
   formData.value.colors = colors.value;
 
-  console.log("Colors array:", colors.value); // Debug log
-  console.log("FormData before submission:", formData.value); // Debug log
-
   if (!isFormFilled.value) {
     notify("Please fill in all required fields", "error");
     return;
@@ -390,11 +400,6 @@ const handleSubmit = async () => {
     formData.value.colors.forEach((color, index) => {
       formDataToSend.append(`colors[${index}]`, color);
     });
-
-    console.log(
-      "FormData after preparation:",
-      Object.fromEntries(formDataToSend)
-    ); // Debug log
 
     const res = await axios.post(
       `${import.meta.env.VITE_BASE_URL}/product`,
