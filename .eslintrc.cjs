@@ -8,4 +8,10 @@ module.exports = {
   rules: {
     "vue/multi-word-component-names": "off",
   },
+  env: {
+    browser: true,
+    node: true,
+    vitest: true,
+    es6: true,
+  },
 };

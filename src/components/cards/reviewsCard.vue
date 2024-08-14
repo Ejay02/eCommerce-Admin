@@ -11,6 +11,7 @@
         :loading="initLoading"
         item-layout="horizontal"
         :data-source="list"
+        data-test="list"
       >
         <template #renderItem="{ item }">
           <a-list-item>
@@ -35,8 +36,9 @@
     </div>
 
     <div v-if="!initLoading && !loading" class="load-more-container">
-      <a-button @click="onLoadMore">load more</a-button>
+      <a-button @click="onLoadMore" data-test="load-more">load more</a-button>
     </div>
+    <div v-else data-test="loading">Loading...</div>
   </div>
 </template>
 
