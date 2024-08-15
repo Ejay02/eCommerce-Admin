@@ -45,10 +45,16 @@ const title = ref("");
 
 const handleSubmit = async () => {
   try {
+    const trimmedTitle = title.value.trim(); // Trim the title here
+    if (!trimmedTitle) {
+      return; // Optionally handle empty title, but the button should be disabled anyway
+    }
+
     const response = await axios.post(
       `${import.meta.env.VITE_BASE_URL}/blog-category`,
       {
-        title: title?.value,
+        // title: title?.value,
+        title: trimmedTitle,
       }
     );
 
@@ -62,7 +68,8 @@ const handleSubmit = async () => {
 };
 
 const isFormFilled = computed(() => {
-  return title.value;
+  // return title.value;
+  return !!title.value?.trim();
 });
 </script>
 

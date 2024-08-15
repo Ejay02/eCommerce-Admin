@@ -8,7 +8,6 @@ import Customers from "./pages/customers.vue";
 import Dashboard from "./pages/dashboard.vue";
 import MainLayout from "./components/mainLayout.vue";
 import ResetPassword from "./pages/resetPassword.vue";
-// import ResetPassword from "./pages/resetPassword.vue";
 import NotFound from "./components/error/notFound.vue";
 import ForgotPassword from "./pages/forgotPassword.vue";
 import AddBlog from "./pages/blog/addBlog.vue";
@@ -19,8 +18,6 @@ import AddProduct from "./pages/catalog/addProduct.vue";
 import ProductList from "./pages/catalog/productList.vue";
 import Brand from "./pages/catalog/brand.vue";
 import BrandList from "./pages/catalog/brandList.vue";
-// import Color from "./pages/catalog/color.vue";
-// import ColorList from "./pages/catalog/colorList.vue";
 import Category from "./pages/catalog/category.vue";
 import CategoryList from "./pages/catalog/categoryList.vue";
 import EditBlog from "./pages/blog/editBlog.vue";
@@ -29,7 +26,6 @@ import EditBlogCategory from "./pages/blog/editBlogCategory.vue";
 import EditCategoryList from "./pages/catalog/editCategoryList.vue";
 import EditBrand from "./pages/catalog/editBrand.vue";
 
-// import AboutView from "./AboutView.vue";
 
 const routes = [
   {
