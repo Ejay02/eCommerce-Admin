@@ -3,7 +3,7 @@
     v-if="isModalVisible"
     class="modal-overlay d-flex"
     @click.self="handleCancel"
-    :key="isModalVisible" 
+    :key="isModalVisible"
   >
     <div class="modal-card">
       <div class="modal-header mb-2">
@@ -50,10 +50,9 @@ const source = ref(modalStore.source);
 watch(
   () => modalStore.deleteModal,
   (newVal) => {
-    console.log('modalStore.deleteModal changed:', newVal);
     isModalVisible.value = newVal;
-    console.log('isModalVisible updated to:', isModalVisible.value);  
-  }
+  },
+  { immediate: true }
 );
 
 watch(
@@ -71,11 +70,8 @@ watch(
 );
 
 const handleCancel = () => {
-  console.log("Closing modal");
   modalStore.deleteModal = false;
   modalStore.modalId = null;
-
-  console.log("modalStore.deleteModal after cancel:", modalStore.deleteModal); // Check if it's set to false
 };
 
 const handleDelete = async () => {

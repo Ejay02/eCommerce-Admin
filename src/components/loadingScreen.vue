@@ -3,7 +3,7 @@
     <div class="spinner-border text-primary" role="status">
       <span class="visually-hidden">Loading...</span>
     </div>
-    <h2 class="loading-text">Loading, please wait...</h2>
+    <h2 class="loading-text">Loading, stand by...</h2>
   </div>
 </template>
 

@@ -302,6 +302,7 @@ b
                 </a-menu-item>
                 <a-menu-item>
                   <div
+                    data-test="logout"
                     @click="handleLogout"
                     class="d-flex gap-3 align-items-center text-decoration-none text-secondary"
                   >
