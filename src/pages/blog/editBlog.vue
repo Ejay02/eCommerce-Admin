@@ -37,7 +37,7 @@
                 aria-label="Blog Category"
               />
             </div>
-            
+
             <!-- author -->
             <div class="mb-3">
               <input
@@ -155,7 +155,7 @@ const fetchBlogDetails = async () => {
       );
     }
   } catch (error) {
-    notify("Error fetching blog details");
+    notify("Error fetching blog details", "error");
   }
 };
 
