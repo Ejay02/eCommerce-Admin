@@ -7,6 +7,7 @@ import aiService from "@/utils/aiService";
 
 // Mock dependencies
 vi.mock("axios");
+
 vi.mock("@/utils/aiService", () => ({
   default: {
     generateContent: vi.fn().mockResolvedValue("Generated content"),

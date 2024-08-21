@@ -78,6 +78,7 @@
             >
               {{ color }}
               <span
+                id="remove-color"
                 @click="removeColor(index)"
                 :style="{ color: isLightColor(color) ? 'black' : 'white' }"
                 >x</span
@@ -107,6 +108,7 @@
             list-type="picture"
             class="upload-list-inline"
             v-model:fileList="formData.images"
+            id="image"
           >
             <a-button class="span">
               <i class="bi bi-upload m-2"></i>
