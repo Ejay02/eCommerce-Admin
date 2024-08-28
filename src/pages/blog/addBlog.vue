@@ -159,7 +159,6 @@ const generateBlogContent = async () => {
     return;
   }
 
-  console.log("title", formData.value.title);
   isGenerating.value = true;
 
   try {
@@ -170,15 +169,11 @@ const generateBlogContent = async () => {
       let prompt;
       if (i === 0) {
         prompt = `Write a comprehensive and engaging blog post on: ${formData.value.title}. Provide an introduction that grabs the reader's attention, followed by 3-5 key points that explore the topic in-depth`;
-        console.log("prompt:", prompt);
       } else {
         prompt = `Continue the following blog post: ${fullContent.slice(-100)}`;
       }
 
       let generatedContent = await aiService.generateContent(prompt);
-
-
-      console.log("Generated content:", generatedContent);
 
       // Remove the prompt if it's included in the response
       const promptIndex = generatedContent?.indexOf(prompt);
@@ -194,7 +189,6 @@ const generateBlogContent = async () => {
     formData.value.description = fullContent.trim();
     notify("Blog content generated successfully!", "success");
   } catch (error) {
-    console.log("error:", error);
     notify("Error generating blog content", "error");
   } finally {
     isGenerating.value = false;
