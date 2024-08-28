@@ -186,6 +186,7 @@ const generateBlogContent = async () => {
     formData.value.description = fullContent.trim();
     notify("Blog content generated successfully!", "success");
   } catch (error) {
+    console.log("error:", error);
     notify("Error generating blog content", "error");
   } finally {
     isGenerating.value = false;
