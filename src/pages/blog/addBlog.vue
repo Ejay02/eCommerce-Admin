@@ -166,19 +166,24 @@ const generateBlogContent = async () => {
     for (let i = 0; i < numberOfGenerations; i++) {
       let prompt;
       if (i === 0) {
-        // prompt = `Write the beginning of a blog post about: ${formData.value.title}`;
         prompt = `Write a comprehensive and engaging blog post on: ${formData.value.title}. Provide an introduction that grabs the reader's attention, followed by 3-5 key points that explore the topic in-depth`;
       } else {
         prompt = `Continue the following blog post: ${fullContent.slice(-100)}`;
       }
       let generatedContent = await aiService.generateContent(prompt);
 
-      // Remove the prompt if it's included in the response
-      const promptIndex = generatedContent.indexOf(prompt);
-      if (promptIndex !== -1) {
-        generatedContent = generatedContent
-          .substring(promptIndex + prompt.length)
-          .trim();
+      // Check if generatedContent is defined and a string before using indexOf
+      if (typeof generatedContent === "string") {
+        // Remove the prompt if it's included in the response
+        const promptIndex = generatedContent.indexOf(prompt);
+        if (promptIndex !== -1) {
+          generatedContent = generatedContent
+            .substring(promptIndex + prompt.length)
+            .trim();
+        }
+      } else {
+        console.error("Generated content is not a string:", generatedContent);
+        generatedContent = ""; // Set to empty string to avoid further errors
       }
 
       fullContent += " " + generatedContent;
@@ -186,7 +191,7 @@ const generateBlogContent = async () => {
     formData.value.description = fullContent.trim();
     notify("Blog content generated successfully!", "success");
   } catch (error) {
-    console.log("error:", error);
+    console.error("Error generating blog content:", error);
     notify("Error generating blog content", "error");
   } finally {
     isGenerating.value = false;
@@ -194,11 +199,9 @@ const generateBlogContent = async () => {
 };
 
 const handleSubmit = async () => {
-  // const description = quillEditor.value.root.innerHTML; // Get HTML content
   const description = quillEditor.value.getText();
   formData.value.description = description;
 
-  // Validate form data
   if (!isFormFilled.value) {
     notify("Please fill in all required fields", "error");
     return;
@@ -227,6 +230,7 @@ const handleSubmit = async () => {
       router.push("/admin/blog/blog-list");
     }
   } catch (error) {
+    console.error("Error creating blog:", error);
     notify("Error creating blog", "error");
   }
 };
