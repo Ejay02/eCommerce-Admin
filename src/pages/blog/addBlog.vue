@@ -177,9 +177,6 @@ const generateBlogContent = async () => {
 
       let generatedContent = await aiService.generateContent(prompt);
 
-      if (generatedContent === undefined || generatedContent === null) {
-        throw new Error("Failed to generate content");
-      }
 
       console.log("Generated content:", generatedContent);
 
