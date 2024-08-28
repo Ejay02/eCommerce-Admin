@@ -34,6 +34,7 @@ import { useBlogCategoryStore } from "@/store/useBlogCategoryStore";
 import { useNotifications } from "@/composable/globalAlert.js";
 import { useProductCategoryStore } from "@/store/useProductCategoryStore";
 import { useBrandStore } from "@/store/useBrandStore";
+import { useEnquiryStore } from "@/store/useEnquriesStore";
 
 const { notify } = useNotifications();
 const modalStore = useModalStore();
@@ -43,6 +44,7 @@ const blogStore = useBlogStore();
 const productStore = useProductStore();
 const prodCategoryStore = useProductCategoryStore();
 const brandStore = useBrandStore();
+const enqStore = useEnquiryStore();
 
 const title = ref(modalStore.modalTitle);
 const source = ref(modalStore.source);
@@ -118,6 +120,14 @@ const handleDelete = async () => {
       if (response.data) {
         prodCategoryStore.deleteProdCategory(modalStore.modalId);
         notify("Prod Category deleted successfully!", "success");
+      }
+    } else if (source.value === "enquiries") {
+      response = await axios.delete(
+        `${import.meta.env.VITE_BASE_URL}/enquiry/${modalStore.modalId}`
+      );
+      if (response.data) {
+        enqStore.deleteEnquiry(modalStore.modalId);
+        notify("Enquiry deleted successfully!", "success");
       }
     }
     modalStore.deleteModal = false;

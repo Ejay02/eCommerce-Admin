@@ -25,6 +25,7 @@ import EditProduct from "./pages/catalog/editProduct.vue";
 import EditBlogCategory from "./pages/blog/editBlogCategory.vue";
 import EditCategoryList from "./pages/catalog/editCategoryList.vue";
 import EditBrand from "./pages/catalog/editBrand.vue";
+import EnquiryDetail from "./pages/enquiryDetail.vue";
 
 
 const routes = [
@@ -59,6 +60,10 @@ const routes = [
       {
         path: "enquiries",
         component: Enquiries,
+      },
+      {
+        path: "/enquiry/:id",
+        component: EnquiryDetail,
       },
       {
         path: "settings",
