@@ -22,7 +22,8 @@ export default {
 
       return response.data[0].generated_text;
     } catch (error) {
-      notify("Error generating blog content", "error");
+      console.log("error ai:", error);
+      notify("Hmm, all our bots are currently busy.. ⚙️", "error");
     }
   },
 };
