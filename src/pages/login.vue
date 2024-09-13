@@ -75,6 +75,7 @@
 
       <!-- gh -->
       <button
+        :disabled="!isFormValid"
         class="btn border-0 py-2 fw-bold w-100 text-center ghub"
         type="submit"
         @click="githubLogin"
@@ -85,6 +86,7 @@
 
       <!-- google -->
       <button
+        :disabled="!isFormValid"
         @click="googleLogin"
         class="btn mt-2 border-0 py-2 fw-bold w-100 text-center g"
       >
@@ -94,6 +96,7 @@
 
       <!-- fb -->
       <button
+        :disabled="!isFormValid"
         class="mt-2 border-0 py-2 fw-bold w-100 text-center fb btn"
         type="submit"
       >
